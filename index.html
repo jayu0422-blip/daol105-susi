@@ -1,0 +1,151 @@
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>내신 등급으로 보는 수시 지원 라인 | 다올105 무료 조회</title>
+<meta name="description" content="서울·경기·인천 60개 대학 2022~2024 수시 입결(등급컷)을 내신 등급 하나로 조회. 이름·연락처 입력 없이 바로 확인." />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<style>
+  :root{--blue:#3182F6;--blue-strong:#0064FF;--blue-soft:#E8F1FF;--blue-soft2:#F3F8FF;--ink:#191F28;--gray:#4E5968;--gray2:#8B95A1;--line:#E5E8EB;--soft:#F2F4F6;--soft2:#F9FAFB;--ok:#12B886;--warn:#F59F00;--danger:#F04452;--shadow:0 6px 24px -8px rgba(20,30,50,.14)}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:"Pretendard",-apple-system,sans-serif;color:var(--ink);background:var(--soft2);-webkit-font-smoothing:antialiased;line-height:1.55;letter-spacing:-.01em}
+  .wrap{max-width:760px;margin:0 auto;padding:0 18px}
+  b{font-weight:700}
+  h1{font-size:clamp(24px,5.6vw,34px);font-weight:800;line-height:1.32;letter-spacing:-.03em}
+  .lead{font-size:15.5px;color:var(--gray);line-height:1.65;font-weight:500}
+  .top{padding:44px 0 26px;text-align:center}
+  .made{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--gray);background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 15px;margin-bottom:18px}
+  .made .dot{width:7px;height:7px;border-radius:50%;background:var(--ok)}
+  .trust{font-size:12.5px;color:var(--gray2);margin-top:12px;line-height:1.7}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px 20px;box-shadow:var(--shadow);margin-top:18px}
+  .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+  @media(max-width:520px){.frow{grid-template-columns:1fr 1fr}}
+  .fld label{display:block;font-size:12.5px;font-weight:800;color:var(--gray);margin-bottom:6px}
+  .fld input,.fld select{width:100%;font-family:inherit;font-size:16px;font-weight:700;color:var(--ink);background:var(--soft2);border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;outline:none}
+  .fld input:focus,.fld select:focus{border-color:var(--blue)}
+  .go{width:100%;margin-top:6px;font-family:inherit;font-size:17px;font-weight:800;color:#fff;background:var(--blue);border:none;border-radius:14px;padding:16px;cursor:pointer;box-shadow:0 8px 20px -8px rgba(49,130,246,.6)}
+  .go:hover{background:var(--blue-strong)}
+  .go:active{transform:scale(.99)}
+  .hint{font-size:12px;color:var(--gray2);margin-top:10px;line-height:1.65;text-align:center}
+  .result{padding:8px 0 40px}
+  .grp{margin-top:22px}
+  .grp-h{display:flex;align-items:center;gap:9px;font-size:16.5px;font-weight:800;margin-bottom:10px}
+  .grp-h .bd{width:10px;height:10px;border-radius:50%}
+  .grp-h small{font-weight:700;color:var(--gray2);font-size:13px}
+  .g-safe .bd{background:var(--ok)} .g-fit .bd{background:var(--blue)} .g-try .bd{background:var(--warn)}
+  .rows{display:grid;gap:8px}
+  .row{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .row .u{font-size:15.5px;font-weight:800}
+  .row .u small{font-weight:700;color:var(--gray2);font-size:12.5px;margin-left:6px}
+  .row .m{font-size:14px;color:var(--gray);font-weight:600;margin-top:2px}
+  .row .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+  .chip{font-size:11.5px;font-weight:800;border-radius:7px;padding:4px 9px;background:var(--soft);color:var(--gray)}
+  .chip.cut{background:var(--blue-soft);color:var(--blue-strong)}
+  .chip.min{background:#FFF4E0;color:#9a6700}
+  .chip.comp{background:#F3F0FF;color:#6741D9}
+  .more{width:100%;margin-top:10px;font-family:inherit;font-size:14px;font-weight:800;color:var(--blue);background:var(--blue-soft2);border:1px solid var(--blue-soft);border-radius:12px;padding:12px;cursor:pointer}
+  .empty{background:#fff;border:1px dashed var(--line);border-radius:14px;padding:22px;text-align:center;font-size:14px;color:var(--gray2);font-weight:600}
+  .note{background:var(--blue-soft2);border-radius:14px;padding:15px 17px;font-size:12.5px;color:var(--gray);line-height:1.75;margin-top:24px}
+  .note b{color:var(--ink)}
+  .cta{margin-top:26px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px 20px;box-shadow:var(--shadow)}
+  .cta .t{font-size:17px;font-weight:800;line-height:1.5;margin-bottom:6px}
+  .cta p{font-size:13.5px;color:var(--gray);line-height:1.65}
+  .cta a{display:inline-flex;margin-top:14px;font-size:16px;font-weight:800;color:#fff;background:var(--blue);border-radius:12px;padding:14px 26px;text-decoration:none}
+  footer{padding:30px 0 40px;text-align:center;color:var(--gray2);font-size:12px;line-height:1.8;border-top:1px solid var(--line);margin-top:34px}
+  footer b{color:var(--gray)}
+  .hidden{display:none}
+  .loading{text-align:center;padding:30px;color:var(--gray2);font-weight:700;font-size:14px}
+</style>
+
+<div class="top">
+  <div class="wrap">
+    <div class="made"><span class="dot"></span>다올105 · 대치더올 제공 · 무료</div>
+    <h1>내신 등급 하나로 보는<br /><span style="color:var(--blue)">수시 지원 라인</span></h1>
+    <p class="lead" style="margin-top:12px">서울·경기·인천 60개 대학, <b style="color:var(--ink)">2022~2024 실제 입결(등급컷) 7,151개 전형</b>을 기준으로 안정 · 적정 · 도전 라인을 보여드립니다.</p>
+    <p class="trust">🔒 이름·연락처 입력 없음 · 결과는 이 화면에서만 계산됩니다</p>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="panel">
+    <div class="frow">
+      <div class="fld"><label>내신 평균 등급</label><input id="g" type="number" min="1" max="9" step="0.1" placeholder="예: 3.5" inputmode="decimal" /></div>
+      <div class="fld"><label>계열</label><select id="tr"><option value="">전체</option><option>인문</option><option>자연</option><option>예체능</option></select></div>
+    </div>
+    <div class="frow">
+      <div class="fld"><label>지역</label><select id="rg"><option value="">서울·경기·인천 전체</option><option>서울</option><option>경기</option><option>인천</option></select></div>
+      <div class="fld"><label>전형 유형</label><select id="ty"><option value="학생부교과">학생부교과 (권장)</option><option value="학생부종합">학생부종합</option><option value="논술">논술</option><option value="">전체</option></select></div>
+    </div>
+    <button class="go" onclick="run()">지원 라인 조회하기</button>
+    <p class="hint">※ 등급 비교는 <b>학생부교과</b> 전형이 가장 유의미합니다. 종합·논술은 서류·논술 실력이 중심이라 등급컷은 참고치입니다.</p>
+  </div>
+
+  <div id="out" class="result"></div>
+
+  <div class="note"><b>꼭 읽어주세요.</b> 이 자료는 각 대학이 발표한 2022~2024학년도 수시 입결(대부분 최종등록자 70%컷·평균 등)을 정리한 참고 자료입니다. 대학별 등급 산출 방식(반영 교과·가중치)이 서로 다르고, 해마다 컷은 오르내립니다. 특히 학생부종합은 등급보다 서류·활동이 중심입니다. <b>실제 지원 판단은 반드시 원서 시점의 모집요강과 상담을 통해 확정하세요.</b></div>
+
+  <div class="cta">
+    <div class="t">우리 아이 성적표로 정확히 보고 싶다면</div>
+    <p>대학별 반영 교과로 다시 계산하면 등급이 달라질 수 있습니다.<br />성적표 지참 시 지원 라인을 함께 정리해 드립니다. (등록 권유 없음)</p>
+    <a href="tel:031-794-8158">☎ 031-794-8158 무료 상담</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap"><b>다올105 · 대치더올 수학과학전문관</b><br />하남 미사 · ☎ 031-794-8158 · 010-8337-8158<br />본 조회는 교육 정보 제공 목적이며, 개인정보를 수집·저장·전송하지 않습니다.</div>
+</footer>
+
+<script>
+'use strict';
+let DATA = null;
+async function load() {
+  if (DATA) return DATA;
+  const res = await fetch('data.json');
+  DATA = await res.json();
+  return DATA;
+}
+function cutOf(r) { return r[8] ?? r[9] ?? r[10]; }
+function yearOf(r) { return r[8] != null ? 24 : (r[9] != null ? 23 : 22); }
+function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+
+function rowHtml(r) {
+  const cuts = [];
+  if (r[8] != null) cuts.push('24년 ' + r[8]);
+  if (r[9] != null) cuts.push('23년 ' + r[9]);
+  if (r[10] != null) cuts.push('22년 ' + r[10]);
+  const minChip = (r[7] && r[7] !== '-') ? '<span class="chip min">최저 있음</span>' : '<span class="chip">최저 없음/미확인</span>';
+  const compChip = r[5] === '학생부종합' ? '<span class="chip comp">종합 — 등급은 참고치</span>' : '';
+  return '<div class="row"><div class="u">' + esc(r[0]) + '<small>' + esc(r[1] === r[2] ? r[1] : r[1] + ' ' + r[2]) + '</small></div>'
+    + '<div class="m">' + esc(r[4]) + ' · ' + esc(r[6]) + ' (' + esc(r[5]) + ')</div>'
+    + '<div class="meta"><span class="chip cut">' + cuts.join(' / ') + '</span>' + minChip + compChip + '</div></div>';
+}
+
+function section(key, title, subtitle, items) {
+  if (!items.length) return '<div class="grp ' + key + '"><div class="grp-h"><span class="bd"></span>' + title + ' <small>' + subtitle + '</small></div><div class="empty">이 구간에 해당하는 전형이 없습니다. 필터를 넓혀 보세요.</div></div>';
+  const first = items.slice(0, 8).map(rowHtml).join('');
+  const rest = items.slice(8).map(rowHtml).join('');
+  const moreBtn = items.length > 8 ? '<button class="more" onclick="this.previousElementSibling.classList.remove(\'hidden\');this.remove()">+ ' + (items.length - 8) + '개 더 보기</button>' : '';
+  return '<div class="grp ' + key + '"><div class="grp-h"><span class="bd"></span>' + title + ' <small>' + subtitle + ' · ' + items.length + '개</small></div><div class="rows">' + first + '</div><div class="rows hidden" style="margin-top:8px">' + rest + '</div>' + moreBtn + '</div>';
+}
+
+async function run() {
+  const g = parseFloat(document.getElementById('g').value);
+  const out = document.getElementById('out');
+  if (!(g >= 1 && g <= 9)) { out.innerHTML = '<div class="empty">내신 평균 등급을 1.0 ~ 9.0 사이로 입력해 주세요.</div>'; return; }
+  out.innerHTML = '<div class="loading">입결 데이터를 불러오는 중…</div>';
+  const data = await load();
+  const tr = document.getElementById('tr').value, rg = document.getElementById('rg').value, ty = document.getElementById('ty').value;
+  const rows = data.filter(r => (!tr || r[3] === tr) && (!rg || r[1] === rg) && (!ty || r[5] === ty) && cutOf(r) != null);
+  const withDiff = rows.map(r => ({ r, cut: cutOf(r), diff: cutOf(r) - g }));
+  const byCut = (a, b) => a.cut - b.cut;
+  const safe = withDiff.filter(x => x.diff >= 0.3).sort(byCut).map(x => x.r);
+  const fit  = withDiff.filter(x => x.diff >= -0.2 && x.diff < 0.3).sort(byCut).map(x => x.r);
+  const tryy = withDiff.filter(x => x.diff >= -0.8 && x.diff < -0.2).sort(byCut).map(x => x.r);
+  out.innerHTML =
+    '<p style="font-size:13.5px;color:var(--gray2);font-weight:700;text-align:center;margin-top:16px">내신 ' + g.toFixed(1) + '등급 기준 · 최근 연도 입결 컷과 비교한 결과입니다</p>'
+    + section('g-fit', '🎯 적정', '컷 ±0.2~0.3등급', fit)
+    + section('g-safe', '🛡 안정', '컷이 내 등급보다 0.3등급 이상 아래', safe)
+    + section('g-try', '🔥 도전', '컷보다 0.2~0.8등급 부족', tryy);
+  window.scrollTo({ top: document.getElementById('out').offsetTop - 20, behavior: 'smooth' });
+}
+document.getElementById('g').addEventListener('keydown', e => { if (e.key === 'Enter') run(); });
+</script>
