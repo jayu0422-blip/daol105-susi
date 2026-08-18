@@ -46,7 +46,16 @@
   .empty{background:#fff;border:1px dashed var(--line);border-radius:14px;padding:22px;text-align:center;font-size:14px;color:var(--gray2);font-weight:600}
   .note{background:var(--blue-soft2);border-radius:14px;padding:15px 17px;font-size:12.5px;color:var(--gray);line-height:1.75;margin-top:24px}
   .note b{color:var(--ink)}
-  .cta{margin-top:26px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px 20px;box-shadow:var(--shadow)}
+  .next{margin-top:22px;background:linear-gradient(135deg,#0F2E4A,#123A5E);border-radius:20px;
+  padding:24px 20px;text-align:center;box-shadow:var(--shadow);display:none}
+.next.on{display:block;animation:nx .45s ease both}
+@keyframes nx{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.next .k{font-size:12px;font-weight:800;letter-spacing:.06em;color:#7FD9F5;margin-bottom:10px}
+.next .t{font-size:19px;font-weight:800;color:#fff;line-height:1.45;letter-spacing:-.02em}
+.next p{font-size:13.5px;color:#C3D4E4;line-height:1.7;margin-top:10px}
+.next a{display:block;margin-top:16px;background:#fff;color:#0F2E4A;font-weight:800;font-size:16px;
+  border-radius:13px;padding:15px;text-decoration:none}
+.cta{margin-top:26px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px 20px;box-shadow:var(--shadow)}
   .cta .t{font-size:17px;font-weight:800;line-height:1.5;margin-bottom:6px}
   .cta p{font-size:13.5px;color:var(--gray);line-height:1.65}
   .cta a{display:inline-flex;margin-top:14px;font-size:16px;font-weight:800;color:#fff;background:var(--blue);border-radius:12px;padding:14px 26px;text-decoration:none}
@@ -81,11 +90,20 @@
 
   <div id="out" class="result"></div>
 
+  <div id="next" class="next">
+    <div class="k">지원 라인을 확인하셨다면</div>
+    <div class="t">그런데 이 라인,<br />그대로 쓰면 될까요?</div>
+    <p>작년 컷은 올해의 기준이 아닙니다.<br />
+      3개년이 모두 공개된 5,101개 모집단위 중 <b style="color:#fff">5곳 중 1곳은 컷이 1등급 이상</b> 움직였습니다.</p>
+    <a href="consulting/">실패 없이 지원하는 법 →</a>
+  </div>
+
   <div class="note"><b>꼭 읽어주세요.</b> 이 자료는 각 대학이 발표한 2022~2024학년도 수시 입결(대부분 최종등록자 70%컷·평균 등)을 정리한 참고 자료입니다. 대학별 등급 산출 방식(반영 교과·가중치)이 서로 다르고, 해마다 컷은 오르내립니다. 특히 학생부종합은 등급보다 서류·활동이 중심입니다. <b>실제 지원 판단은 반드시 원서 시점의 모집요강과 상담을 통해 확정하세요.</b></div>
 
   <div class="cta">
     <div class="t">우리 아이 성적표로 정확히 보고 싶다면</div>
     <p>대학별 반영 교과로 다시 계산하면 등급이 달라질 수 있습니다.<br />성적표 지참 시 지원 라인을 함께 정리해 드립니다. (등록 권유 없음)</p>
+    <a href="consulting/" style="display:block;background:var(--blue);color:#fff;font-weight:800;border-radius:13px;padding:15px;text-decoration:none;margin-bottom:10px">실패 없이 지원하는 법 →</a>
     <a href="tel:031-794-8158">☎ 031-794-8158 무료 상담</a>
   </div>
 </div>
@@ -127,12 +145,14 @@ function section(key, title, subtitle, items) {
   return '<div class="grp ' + key + '"><div class="grp-h"><span class="bd"></span>' + title + ' <small>' + subtitle + ' · ' + items.length + '개</small></div><div class="rows">' + first + '</div><div class="rows hidden" style="margin-top:8px">' + rest + '</div>' + moreBtn + '</div>';
 }
 
+function showNext(){ var n=document.getElementById('next'); if(n) n.classList.add('on'); }
 async function run() {
   const g = parseFloat(document.getElementById('g').value);
   const out = document.getElementById('out');
   if (!(g >= 1 && g <= 9)) { out.innerHTML = '<div class="empty">내신 평균 등급을 1.0 ~ 9.0 사이로 입력해 주세요.</div>'; return; }
   out.innerHTML = '<div class="loading">입결 데이터를 불러오는 중…</div>';
   const data = await load();
+  showNext();
   const tr = document.getElementById('tr').value, rg = document.getElementById('rg').value, ty = document.getElementById('ty').value;
   const rows = data.filter(r => (!tr || r[3] === tr) && (!rg || r[1] === rg) && (!ty || r[5] === ty) && cutOf(r) != null);
   const withDiff = rows.map(r => ({ r, cut: cutOf(r), diff: cutOf(r) - g }));

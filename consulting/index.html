@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>2027 수시 지원 전략 설계 | 다올105 · 하남 미사</title>
+<meta name="description" content="우리 아이 어디까지 갈 수 있을까요. 3년 동안 아무도 답해주지 않은 그 질문에, 데이터로 답합니다. 다올105 · 등록번호 제 하남 298호">
+<meta property="og:title" content="우리 아이, 어디까지 갈 수 있을까요">
+<meta property="og:description" content="3년 동안 물으셨을 겁니다. 그리고 아직 답을 못 들으셨을 겁니다.">
+<meta name="format-detection" content="telephone=no">
+<style>
+:root{
+  --bg:#fff; --fg:#12161c; --dim:#606a78; --faint:#8b95a3;
+  --line:#e4e8ee; --soft:#f5f7f9; --soft2:#eef2f5;
+  --acc:#0d5a48; --acc-l:#e6f2ee; --acc-t:#0a4437;
+  --warm:#a03c14; --warm-l:#fdf0e9;
+  --ink-bg:#0d1519; --ink-fg:#eef3f2; --ink-dim:#8fa39e; --ink-acc:#5fd6ab;
+  --sh:0 1px 2px rgba(12,22,32,.05),0 10px 30px -8px rgba(12,22,32,.10);
+  --w:720px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1116; --fg:#e9eef3; --dim:#9aa5b3; --faint:#78828f;
+    --line:#212934; --soft:#141a21; --soft2:#1a222b;
+    --acc:#4fd1a5; --acc-l:#10241e; --acc-t:#8fe8c6;
+    --warm:#f0a878; --warm-l:#241810;
+    --ink-bg:#060a0d; --ink-fg:#e9eef3; --ink-dim:#8b9aa5; --ink-acc:#5fd6ab;
+    --sh:0 1px 2px rgba(0,0,0,.4),0 10px 30px -8px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1116; --fg:#e9eef3; --dim:#9aa5b3; --faint:#78828f;
+  --line:#212934; --soft:#141a21; --soft2:#1a222b;
+  --acc:#4fd1a5; --acc-l:#10241e; --acc-t:#8fe8c6;
+  --warm:#f0a878; --warm-l:#241810;
+  --ink-bg:#060a0d; --ink-fg:#e9eef3; --ink-dim:#8b9aa5; --ink-acc:#5fd6ab;
+}
+:root[data-theme="light"]{
+  --bg:#fff; --fg:#12161c; --dim:#606a78; --faint:#8b95a3;
+  --line:#e4e8ee; --soft:#f5f7f9; --soft2:#eef2f5;
+  --acc:#0d5a48; --acc-l:#e6f2ee; --acc-t:#0a4437;
+  --warm:#a03c14; --warm-l:#fdf0e9;
+  --ink-bg:#0d1519; --ink-fg:#eef3f2; --ink-dim:#8fa39e; --ink-acc:#5fd6ab;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--fg);
+  font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  font-size:17px;line-height:1.78;letter-spacing:-.014em;
+  word-break:keep-all;overflow-wrap:break-word;
+}
+.w{max-width:var(--w);margin:0 auto;padding:0 22px}
+sec,section{display:block}
+.pad{padding:72px 0}
+.pad-s{padding:54px 0}
+.ink{background:var(--ink-bg);color:var(--ink-fg)}
+.ink .dim{color:var(--ink-dim)}
+.tint{background:var(--soft)}
+
+h1{font-size:clamp(31px,8.4vw,52px);line-height:1.26;letter-spacing:-.042em;font-weight:800}
+h2{font-size:clamp(24px,5.8vw,36px);line-height:1.32;letter-spacing:-.036em;font-weight:800;margin-bottom:20px}
+h3{font-size:clamp(18px,3.9vw,22px);line-height:1.45;letter-spacing:-.025em;font-weight:700;margin:34px 0 12px}
+p{margin:0 0 17px;font-size:17px}
+p:last-child{margin-bottom:0}
+.lead{font-size:clamp(18.5px,4.6vw,21px);line-height:1.75;color:var(--dim);letter-spacing:-.02em}
+.ink .lead{color:var(--ink-dim)}
+.dim{color:var(--dim)}
+.sm{font-size:15.5px;line-height:1.75}
+.xs{font-size:13px;line-height:1.68;color:var(--faint)}
+strong{font-weight:700}
+em{font-style:normal;color:var(--acc);font-weight:700}
+.ink em{color:var(--ink-acc)}
+
+.eyebrow{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.06em;
+  color:var(--acc);background:var(--acc-l);padding:7px 14px;border-radius:99px;margin-bottom:24px}
+.ink .eyebrow{color:var(--ink-acc);background:rgba(95,214,171,.12)}
+
+/* hero */
+.hero-wrap{position:relative;overflow:hidden;isolation:isolate}
+.hero-bg{position:absolute;inset:0;z-index:-2;background-image:url('assets/facility.jpg');
+  background-size:cover;background-position:center 62%;opacity:.16;filter:saturate(.35) contrast(1.02)}
+.hero-bg::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,
+    rgba(6,10,13,.93) 0%, rgba(6,10,13,.86) 34%, rgba(6,10,13,.82) 62%, rgba(6,10,13,.97) 100%)}
+/* 컨설턴트 — 배경에 크게, 은은하게 */
+.hero-figure{position:absolute;right:-18%;bottom:0;z-index:-1;
+  width:min(88vw,600px);pointer-events:none;user-select:none;
+  opacity:.40;filter:grayscale(.3) contrast(1.02);
+  -webkit-mask-image:linear-gradient(to left, #000 26%, transparent 90%),
+    linear-gradient(to top, transparent 2%, #000 20%);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to left, #000 26%, transparent 90%),
+    linear-gradient(to top, transparent 2%, #000 20%);
+  mask-composite:intersect}
+.hero-figure img{width:100%;height:auto;display:block}
+@media (min-width:760px){ .hero-figure{right:-7%;width:min(54vw,620px);opacity:.36} }
+@media (max-width:430px){ .hero-figure{right:-26%;width:104vw;opacity:.32} }
+.hero{padding:30px 0 52px;position:relative}
+.hero h1{margin-bottom:22px;text-shadow:0 2px 22px rgba(0,0,0,.5)}
+.hero .lead{max-width:600px}
+.logo{display:block;width:76px;height:auto;margin-bottom:20px;opacity:.95}
+.rule{height:1px;background:var(--line);margin:34px 0;border:0}
+.ink .rule{background:rgba(255,255,255,.1)}
+
+/* hero profile strip */
+.hprof{display:block;margin-top:30px;padding:15px 18px;max-width:340px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);
+  border-radius:14px;backdrop-filter:blur(8px)}
+.hprof-b{min-width:0}
+.hprof-k{display:block;font-size:11.5px;font-weight:700;letter-spacing:.07em;
+  color:var(--ink-acc);margin-bottom:6px}
+.hprof-n{font-size:clamp(20px,5vw,25px);font-weight:800;letter-spacing:-.032em;line-height:1.25}
+.hprof-n em{font-size:.6em;font-weight:700;color:var(--ink-dim);margin-left:8px;letter-spacing:-.01em}
+.hprof-c{font-size:13px;line-height:1.6;color:var(--ink-dim);margin-top:7px}
+.hprof-c b{color:var(--ink-acc);font-weight:800}
+@media (max-width:380px){ .hprof{padding:13px 15px;max-width:none} }
+
+/* pull quote — the spine of the page */
+.pull{
+  font-size:clamp(21px,5vw,29px);line-height:1.48;letter-spacing:-.032em;font-weight:800;
+  margin:38px 0;padding-left:20px;border-left:4px solid var(--acc);
+}
+.ink .pull{border-left-color:var(--ink-acc)}
+.pull small{display:block;font-size:15px;font-weight:500;line-height:1.7;
+  color:var(--dim);margin-top:14px;letter-spacing:-.015em}
+.ink .pull small{color:var(--ink-dim)}
+
+/* big statement, centered */
+.say{font-size:clamp(27px,7vw,38px);line-height:1.38;letter-spacing:-.042em;
+  font-weight:800;text-align:center;margin:14px 0}
+
+/* card */
+.card{border:1px solid var(--line);border-radius:16px;padding:24px 22px;margin:18px 0;background:var(--bg)}
+.card h3{margin:0 0 10px;font-size:18.5px}
+.card.a{border-color:var(--acc);background:var(--acc-l)}
+.card.wm{border-color:var(--warm);background:var(--warm-l)}
+.ink .card{border-color:rgba(255,255,255,.13);background:rgba(255,255,255,.04)}
+
+/* misbelief blocks */
+.mis{border-top:1px solid var(--line);padding:26px 0}
+.mis:last-of-type{border-bottom:1px solid var(--line)}
+.mis-q{font-size:clamp(18px,4.2vw,22px);font-weight:800;letter-spacing:-.028em;
+  line-height:1.5;margin-bottom:12px}
+.mis-q span{color:var(--faint);font-weight:700;margin-right:9px}
+.mis-a{font-size:16px;line-height:1.78;color:var(--dim)}
+.mis-a b{color:var(--fg)}
+
+/* number, subordinate to text */
+.fig{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+  margin:18px 0;padding:16px 18px;background:var(--soft);border-radius:12px}
+.fig b{font-size:clamp(26px,6.4vw,34px);font-weight:800;letter-spacing:-.04em;
+  color:var(--acc);line-height:1.1}
+.fig span{font-size:15px;line-height:1.62;color:var(--dim);flex:1 1 190px}
+.ink .fig{background:rgba(255,255,255,.05)}
+.ink .fig b{color:var(--ink-acc)}
+
+/* table */
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:22px 0;
+  border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:420px;font-size:15px}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line)}
+th{background:var(--soft);font-weight:700;font-size:13px;color:var(--dim);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600}
+td.hl{color:var(--acc);font-weight:800}
+
+/* steps */
+.st{display:flex;gap:16px;padding:22px 0;border-bottom:1px solid var(--line)}
+.st:last-of-type{border-bottom:0}
+.st-n{flex:0 0 30px;font-size:14px;font-weight:800;color:var(--acc);padding-top:3px;
+  font-variant-numeric:tabular-nums}
+.st-b{flex:1;min-width:0}
+.st-b h3{margin:0 0 7px;font-size:18px}
+.st-b p{font-size:15.5px;line-height:1.74;color:var(--dim);margin:0}
+
+/* program rows */
+.pr{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px dashed var(--line)}
+.pr:last-child{border-bottom:0}
+.pr-t{flex:0 0 74px;font-size:13px;font-weight:700;color:var(--acc);padding-top:2px}
+.pr-b{flex:1;min-width:0;font-size:15.5px;line-height:1.7}
+.pr-b b{display:block;font-size:16.5px;margin-bottom:3px}
+
+/* cta */
+.btn{display:block;width:100%;max-width:360px;margin:18px auto 0;padding:18px 24px;
+  background:var(--acc);color:#fff;border-radius:14px;text-decoration:none;text-align:center;
+  font-weight:800;font-size:17.5px;letter-spacing:-.022em;box-shadow:var(--sh)}
+:root[data-theme="dark"] .btn,.ink .btn{color:#08120f}
+@media (prefers-color-scheme:dark){.btn{color:#08120f}}
+.btn.g{background:transparent;border:1.5px solid var(--acc);color:var(--acc);box-shadow:none}
+:root[data-theme="dark"] .btn.g{color:var(--acc)}
+@media (prefers-color-scheme:dark){.btn.g{color:var(--acc)}}
+
+/* profile */
+.prof{display:flex;gap:22px;align-items:flex-end;margin:26px 0 4px;flex-wrap:wrap}
+.prof-img{flex:0 0 168px;max-width:168px;position:relative}
+.prof-img img{width:100%;height:auto;display:block;filter:drop-shadow(0 12px 28px rgba(10,30,25,.18))}
+.prof-txt{flex:1 1 260px;min-width:0;padding-bottom:6px}
+.prof-role{font-size:13px;font-weight:700;letter-spacing:.05em;color:var(--acc);
+  background:var(--acc-l);padding:6px 12px;border-radius:99px;display:inline-block;margin-bottom:12px}
+.prof-name{font-size:clamp(30px,7.4vw,42px);font-weight:800;letter-spacing:-.04em;line-height:1.15}
+.prof-name span{font-size:.5em;font-weight:700;color:var(--dim);margin-left:9px;letter-spacing:-.02em}
+.prof-sub{font-size:16px;color:var(--dim);margin-top:9px;line-height:1.65}
+@media (max-width:420px){
+  .prof{gap:18px;align-items:center}
+  .prof-img{flex:0 0 142px;max-width:142px}
+}
+.creds{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 6px}
+.cred{flex:1 1 150px;background:var(--soft);border:1px solid var(--line);
+  border-radius:13px;padding:15px 16px}
+.cred b{display:block;font-size:clamp(22px,5.4vw,28px);font-weight:800;
+  letter-spacing:-.035em;color:var(--acc);line-height:1.15}
+.cred span{display:block;font-size:13px;color:var(--dim);margin-top:5px;line-height:1.55}
+
+/* case */
+.case{border:1px solid var(--line);border-radius:15px;overflow:hidden;margin:16px 0}
+.case-h{background:var(--soft);padding:13px 18px;font-size:14.5px;font-weight:700;
+  border-bottom:1px solid var(--line)}
+.case-h em{color:var(--acc);font-weight:800}
+.case-b{padding:4px 18px 16px}
+.case-r{display:flex;gap:13px;padding:13px 0;border-bottom:1px dashed var(--line);font-size:15px;line-height:1.7}
+.case-r:last-child{border-bottom:0}
+.case-r b{flex:0 0 62px;font-size:12.5px;font-weight:700;color:var(--dim);padding-top:3px}
+.case-r div{flex:1;min-width:0}
+.case-r.hit div{color:var(--acc);font-weight:700}
+
+/* footer */
+footer{background:var(--soft);border-top:1px solid var(--line);padding:40px 0 64px}
+.lg{font-size:12.5px;line-height:1.9;color:var(--dim)}
+.lg b{color:var(--fg)}
+.lgbox{border:1px solid var(--line);border-radius:12px;padding:17px;margin:16px 0;background:var(--bg)}
+.lg p{font-size:12.5px;margin-bottom:15px}
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<div class="ink hero-wrap">
+<div class="hero-bg"></div>
+<div class="hero-figure"><img src="assets/jeong.png" alt="" aria-hidden="true" width="560" height="582" decoding="async"></div>
+<div class="w"><section class="hero">
+  <img class="logo" src="assets/logo.png" alt="다올105 미사학원" width="255" height="213">
+  <span class="eyebrow">2027학년도 수시 · 하남 미사</span>
+  <h1>우리 아이,<br>어디까지<br>갈 수 있을까요.</h1>
+  <p class="lead">
+    3년 동안 이 질문을 하셨을 겁니다.<br>
+    그리고 아직도 <strong>시원한 답을 들으신 적이 없을</strong> 겁니다.
+  </p>
+  <hr class="rule">
+  <p class="sm dim">
+    담임선생님께도, 설명회에서도, 커뮤니티에서도 물어보셨겠죠.
+    돌아온 건 대부분 “좀 더 지켜보자”, “안정적으로 가자”였을 겁니다.
+    그게 성의가 없어서가 아닙니다.
+  </p>
+  <p class="say" style="margin-top:30px">그 답이<br>원래 없기 때문입니다.</p>
+
+  <div class="hprof">
+    <div class="hprof-b">
+      <span class="hprof-k">이 상담을 맡는 사람</span>
+      <div class="hprof-n">정영주 <em>입시컨설턴트</em></div>
+      <p class="hprof-c"><b>경력 15년</b> · 수시·정시 컨설턴트<br>관리형 독서실 담임</p>
+    </div>
+  </div>
+</section></div>
+</div>
+
+<!-- ── 1. 왜 답이 없나 ── -->
+<div class="w"><section class="pad">
+  <h2>올해 합격선은<br>아직 세상에 없습니다</h2>
+  <p class="lead">
+    지금 찾고 계신 그 숫자 — <strong>“이 성적이면 어디”</strong> —
+    올해 것은 아직 만들어지지 않았습니다.
+  </p>
+  <p>
+    원서접수가 끝나고, 최초 합격자가 나오고, 예비번호가 다 돌고,
+    최종 등록까지 마감돼야 그때 비로소 생깁니다. <strong>12월 말입니다.</strong>
+  </p>
+
+  <div class="card">
+    <h3>예비번호가 도는 이유</h3>
+    <p class="sm dim">
+      10명 뽑는 학과에서 최초 합격자 4명이 다른 대학에도 붙었다고 해봅시다.
+      그 4명이 다른 곳에 등록하면 4자리가 빕니다. 예비 1번부터 연락이 갑니다.
+      그런데 예비 1번도 이미 다른 대학에 등록했을 수 있죠. 다음 번호로 넘어갑니다.
+      한 자리가 비면 그 자리가 아래로, 또 아래로 이동합니다.
+    </p>
+  </div>
+
+  <p>
+    올해 누가 어디로 몰릴지, 누가 수능최저를 맞출지, 몇 명이 중복 합격으로 빠져나갈지 —
+    <strong>아직 아무것도 정해지지 않았습니다.</strong>
+    그래서 모든 학생에게 똑같이 적용되는 정답표는 존재할 수가 없습니다.
+  </p>
+
+  <div class="pull">
+    답이 없는 게 아니라,<br>질문이 틀렸습니다.
+    <small>“어디까지 갈 수 있나”가 아니라 “어떤 순서로 좁힐 것인가”입니다.
+    아직 만들어지지 않은 결과를 한 번에 맞힐 수는 없지만,
+    조건을 하나씩 넣어 좁히면 가능성 있는 구간까지는 충분히 가까이 갑니다.</small>
+  </div>
+</section></div>
+
+<!-- ── 2. 흔한 오답 ── -->
+<div class="tint"><div class="w"><section class="pad">
+  <span class="eyebrow">이 시기에 가장 많이 하는 선택</span>
+  <h2>답이 안 보이면,<br>사람은 셋 중 하나를 합니다</h2>
+
+  <div class="mis">
+    <div class="mis-q"><span>01</span>“작년에 이 성적으로 붙었대요”</div>
+    <p class="mis-a">
+      가장 흔하고, 가장 위험합니다. 저희가 3개년 등급컷을 전부 대조해봤습니다.
+      3년치가 모두 공개된 <b>5,101개 모집단위</b>에서 컷은 평균 <b>0.64등급</b>씩 움직였고,
+      <b>5곳 중 1곳(19.4%)은 1등급 이상</b> 흔들렸습니다.
+      작년 숫자 하나에 6장을 걸면, 다섯 번에 한 번은 완전히 다른 지도를 보게 됩니다.
+    </p>
+  </div>
+
+  <div class="mis">
+    <div class="mis-q"><span>02</span>“카페에서 봤는데 거기가 빠졌대요”</div>
+    <p class="mis-a">
+      그 글은 <b>우리만 보는 게 아닙니다.</b>
+      작년에 컷이 유난히 낮았던 곳은 올해 모두가 주목합니다. 몰리면 다시 오릅니다.
+      실제로 2025학년도 인서울 교과전형에서 <b>경쟁률이 크게 떨어진 100개 학과</b> 중
+      컷이 실제로 내려간 곳은 <b>52개</b>였습니다. <b>28개는 오히려 올랐습니다.</b>
+      경쟁률 하나만 보고 판단하면 절반은 틀립니다.
+    </p>
+  </div>
+
+  <div class="mis">
+    <div class="mis-q"><span>03</span>“일단 안정적으로 쓰자”</div>
+    <p class="mis-a">
+      요즘 <b>“올해가 마지막이다, 재수는 절대 안 된다”</b>는 말이 많이 돕니다.
+      그 공포가 지원을 실력보다 훨씬 아래로 끌어내립니다.
+      그런데 정작 2026학년도 수시 지원자 1,500명을 조사해보니
+      <b>4명 중 1명(26.8%)은 안정을 아예 쓰지 않았습니다.</b>
+      평균은 상향 2.52장 · 적정 1.99장 · 안정 1.18장이었습니다.
+      <b>불안해서 낮춘 것도, 불안해서 안 쓴 것도 전부 근거가 없는 선택입니다.</b>
+    </p>
+  </div>
+
+  <div class="pull" style="margin-top:36px">
+    세 가지 모두<br>같은 원인에서 나옵니다.
+    <small>근거가 없어서입니다. 근거가 없으면 남의 사례를 따라가거나, 겁이 나서 낮추게 됩니다.
+    12년을 준비한 아이의 마지막 선택이 그렇게 정해지면 안 됩니다.</small>
+  </div>
+</section></div></div>
+
+<!-- ── 3. 진짜 문제 ── -->
+<div class="w"><section class="pad">
+  <span class="eyebrow">저희가 데이터를 뒤지며 알게 된 것</span>
+  <h2>가장 위험한 건<br>‘몰라서’가 아니라<br>‘잘못 알아서’입니다</h2>
+
+  <h3>“내신이 부족하니 학종으로 돌리자”</h3>
+  <p>
+    가장 많이 듣는 말이고, 절반만 맞습니다.
+    같은 대학·같은 학과에서 두 전형의 컷을 나란히 놓아봤습니다.
+    특별전형은 모집단이 달라 전부 빼고, 일반전형만 <strong>1,319쌍</strong>입니다.
+  </p>
+  <div class="fig">
+    <b>0.74등급</b>
+    <span>종합전형 컷이 교과전형보다 낮은 폭 — <strong>중앙값</strong>.
+      1,319쌍 중 1,285쌍(97.4%)에서 종합이 더 낮았습니다.</span>
+  </div>
+  <p>
+    여기서 대부분 멈춥니다. <strong>“그럼 종합이 유리하네”</strong> 하고요.
+  </p>
+
+  <div class="pull">
+    내신을 깎아준다는<br>뜻이 아닙니다.
+    <small>흔히 “학종 컷이 낮은 건 특목고 애들 때문”이라고 합니다.
+    저희 데이터는 그렇게 말하지 않습니다. 특목고가 거의 가지 않는 학과
+    — 사범·간호·예체능 — 에서도 차이는 <strong>0.71등급</strong>이 났습니다.
+    결국 이 차이는 “누가 지원했느냐”가 아니라 <strong>“무엇을 보고 뽑느냐”</strong>에서 옵니다.
+    그 0.7등급은 <strong>서류와 면접으로 채워야 하는 자리</strong>입니다. 그냥 비어 있는 자리가 아닙니다.</small>
+  </div>
+
+  <h3>그럼 3등급씩 벌어진 사례는 뭔가요</h3>
+  <p>
+    인터넷에 돌아다니는 그 사례들, 저희가 직접 뜯어봤습니다.
+    격차가 2등급을 넘긴 곳은 1,319개 중 <strong>27개, 2%</strong>뿐이었습니다. 그 27개의 정체는 이렇습니다.
+  </p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>격차 2등급 초과 학과</th><th class="n">비중</th></tr></thead>
+      <tbody>
+        <tr><td>기초과학·공학 <span class="xs">과학고·영재학교가 몰리는 곳</span></td><td class="n hl">41%</td></tr>
+        <tr><td>어문·국제 <span class="xs">외고·국제고가 몰리는 곳</span></td><td class="n hl">15%</td></tr>
+        <tr><td>인문사회·경상 등</td><td class="n">37%</td></tr>
+        <tr><td>사범·간호·예체능·실용</td><td class="n">7%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    <strong>절반 이상이 특목고·영재학교가 몰리는 학과였습니다.</strong>
+    영재학교는 법적으로 고등학교가 아니라서 <strong>학생부에 석차등급 자체가 나오지 않습니다.</strong>
+    과학고도 학년 정원이 작아 최상위권끼리 붙어도 등급 숫자가 커집니다.
+    <strong>이런 학생들이 섞인 컷은 일반고 아이의 좌표가 아닙니다.</strong>
+  </p>
+
+  <div class="card wm">
+    <h3>같은 ‘학종’인데 완전히 다른 입시입니다</h3>
+    <p class="sm">
+      서울대 학종 <strong>일반전형</strong>은 합격자의 <strong>28.3%가 영재학교</strong> 출신입니다.
+      같은 서울대 학종 <strong>지역균형</strong>은 508명 중 <strong>475명(93.5%)이 일반고</strong>였고,
+      외고·국제고·과학고·영재학교는 <strong>0명</strong>이었습니다.
+    </p>
+    <p class="sm" style="margin-top:11px">
+      이름표는 똑같이 ‘학생부종합’입니다.
+      <strong>“학종이 유리한가”가 아니라 “어느 트랙인가”를 물어야 하는 이유입니다.</strong>
+    </p>
+    <p class="xs" style="margin-top:9px">서울대 2026학년도 발표 결과 기준</p>
+  </div>
+
+  <h3>그리고, 우리 아이 등급은 하나가 아닙니다</h3>
+  <p>
+    대학마다 반영하는 교과·과목·학년 비중이 다릅니다.
+    전과목을 보는 곳, 국·영·수·사·과만 보는 곳, 일부 과목만 보는 곳이 전부 다릅니다.
+  </p>
+  <div class="fig">
+    <b>2.1 → 1.8</b>
+    <span>같은 학생인데 A대학 기준과 B대학 기준이 이만큼 벌어집니다.
+      전과목 평균 하나만 들고 대학을 찾으면, <strong>갈 수 있는 곳을 놓칩니다.</strong></span>
+  </div>
+</section></div>
+
+<!-- ── 4. 학교 ── -->
+<div class="tint"><div class="w"><section class="pad">
+  <h2>선생님을 탓하려는<br>이야기가 아닙니다</h2>
+  <p class="lead">
+    담임선생님은 우리 아이를 가장 오래 보신 분입니다.
+    다만 이 작업에는 학교가 구조적으로 감당하기 어려운 부분이 있습니다.
+    <strong>역량의 문제가 아니라 구조의 문제입니다.</strong>
+  </p>
+
+  <div class="st">
+    <div class="st-n">01</div>
+    <div class="st-b">
+      <h3>진로전담교사는 학교당 1명 이상</h3>
+      <p>「진로교육법 시행령」이 정한 기준입니다. 한 분이 전교생의 진학 설계를 맡습니다.</p>
+    </div>
+  </div>
+  <div class="st">
+    <div class="st-n">02</div>
+    <div class="st-b">
+      <h3>고3 담임은 매년 학년이 바뀝니다</h3>
+      <p>한 학년만 3년 연속 맡는 구조가 아닙니다. 쌓인 감각이 이어지기 어렵습니다.</p>
+    </div>
+  </div>
+  <div class="st">
+    <div class="st-n">03</div>
+    <div class="st-b">
+      <h3>물리적으로 불가능한 분량입니다</h3>
+      <p>3개년 × 60개 대학 × 7,151개 모집단위를 대조하는 일은,
+        수업과 평가와 생활지도를 병행하며 할 수 있는 양이 아닙니다.</p>
+    </div>
+  </div>
+
+  <div class="pull" style="margin-top:34px">
+    학교가 부족한 게 아니라,<br>이건 다른 종류의 일입니다.
+    <small>가르치는 일과, 3년치 숫자를 뒤져 6장을 배치하는 일은 다른 작업입니다.
+    저희는 그 두 번째 일만 합니다.</small>
+  </div>
+</section></div></div>
+
+<!-- ── 5. 우리 방식 ── -->
+<div class="w"><section class="pad">
+  <span class="eyebrow">다올105가 하는 일</span>
+  <h2>순서를 지키면<br>6장이 흔들리지<br>않습니다</h2>
+  <p class="lead">
+    한 장씩 마음 가는 대로 채우면, 나중에 한 장을 바꿀 때 나머지 다섯 장이 전부 흔들립니다.
+    저희는 이 순서로 갑니다.
+  </p>
+
+  <div class="st">
+    <div class="st-n">01</div>
+    <div class="st-b">
+      <h3>좌표 — 지금 어디에 서 있는가</h3>
+      <p>대학 이름을 적기 전에 세 줄부터 확정합니다. 전과목 등급과 주요교과 등급,
+        모의고사 2개·3개 영역 합, 그리고 3년간 이어온 관심의 축.
+        셋 다 애매하면 강한 걸 억지로 찾지 않고 <strong>약한 것부터 지웁니다.</strong></p>
+    </div>
+  </div>
+  <div class="st">
+    <div class="st-n">02</div>
+    <div class="st-b">
+      <h3>안정 — 마지막 카드를 가장 먼저</h3>
+      <p>뒤가 비어 있으면 불안해서 나머지를 조금씩 낮추게 되고,
+        결국 여섯 장이 전부 애매한 중간에 몰립니다.
+        <strong>안정 한 장을 먼저 못 박아야 나머지에서 과감해질 수 있습니다.</strong></p>
+    </div>
+  </div>
+  <div class="st">
+    <div class="st-n">03</div>
+    <div class="st-b">
+      <h3>적정 — 표면 경쟁률에 속지 않습니다</h3>
+      <p>수능최저가 있는 전형은 지원자 상당수가 최저를 넘지 못합니다.
+        2025학년도 논술전형 최저 충족률은 18개 대학 평균 <strong>34.2%</strong>였습니다.
+        표면 경쟁률이 아니라 <strong>실제로 남는 사람 수</strong>로 다시 계산해야 합니다.</p>
+    </div>
+  </div>
+  <div class="st">
+    <div class="st-n">04</div>
+    <div class="st-b">
+      <h3>상향 — 남들이 부담스러워하는 곳을 봅니다</h3>
+      <p>작년에 낮았던 곳은 몰립니다. 거꾸로 작년에 유난히 높았던 곳,
+        전형이 크게 바뀐 곳, 올해 신설되어 작년 데이터가 없는 곳 —
+        <strong>다들 피하는 자리에 틈이 생깁니다.</strong></p>
+    </div>
+  </div>
+</section></div>
+
+<!-- ── 6. 프로그램 ── -->
+<div class="ink"><div class="w"><section class="pad">
+  <span class="eyebrow">진행 방식</span>
+  <h2>하루면 끝납니다.<br>그리고 아무것도<br>남기지 않습니다.</h2>
+  <p class="lead">
+    여러 번 오실 필요 없습니다. <strong>당일 한 번으로 끝냅니다.</strong>
+    그리고 가져오신 서류는 <strong>그날 그대로 다시 가져가십니다.</strong>
+  </p>
+
+  <div class="pr">
+    <div class="pr-t">STEP 1</div>
+    <div class="pr-b"><b>문진표 작성 — 30분</b>
+      아이가 직접 작성합니다. 3년간 무엇을 했고, 그 안에서 자기 역할이 무엇이었는지를
+      본인의 말로 정리합니다. 이 과정 자체가 면접 준비의 출발점이 됩니다.</div>
+  </div>
+  <div class="pr">
+    <div class="pr-t">STEP 2</div>
+    <div class="pr-b"><b>지참 서류 대조</b>
+      작성한 내용과 가져온 서류를 함께 확인합니다.
+      빠진 것, 잘못 기억한 것, 눈에 띄는 것을 그 자리에서 짚습니다.
+      <strong>확인이 끝나면 서류는 바로 돌려드립니다.</strong></div>
+  </div>
+  <div class="pr">
+    <div class="pr-t">STEP 3</div>
+    <div class="pr-b"><b>컨설팅 — 30분 이상</b>
+      교과 등급을 대학별 반영식으로 환산하고 3개년 최종등록자 컷과 대조해
+      지원 가능선을 그립니다. 교과·종합·논술 중 어느 축이 유리한지 판정하고,
+      안정 → 적정 → 상향 순서로 <strong>6장을 배치</strong>합니다.</div>
+  </div>
+
+  <div class="card" style="margin-top:24px">
+    <h3>당일 가져오실 것 세 가지</h3>
+    <p class="sm dim" style="margin-bottom:12px">이 세 가지가 있어야 판정이 정확해집니다.</p>
+    <div class="pr" style="padding:11px 0">
+      <div class="pr-t">01</div><div class="pr-b" style="font-size:15.5px">학교생활기록부</div>
+    </div>
+    <div class="pr" style="padding:11px 0">
+      <div class="pr-t">02</div><div class="pr-b" style="font-size:15.5px">모의고사 성적표 <span class="xs">5월 · 6월 · 7월</span></div>
+    </div>
+    <div class="pr" style="padding:11px 0">
+      <div class="pr-t">03</div><div class="pr-b" style="font-size:15.5px">성적일람표</div>
+    </div>
+  </div>
+
+  <div class="pull">
+    확인하고,<br>그 자리에서 돌려드립니다.
+    <small>복사하지 않습니다. 사진 찍지 않습니다. 스캔하지 않습니다.
+    파일로 받지 않고, 저장하지 않습니다.
+    <strong>가져오신 서류는 전부 당일 그대로 가지고 돌아가십니다.</strong></small>
+  </div>
+
+  <div class="card">
+    <h3>서류를 남기지 않는 이유</h3>
+    <p class="sm dim">
+      2026년 7월 말부터 학원이 학교생활기록부를 받아 보관하거나 분석하는 것이 법으로 제한됐습니다.
+      대형 입시업체들이 수시 예측 서비스를 잇달아 접은 것도 그 때문입니다.
+    </p>
+    <p class="sm dim" style="margin-top:11px">
+      저희는 <strong>어떤 서류도 디지털로 옮기지 않습니다.</strong>
+      상담이 끝나면 학원에 남는 것은 없습니다.
+      <strong>기록은 학교가 쓰고, 해석은 저희가 합니다.</strong>
+    </p>
+  </div>
+
+  <div class="creds" style="margin-top:24px">
+    <div class="cred"><b>60분~</b><span>문진표 30분 + 컨설팅 30분 이상</span></div>
+    <div class="cred"><b>추가비용 0원</b><span>시간이 길어져도<br>더 받지 않습니다</span></div>
+    <div class="cred"><b>당일 완결</b><span>재방문 없이<br>한 번에 끝냅니다</span></div>
+  </div>
+</section></div></div>
+
+<!-- ── 7. 담당 ── -->
+<div class="w"><section class="pad">
+  <span class="eyebrow">이 상담을 맡는 사람</span>
+
+  <div class="prof">
+    <div class="prof-img"><img src="assets/jeong.png" alt="정영주 입시컨설턴트" width="560" height="582" decoding="async"></div>
+    <div class="prof-txt">
+      <span class="prof-role">입시컨설턴트</span>
+      <div class="prof-name">정영주<span>선생님</span></div>
+      <p class="prof-sub">수시·정시 컨설턴트<br>관리형 독서실 담임</p>
+    </div>
+  </div>
+
+  <div class="creds">
+    <div class="cred"><b>15년</b><span>입시 상담 경력</span></div>
+    <div class="cred"><b>수시 · 정시</b><span>전 영역 설계 담당</span></div>
+    <div class="cred"><b>매일</b><span>독서실 담임으로<br>같은 아이를 봅니다</span></div>
+  </div>
+  <p class="xs">경력은 강사 게시표(2026. 8. 1. 기준) 신고 자료에 따릅니다.</p>
+
+  <h3>1년에 두 번 만나는 컨설턴트가 아닙니다</h3>
+  <p>
+    대치동 컨설팅은 두 시간 만나고 끝납니다. 그 두 시간에 아이를 다 알 수는 없습니다.
+    학교 선생님은 아이를 잘 아시지만, 3개년 데이터를 뒤질 시간이 없습니다.
+  </p>
+  <p>
+    <strong>정영주 선생님은 관리형 독서실 담임을 겸합니다.</strong>
+    이 아이가 몇 시에 오는지, 어느 과목에서 막히는지, 시험 기간에 무너지는지 —
+    <strong>상담 전부터 이미 알고 있습니다.</strong>
+    그 위에 3개년 7,151개 모집단위를 얹습니다.
+  </p>
+
+  <h3>실제로 이런 판단을 합니다</h3>
+  <p class="sm dim">
+    합격한 대학보다, 어떻게 그 자리에 갔는지가 중요합니다.
+    아래는 정영주 컨설턴트가 담당한 실제 사례입니다.
+  </p>
+
+  <div class="case">
+    <div class="case-h">내신 2.8 · 일반고 · <em>생명공학 희망</em></div>
+    <div class="case-b">
+      <div class="case-r"><b>학교</b><div>생명공학 계열로 추천서를 받음</div></div>
+      <div class="case-r"><b>진단</b><div>강점이 생명이 아니라
+        <strong>수리·공간 탐구</strong> 쪽에 몰려 있었습니다. 과정이 구체적이고 문제해결이 드러나 있었습니다.</div></div>
+      <div class="case-r"><b>제안</b><div>학교가 권한 곳은 그대로 두고,
+        <strong>건축학과를 한 장 추가</strong>했습니다.</div></div>
+      <div class="case-r hit"><b>결과</b><div>국민대 건축학과 · 상명대 생명공학과 합격</div></div>
+    </div>
+  </div>
+
+  <div class="case">
+    <div class="case-h">내신 2.5 · 일반고 · <em>도시계획 희망</em></div>
+    <div class="case-b">
+      <div class="case-r"><b>학교</b><div>2학년 마친 시점 상담 결과 — 가천대 · 경기대</div></div>
+      <div class="case-r"><b>진단</b><div>도시계획은 선택지가 좁은 분야였습니다.
+        탐구가 겉핥기 수준이라 배경·과정·이해관계·근거 법령까지 넣도록 방향을 바꿨습니다.</div></div>
+      <div class="case-r"><b>제안</b><div>두 학기 연속 내신이 올랐는데도 학교 상담은 안정 위주였습니다.
+        학교 판단은 존중하되 <strong>상향 2곳을 더</strong> 넣었습니다.</div></div>
+      <div class="case-r hit"><b>결과</b><div>건국대 부동산학과 · 국민대 행정학과 합격</div></div>
+    </div>
+  </div>
+
+  <p class="sm dim">
+    두 사례 모두 <strong>학교가 권한 곳에도 합격</strong>했습니다.
+    학교 판단이 틀렸다는 이야기가 아닙니다.
+    한 장을 더 볼 여유가 있었고, 그 한 장이 결과를 바꿨다는 이야기입니다.
+  </p>
+
+  <div class="pull">
+    합격은 약속하지 않습니다.<br>근거는 약속합니다.
+    <small>여섯 칸에 왜 그 대학이 들어갔는지, 아이도 부모님도 설명할 수 있게 만들어 드립니다.
+    그래야 결과가 어떻든 후회가 남지 않습니다.</small>
+  </div>
+</section></div>
+
+<!-- ── 8. CTA ── -->
+<div class="tint"><div class="w"><section class="pad">
+  <p class="say">9월 7일이 지나면<br>바꿀 수 없습니다.</p>
+  <p class="sm dim" style="text-align:center;margin-top:18px">
+    원서접수 전에 6장이 확정되어야 합니다.<br>
+    사전 분석에 시간이 필요해 하루에 받을 수 있는 인원이 정해져 있습니다.
+  </p>
+
+  <div class="tw" style="margin:26px 0 22px">
+    <table>
+      <thead><tr><th>구분</th><th>일정</th></tr></thead>
+      <tbody>
+        <tr><td><strong>접수</strong></td><td class="hl">8월 20일(목) ~ 8월 25일(화)</td></tr>
+        <tr><td><strong>상담 진행</strong></td><td class="hl">8월 24일(월) ~ 8월 29일(토)</td></tr>
+        <tr><td>수시 원서접수</td><td>9월 7일(월) ~ 9월 11일(금)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="xs" style="text-align:center;margin-top:-10px">일정은 예약 상황에 따라 조정될 수 있습니다.</p>
+
+  <a class="btn" href="tel:031-794-8158">상담 예약 · 031-794-8158</a>
+  <a class="btn g" href="#legal">이용 조건 · 교습비 확인</a>
+
+  <div class="card" style="max-width:420px;margin:24px auto 0;text-align:left">
+    <h3 style="text-align:center">당일 가져오실 것</h3>
+    <p class="sm" style="text-align:center;margin-bottom:0">
+      학교생활기록부<br>
+      모의고사 성적표 <span class="xs">(5·6·7월)</span><br>
+      성적일람표
+    </p>
+  </div>
+  <p class="xs" style="text-align:center;margin-top:14px">
+    <strong>확인 후 그 자리에서 모두 돌려드립니다.</strong><br>
+    복사·촬영·스캔하지 않으며, 어떤 서류도 보관하지 않습니다.
+  </p>
+</section></div></div>
+
+<!-- ── FOOTER ── -->
+<footer id="legal"><div class="w">
+<div class="lg">
+  <div class="lgbox">
+    <b>다올105</b><br>
+    등록번호 <b>제 하남 298호</b><br>
+    교습과정 <b>진학상담·지도</b> — 고3 진학설계반<br>
+    <!-- ═══════════════════════════════════════════════════════════════
+         ⚠️ 교습비 — 배포 전 반드시 확정할 것
+
+         1) 광주하남교육지원청에서 [참고3] 학원등 교습비 기준표 원본을 다시 받아
+            「진학지도 / 진학상담·지도」 분당단가를 확정 (현재 확인값 234원/분).
+         2) 교습비 변경등록(서식 8_교습비 변경 신청서) 수리 완료 후,
+            등록액과 아래 숫자를 100% 일치시킬 것.
+
+         ※ 학원법 제15조제4항 — 등록액과 다른 숫자를 광고에 쓰면 그 자체로 위반
+           (경기 기준 교습비 표시 허위는 1차부터 교습정지).
+         ※ 수리 전 신액 광고는 2026년 온라인 모니터링 적발 1위 유형('교습비 변경 미등록' 174건).
+         ※ 시행령 제16조의3 광고 표시 의무 4항목은 학원명칭·등록번호·교습과정·교습비등이며
+           교습시간은 광고 표시 의무 항목이 아님. 게시표에는 기재 필요.
+         ═══════════════════════════════════════════════════════════════ -->
+    교습비 <b>500,000원</b> (재원생 450,000원)<br>
+    경기도 하남시 · ☎ 031-794-8158
+  </div>
+
+  <p><b>학교생활기록부 등 지참 서류에 관한 고지</b><br>
+    상담 시 지참 서류는 <b>학생 본인 또는 보호자가 직접 소지하여 방문</b>하며,
+    상담 중 확인을 마친 후 <b>당일 전량 본인에게 반환</b>합니다.
+    본원은 학교생활기록부를 포함한 어떠한 지참 서류도
+    <b>사본·촬영·스캔·전자파일 형태로 수령하거나 보관하지 않으며, 디지털 자료로 변환하지 않습니다.</b>
+    상담 결과 및 기록에는 학교생활기록부의 서술 내용이 포함되지 않습니다.</p>
+
+  <p><b>합격 보장에 관한 고지</b><br>
+    본 상담은 합격을 보장하지 않습니다. 제시되는 등급컷과 지원 가능선은
+    각 대학이 공표한 과거 입시결과에 근거한 참고 자료이며, 당해 연도 결과를 예측하지 않습니다.</p>
+
+  <p><b>상담 사례에 관한 고지</b><br>
+    본 페이지에 게재된 사례는 본원 컨설턴트가 담당한 개별 상담의 실제 경과이며,
+    수강 이력 및 결과에 관한 증빙자료를 본원이 보관하고 있습니다.
+    개별 사례는 해당 학생의 성적·이수과목·지원 시점 등 고유한 조건에서 나온 결과로,
+    동일한 조건이 아닌 다른 학생에게 같은 결과를 보장하지 않습니다.
+    사례에는 학교생활기록부의 서술 내용이 포함되어 있지 않습니다.</p>
+
+  <p><b>상담 결과물 사용 제한</b><br>
+    본원이 제공하는 교재 및 상담 내용은 학교 제출용이 아니며,
+    학교생활기록부 기재를 요청하는 용도로 사용할 수 없습니다.</p>
+
+  <p><b>교습비 반환</b><br>
+    교습비등의 반환은 「학원의 설립·운영 및 과외교습에 관한 법률」 제18조 및
+    같은 법 시행령 [별표 4] 반환기준에 따릅니다. 반환기준 전문은 원내에 게시되어 있습니다.</p>
+
+  <p><b>인용 자료 출처</b><br>
+    · 등급컷 분석 — 각 대학이 발표한 <b>2022·2023·2024학년도</b> 수시 입시결과
+    (최종등록자 70%컷·평균 등) 60개 대학 7,151개 모집단위<br>
+    · 교과·종합 격차 — 위 자료 중 동일 대학·동일 모집단위에 두 전형이 모두 존재하는
+    <b>일반전형 1,319쌍</b>. 특별전형(농어촌·기회균형·특성화고·만학도·특수교육대상자 등) 제외<br>
+    · 고교유형별 구성 — 서울대 2026학년도 발표 결과<br>
+    · 논술 수능최저 충족률 — 2025학년도 18개 대학 집계<br>
+    · 경쟁률·컷 대조 — 2025학년도 인서울 교과전형 분석<br>
+    · 지원 성향 — 2026학년도 수시 지원자 1,500명 조사<br>
+    · 2027학년도 전형 일정 — 한국대학교육협의회 대학입학전형기본사항</p>
+
+  <p><b>데이터 최신성 고지</b><br>
+    본 페이지의 등급컷 분석은 <b>2024학년도까지</b>의 공표 자료를 기준으로 합니다.
+    2025·2026학년도 입시결과는 포함되어 있지 않으며, 상담 시 각 대학 입학처의
+    최신 공표 자료를 함께 확인해 제공합니다.</p>
+
+  <p class="xs">
+    대학별 등급 산출 방식(반영 교과·가중치·수능최저)이 서로 달라 등급컷은 참고치이며,
+    단순 평균 등급이 아닌 대학별 환산 기준으로 비교해야 합니다.
+    최종등록자 70%컷은 마지막 합격자의 성적이 아니라, 등록자를 성적순으로 정렬했을 때
+    상위 70% 지점의 값입니다.
+    학생부종합전형은 서류·면접 평가가 중심이며 등급만으로 결과가 결정되지 않습니다.
+    전형별 등급컷에는 고교유형에 따른 편차가 반영되어 있어 일반고 학생에게 그대로 적용할 수 없습니다.
+  </p>
+</div>
+</div></footer>
+
+</body>
+</html>
