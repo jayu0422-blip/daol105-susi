@@ -1,0 +1,43 @@
+가설A = 컬럼이 [2024,2023,2022]학년도
+가설B = 컬럼이 [2025,2024,2023]학년도
+
+서울대학교 / 첨단융합학부           (2024학년도 신설)
+   컷A=1.29   컷B=None   컷C=None  
+   기대(가설A)=[True, False, False]  기대(가설B)=[True, True, False]  실제=[True, False, False]  →  가설A 부합
+서울대학교 / 첨단융합학부           (2024학년도 신설)
+   컷A=3.02   컷B=None   컷C=None  
+   기대(가설A)=[True, False, False]  기대(가설B)=[True, True, False]  실제=[True, False, False]  →  가설A 부합
+
+한양대학교 / 반도체공학과(외)        (2023학년도 신설)
+   컷A=1.26   컷B=1.03   컷C=None  
+   기대(가설A)=[True, True, False]  기대(가설B)=[True, True, True]  실제=[True, True, False]  →  가설A 부합
+한양대학교 / 반도체공학과(외)        (2023학년도 신설)
+   컷A=2.09   컷B=2.17   컷C=None  
+   기대(가설A)=[True, True, False]  기대(가설B)=[True, True, True]  실제=[True, True, False]  →  가설A 부합
+
+고려대학교 / 차세대통신학과          (2023학년도 신설)
+   컷A=2.54   컷B=2.55   컷C=None  
+   기대(가설A)=[True, True, False]  기대(가설B)=[True, True, True]  실제=[True, True, False]  →  가설A 부합
+고려대학교 / 차세대통신학과          (2023학년도 신설)
+   컷A=3.64   컷B=3.31   컷C=None  
+   기대(가설A)=[True, True, False]  기대(가설B)=[True, True, True]  실제=[True, True, False]  →  가설A 부합
+
+고려대학교 / 스마트모빌리티학부        (2024학년도 신설)
+   컷A=2.29   컷B=2.2    컷C=None  
+   기대(가설A)=[True, False, False]  기대(가설B)=[True, True, False]  실제=[True, True, False]  →  가설B 부합
+고려대학교 / 스마트모빌리티학부        (2024학년도 신설)
+   컷A=4.03   컷B=4.01   컷C=None  
+   기대(가설A)=[True, False, False]  기대(가설B)=[True, True, False]  실제=[True, True, False]  →  가설B 부합
+
+연세대학교 / 디스플레이융합공학과       (2024학년도 신설)
+   컷A=1.75   컷B=None   컷C=None  
+   기대(가설A)=[True, False, False]  기대(가설B)=[True, True, False]  실제=[True, False, False]  →  가설A 부합
+연세대학교 / 디스플레이융합공학과       (2024학년도 신설)
+   컷A=2.48   컷B=2.65   컷C=None  
+   기대(가설A)=[True, False, False]  기대(가설B)=[True, True, False]  실제=[True, True, False]  →  가설B 부합
+
+중앙대학교 / 첨단소재공학과          (2021~ 신설)
+   컷A=2.44   컷B=3.01   컷C=3.05  
+중앙대학교 / AI학과             (2021~ 신설)
+   컷A=1.6    컷B=1.86   컷C=1.42  
+
