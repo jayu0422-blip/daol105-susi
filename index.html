@@ -1,3 +1,4 @@
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>내신 등급으로 보는 수시 지원 라인 | 다올105 무료 조회</title>
@@ -147,7 +148,7 @@
 let DATA = null;
 async function load() {
   if (DATA) return DATA;
-  const res = await fetch('data.json');
+  const res = await fetch('data.json?v=20260825');
   DATA = await res.json();
   return DATA;
 }
