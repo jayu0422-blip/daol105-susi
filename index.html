@@ -86,6 +86,37 @@
   footer b{color:var(--gray)}
   .hidden{display:none}
   .loading{text-align:center;padding:30px;color:var(--gray2);font-weight:700;font-size:14px}
+
+/* -- detail gate -- */
+.gate{margin:26px 0 8px;border:2px solid #2563eb;border-radius:16px;overflow:hidden;background:#fff}
+@media(prefers-color-scheme:dark){.gate{background:#101720;border-color:#4d8bf0}}
+.gate-h{background:linear-gradient(135deg,#2563eb,#1e40af);color:#fff;padding:18px}
+.gate-h .k{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:.06em;background:rgba(255,255,255,.2);padding:5px 11px;border-radius:99px;margin-bottom:9px}
+.gate-h h3{font-size:clamp(18px,4.6vw,23px);font-weight:800;letter-spacing:-.03em;line-height:1.35;margin:0}
+.gate-h p{font-size:13.5px;line-height:1.7;margin:8px 0 0;color:#cfe0ff}
+.gate-b{padding:16px 18px 18px}
+.gate-list{display:grid;gap:9px;margin-bottom:16px}
+.gate-li{display:flex;gap:9px;align-items:flex-start;font-size:14.5px;line-height:1.62}
+.gate-li i{color:#2563eb;font-weight:800;font-style:normal;flex:0 0 auto}
+@media(prefers-color-scheme:dark){.gate-li i{color:#7aa9f7}}
+.gate-li span{flex:1;min-width:0}
+.gate-note{font-size:12.5px;line-height:1.7;color:#5b6572;background:#f4f7fb;border-radius:9px;padding:10px 12px;margin-bottom:14px}
+@media(prefers-color-scheme:dark){.gate-note{background:#161d27;color:#96a3b3}}
+.gf{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.gf label{display:block;font-size:12px;font-weight:700;color:#5b6572;margin-bottom:4px}
+.gf input,.gf select{width:100%;padding:11px 12px;border:1.5px solid #d7dee7;border-radius:9px;font-size:15px;background:#fff;color:#12161c;font-family:inherit}
+@media(prefers-color-scheme:dark){.gf input,.gf select{background:#0d1219;border-color:#2a333f;color:#e9eef3}}
+.gf .full{grid-column:1/-1}
+.gf input:focus,.gf select:focus{outline:none;border-color:#2563eb}
+.gate-agree{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;line-height:1.65;color:#5b6572;margin:13px 0 12px}
+.gate-agree input{margin-top:3px;flex:0 0 auto;width:16px;height:16px}
+.gate-btn{width:100%;padding:15px;background:#2563eb;color:#fff;border:0;border-radius:11px;font-size:16.5px;font-weight:800;letter-spacing:-.02em;cursor:pointer;font-family:inherit}
+.gate-btn:disabled{background:#aebdd2;cursor:not-allowed}
+.gate-err{font-size:13px;color:#d13b3b;margin-top:9px;display:none}
+.gate-ok{display:none;padding:20px 18px;text-align:center}
+.gate-ok b{display:block;font-size:18px;font-weight:800;margin-bottom:7px;color:#0d7a4f}
+@media(prefers-color-scheme:dark){.gate-ok b{color:#4fd1a5}}
+
 </style>
 
 <div class="top">
@@ -134,6 +165,40 @@
   </div>
 
   <div id="out" class="result"></div>
+
+<div class="gate" id="gate" style="display:none">
+  <div class="gate-h">
+    <span class="k">여기까지는 맛보기입니다</span>
+    <h3>이 대학들, 정말 쓸 수 있는지<br>확인해 보시겠습니까?</h3>
+    <p>위 목록은 내신만 본 결과입니다. 실제 지원은 수능최저·추합까지 봐야 정해집니다.</p>
+  </div>
+  <div class="gate-b" id="gateForm">
+    <div class="gate-list">
+      <div class="gate-li"><i>1</i><span><b>수능최저 충족 판정</b> — 수능 예상 등급을 넣으면 <b>4,721개 전형</b>의 최저를 자동 계산합니다. 못 넘기는 곳은 경쟁률이 의미 없습니다.</span></div>
+      <div class="gate-li"><i>2</i><span><b>3개년 컷 추이</b> — 오르는 중인지 내리는 중인지 <b>14,611개</b>에서 방향이 보입니다.</span></div>
+      <div class="gate-li"><i>3</i><span><b>출렁임 경고</b> — 3년새 1등급 이상 흔들린 <b>2,546개(17.4%)</b>를 표시합니다. 작년 숫자만 믿으면 위험한 곳입니다.</span></div>
+      <div class="gate-li"><i>4</i><span><b>특목·자사 경고</b> — 종합 컷이 교과보다 크게 낮은 <b>313개 학과</b>를 표시합니다. 일반고 학생이 그대로 보면 안 되는 숫자입니다.</span></div>
+      <div class="gate-li"><i>5</i><span><b>모집인원 · 추합 인원</b> — 실제로 예비 몇 번까지 돌았는지 3개년으로 봅니다.</span></div>
+    </div>
+    <div class="gate-note">신청만 하시면 바로 열립니다. 결제도, 상담 예약도 필요 없습니다.</div>
+    <div class="gf">
+      <div><label>이름</label><input id="gn" type="text" placeholder="홍길동" autocomplete="name"></div>
+      <div><label>학년</label><select id="gg"><option value="">선택</option><option>고1</option><option>고2</option><option>고3</option><option>N수</option></select></div>
+      <div class="full"><label>학교</label><input id="gs" type="text" placeholder="미사고등학교" autocomplete="organization"></div>
+      <div class="full"><label>휴대폰</label><input id="gp" type="tel" inputmode="numeric" placeholder="01012345678" autocomplete="tel"></div>
+    </div>
+    <label class="gate-agree"><input type="checkbox" id="ga">
+      <span>개인정보 수집·이용에 동의합니다. 수집항목 이름·학교·학년·휴대폰 / 목적 조회 결과 상세 제공 및 입시 정보 안내 / 보유기간 <b>6개월</b> / 동의를 거부하실 수 있으며 이 경우 상세 정보 이용이 제한됩니다.</span>
+    </label>
+    <button class="gate-btn" id="gb">상세 결과 열어보기</button>
+    <div class="gate-err" id="ge"></div>
+  </div>
+  <div class="gate-ok" id="gateOk">
+    <b>열렸습니다</b>
+    <span style="font-size:14px;color:#5b6572">아래 결과에 수능최저 판정과 경고 표시가 함께 나옵니다.</span>
+  </div>
+</div>
+
 
   <div id="next" class="next">
     <div class="k">지원 라인을 확인하셨다면</div>
@@ -231,8 +296,58 @@ async function run() {
     +     '작년 컷이 올해 그대로 유지되는 것도 아닙니다.</p>'
     +   '<a href="consulting/">실패 없이 지원하는 법 &rarr;</a>'
     + '</div>';
+  showGate();
   window.scrollTo({ top: document.getElementById('out').offsetTop - 20, behavior: 'smooth' });
 }
+
+/* -- detail gate -- */
+var GATE_KEY='daol_detail_v1';
+var GAS_URL='';
+function gateUnlocked(){ try{ return localStorage.getItem(GATE_KEY)==='1'; }catch(e){ return false; } }
+function showGate(){
+  var el=document.getElementById('gate'); if(!el) return;
+  el.style.display='block';
+  if(gateUnlocked()){
+    document.getElementById('gateForm').style.display='none';
+    document.getElementById('gateOk').style.display='block';
+  }
+}
+function bindGate(){
+  var b=document.getElementById('gb'); if(!b) return;
+  b.addEventListener('click', function(){
+    var n=document.getElementById('gn').value.trim();
+    var s=document.getElementById('gs').value.trim();
+    var g=document.getElementById('gg').value;
+    var p=document.getElementById('gp').value.replace(/[^0-9]/g,'');
+    var a=document.getElementById('ga').checked;
+    var e=document.getElementById('ge');
+    function fail(m){ e.textContent=m; e.style.display='block'; }
+    if(!n) return fail('이름을 입력해 주세요.');
+    if(!s) return fail('학교를 입력해 주세요.');
+    if(!g) return fail('학년을 선택해 주세요.');
+    if(!/^01[016789][0-9]{7,8}$/.test(p)) return fail('휴대폰 번호를 정확히 입력해 주세요. (예: 01012345678)');
+    if(!a) return fail('개인정보 수집 이용에 동의해 주세요.');
+    e.style.display='none'; b.disabled=true; b.textContent='처리 중...';
+    var payload={ name:n, school:s, grade:g, phone:p,
+      naesin:document.getElementById('g').value,
+      gyeyeol:document.getElementById('tr').value,
+      jiyeok:document.getElementById('rg').value,
+      jeonhyeong:document.getElementById('ty').value,
+      ref:(document.referrer||'direct') };
+    function done(){
+      try{ localStorage.setItem(GATE_KEY,'1'); }catch(err){}
+      document.getElementById('gateForm').style.display='none';
+      document.getElementById('gateOk').style.display='block';
+      if(typeof run==='function') run();
+      document.getElementById('gate').scrollIntoView({behavior:'smooth',block:'center'});
+    }
+    if(GAS_URL){
+      fetch(GAS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)}).then(done).catch(done);
+    } else { done(); }
+  });
+}
+
+bindGate();
 document.getElementById('g').addEventListener('keydown', e => { if (e.key === 'Enter') run(); });
 </script>
 
