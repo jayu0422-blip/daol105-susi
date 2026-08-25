@@ -352,13 +352,13 @@ async function run(){
   var wd = rows.map(function(r){ return { r: r, cut: cutOf(r), d: Math.round(cutOf(r) * 100) - g100 }; });
   var byCut = function(a, b){ return a.cut - b.cut; };
   /* 9등급: 안정 .30 / 적정 -.20 / 도전 -.80  |  5등급은 눈금이 촘촘해 절반 */
-  var B = (scale() === 9) ? [30, -20, -80] : [15, -10, -40];
+  var B = (scale() === 9) ? [30, -20, -80] : [16, -11, -44];
   var safe = wd.filter(function(x){ return x.d >= B[0]; }).sort(byCut).map(function(x){ return x.r; });
   var fit  = wd.filter(function(x){ return x.d >= B[1] && x.d < B[0]; }).sort(byCut).map(function(x){ return x.r; });
   var tryy = wd.filter(function(x){ return x.d >= B[2] && x.d < B[1]; }).sort(byCut).map(function(x){ return x.r; });
   var LB = (scale() === 9)
     ? ['컷 ±0.2~0.3등급','컷이 내 등급보다 0.3등급 이상 아래','컷보다 0.2~0.8등급 부족']
-    : ['컷 ±0.10~0.15등급','컷이 내 등급보다 0.15등급 이상 아래','컷보다 0.10~0.40등급 부족'];
+    : ['컷 ±0.11~0.16등급','컷이 내 등급보다 0.16등급 이상 아래','컷보다 0.11~0.44등급 부족'];
 
   var html = '<p style="font-size:13.5px;color:#4E5968;font-weight:700;text-align:center;margin:4px 0 14px">' +
     scale() + '등급제 평균 ' + g.toFixed(2) + '등급 기준 · ' + grade + ' 입력값으로 계산했습니다</p>';
