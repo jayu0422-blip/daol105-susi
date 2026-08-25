@@ -117,6 +117,18 @@
 .gate-ok b{display:block;font-size:18px;font-weight:800;margin-bottom:7px;color:#0d7a4f}
 @media(prefers-color-scheme:dark){.gate-ok b{color:#4fd1a5}}
 
+
+.agbox{border:1px solid #dfe5ec;border-radius:11px;padding:4px 12px 10px;margin:14px 0 12px;background:#fafbfd}
+@media(prefers-color-scheme:dark){.agbox{background:#131a23;border-color:#28313d}}
+.ag-all{display:flex;gap:8px;align-items:center;padding:11px 0 10px;border-bottom:1px solid #e5eaf0;font-size:14px;cursor:pointer}
+@media(prefers-color-scheme:dark){.ag-all{border-color:#28313d}}
+.ag-all input{width:18px;height:18px;flex:0 0 auto}
+.ag-all b{font-weight:800}
+.gate-agree em{font-style:normal;color:#8a94a1;font-size:11.5px}
+.gate-agree b.req{color:#d13b3b;font-weight:800;font-size:12px}
+.gate-agree b.opt{color:#2563eb;font-weight:800;font-size:12px}
+@media(prefers-color-scheme:dark){.gate-agree b.req{color:#f08a8a}.gate-agree b.opt{color:#7aa9f7}}
+
 </style>
 
 <div class="top">
@@ -187,9 +199,22 @@
       <div class="full"><label>학교</label><input id="gs" type="text" placeholder="미사고등학교" autocomplete="organization"></div>
       <div class="full"><label>휴대폰</label><input id="gp" type="tel" inputmode="numeric" placeholder="01012345678" autocomplete="tel"></div>
     </div>
-    <label class="gate-agree"><input type="checkbox" id="ga">
-      <span>개인정보 수집·이용에 동의합니다. 수집항목 이름·학교·학년·휴대폰 / 목적 조회 결과 상세 제공 및 입시 정보 안내 / 보유기간 <b>6개월</b> / 동의를 거부하실 수 있으며 이 경우 상세 정보 이용이 제한됩니다.</span>
-    </label>
+    <div class="agbox">
+      <label class="ag-all"><input type="checkbox" id="gaAll"><span><b>아래 내용에 모두 동의합니다</b></span></label>
+      <label class="gate-agree"><input type="checkbox" id="ga">
+        <span><b class="req">[필수]</b> 개인정보 수집·이용 및 입시 자료 수신 동의<br>
+        <em>수집항목</em> 이름·학교·학년·휴대폰<br>
+        <em>이용목적</em> 조회 결과 상세 제공, 신청자가 요청한 <b>입시 자료 제공</b>
+        (입시 설명회 영상, 기출 분석 자료, 모의고사·수시 일정 안내)<br>
+        <em>보유기간</em> 수집일로부터 6개월<br>
+        동의를 거부하실 수 있으며, 이 경우 상세 결과와 자료 제공이 제한됩니다.</span>
+      </label>
+      <label class="gate-agree"><input type="checkbox" id="gm">
+        <span><b class="opt">[선택]</b> 광고성 정보 수신 동의<br>
+        수강 안내, 모집 일정, 할인·혜택 등 <b>영리목적 광고성 정보</b>를 문자·알림톡으로 받습니다.<br>
+        <em>동의하지 않으셔도 위 입시 자료와 상세 결과는 그대로 받으실 수 있습니다.</em> 언제든 무료로 수신거부 가능합니다.</span>
+      </label>
+    </div>
     <button class="gate-btn" id="gb">상세 결과 열어보기</button>
     <div class="gate-err" id="ge"></div>
   </div>
@@ -314,25 +339,35 @@ function showGate(){
 }
 function bindGate(){
   var b=document.getElementById('gb'); if(!b) return;
+  var all=document.getElementById('gaAll');
+  var boxes=[document.getElementById('ga'),document.getElementById('gm')];
+  if(all){
+    all.addEventListener('change',function(){ boxes.forEach(function(x){ if(x) x.checked=all.checked; }); });
+    boxes.forEach(function(x){ if(x) x.addEventListener('change',function(){
+      all.checked = boxes.every(function(y){ return y && y.checked; });
+    }); });
+  }
   b.addEventListener('click', function(){
     var n=document.getElementById('gn').value.trim();
     var s=document.getElementById('gs').value.trim();
     var g=document.getElementById('gg').value;
     var p=document.getElementById('gp').value.replace(/[^0-9]/g,'');
     var a=document.getElementById('ga').checked;
+    var mk=document.getElementById('gm').checked;
     var e=document.getElementById('ge');
     function fail(m){ e.textContent=m; e.style.display='block'; }
     if(!n) return fail('이름을 입력해 주세요.');
     if(!s) return fail('학교를 입력해 주세요.');
     if(!g) return fail('학년을 선택해 주세요.');
     if(!/^01[016789][0-9]{7,8}$/.test(p)) return fail('휴대폰 번호를 정확히 입력해 주세요. (예: 01012345678)');
-    if(!a) return fail('개인정보 수집 이용에 동의해 주세요.');
+    if(!a) return fail('[필수] 개인정보 수집·이용에 동의해 주세요.');
     e.style.display='none'; b.disabled=true; b.textContent='처리 중...';
     var payload={ name:n, school:s, grade:g, phone:p,
       naesin:document.getElementById('g').value,
       gyeyeol:document.getElementById('tr').value,
       jiyeok:document.getElementById('rg').value,
       jeonhyeong:document.getElementById('ty').value,
+      marketing:(mk?'Y':'N'),
       ref:(document.referrer||'direct') };
     function done(){
       try{ localStorage.setItem(GATE_KEY,'1'); }catch(err){}
