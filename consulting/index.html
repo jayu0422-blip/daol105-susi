@@ -10,7 +10,7 @@
 <meta name="format-detection" content="telephone=no">
 <style>
 :root{
-  --bg:#fff; --fg:#12161c; --dim:#606a78; --faint:#8b95a3;
+  --bg:#fff; --fg:#12161c; --dim:#606a78; --faint:#505a66;
   --line:#e4e8ee; --soft:#f5f7f9; --soft2:#eef2f5;
   --acc:#0d5a48; --acc-l:#e6f2ee; --acc-t:#0a4437;
   --warm:#a03c14; --warm-l:#fdf0e9;
@@ -20,7 +20,7 @@
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --bg:#0d1116; --fg:#e9eef3; --dim:#9aa5b3; --faint:#78828f;
+    --bg:#0d1116; --fg:#e9eef3; --dim:#9aa5b3; --faint:#8e98a5;
     --line:#212934; --soft:#141a21; --soft2:#1a222b;
     --acc:#4fd1a5; --acc-l:#10241e; --acc-t:#8fe8c6;
     --warm:#f0a878; --warm-l:#241810;
@@ -29,14 +29,14 @@
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0d1116; --fg:#e9eef3; --dim:#9aa5b3; --faint:#78828f;
+  --bg:#0d1116; --fg:#e9eef3; --dim:#9aa5b3; --faint:#8e98a5;
   --line:#212934; --soft:#141a21; --soft2:#1a222b;
   --acc:#4fd1a5; --acc-l:#10241e; --acc-t:#8fe8c6;
   --warm:#f0a878; --warm-l:#241810;
   --ink-bg:#060a0d; --ink-fg:#e9eef3; --ink-dim:#8b9aa5; --ink-acc:#5fd6ab;
 }
 :root[data-theme="light"]{
-  --bg:#fff; --fg:#12161c; --dim:#606a78; --faint:#8b95a3;
+  --bg:#fff; --fg:#12161c; --dim:#606a78; --faint:#505a66;
   --line:#e4e8ee; --soft:#f5f7f9; --soft2:#eef2f5;
   --acc:#0d5a48; --acc-l:#e6f2ee; --acc-t:#0a4437;
   --warm:#a03c14; --warm-l:#fdf0e9;
@@ -68,6 +68,8 @@ p:last-child{margin-bottom:0}
 .dim{color:var(--dim)}
 .sm{font-size:15.5px;line-height:1.75}
 .xs{font-size:13px;line-height:1.68;color:var(--faint)}
+/* 어두운 섹션(.ink) 안에서는 밝은 보조색을 써야 대비가 확보된다 */
+.ink .xs,.ink .sm.dim,.ink small{color:var(--ink-dim)}
 strong{font-weight:700}
 em{font-style:normal;color:var(--acc);font-weight:700}
 .ink em{color:var(--ink-acc)}
@@ -226,10 +228,14 @@ td.hl{color:var(--acc);font-weight:800}
 
 /* footer */
 footer{background:var(--soft);border-top:1px solid var(--line);padding:40px 0 64px}
-.lg{font-size:12.5px;line-height:1.9;color:var(--dim)}
+.lg{font-size:13px;line-height:1.9;color:var(--dim)}
 .lg b{color:var(--fg)}
-.lgbox{border:1px solid var(--line);border-radius:12px;padding:17px;margin:16px 0;background:var(--bg)}
-.lg p{font-size:12.5px;margin-bottom:15px}
+/* 학원법 시행령 제16조의3 광고 표시 4항목 — 명확히 읽히도록 본문급으로 키움 */
+.lgbox{border:1.5px solid var(--acc);border-radius:12px;padding:18px 17px;margin:6px 0 20px;
+  background:var(--acc-l);font-size:14.5px;line-height:2.0;color:var(--fg)}
+.lgbox b{color:var(--fg);font-weight:800}
+.lgbox .xs{font-size:12.5px;color:var(--dim)}
+.lg p{font-size:13px;margin-bottom:15px}
 </style>
 </head>
 <body>
