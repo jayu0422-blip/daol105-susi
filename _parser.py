@@ -46,6 +46,8 @@ def parse_page(pg, gap=3.2):
 
 def num(s):
     s=str(s).strip().replace(',','')
+    # 논술 전형은 원본이 "등급/환산점수"(예: 4.15/73.63) 결합 표기 -> 앞의 등급만 취한다
+    if '/' in s: s = s.split('/')[0].strip()
     try:
         v=float(s); return v if 0.5<=v<=9.9 else None
     except: return None

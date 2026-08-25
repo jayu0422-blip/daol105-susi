@@ -1,0 +1,5 @@
+data.json rows matched-to-PDF: nomatch=402 ambiguous=2
+기준 == 기준24 only: 1107
+기준 == 기준23 only: 12
+기준 == neither: 0
+PDF 전체 26734행 중 기준24==기준23: 20858 (78.0%), 다름: 5876
