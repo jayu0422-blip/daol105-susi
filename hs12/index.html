@@ -290,10 +290,10 @@ footer b{color:var(--g1)}
       <div class="tabs t2" id="tabs"></div>
       <div id="inputArea"></div>
       <div class="nbox">
-        <span class="nlb">한 과목 수강 인원</span>
-        <input id="nInput" type="number" min="5" max="500" step="1" value="30" inputmode="numeric">
+        <span class="nlb">우리 학년 전체 인원</span>
+        <input id="nInput" type="number" min="20" max="800" step="10" value="200" inputmode="numeric">
         <span class="nsuf">명</span>
-        <span class="nhint">성적표의 <b>수강자수</b>를 넣으면 등수가 정확해집니다. 모르면 30으로 두세요.</span>
+        <span class="nhint">한 반이 아니라 <b>같은 학년 전체</b> 인원입니다. 모르면 200으로 두세요.</span>
       </div>
       <div id="alertBox"></div>
     </div>
@@ -315,7 +315,9 @@ footer b{color:var(--g1)}
       </div>
       <button class="go" id="go" type="button">지원 라인 보기</button>
       <p class="note">※ 원본 입결은 <b>9등급제</b>이며 누적 백분위로 <b>5등급제 환산</b>한 값입니다.
-        전교 등수는 <b>한 과목 수강자 30명</b> 기준 추정치입니다. 실제 지원은 모집요강 확인이 필요합니다.</p>
+        등수·백분위는 <b>2025학년도 고1 실측 분포</b>(경기진학지도협의회 63개교 16,110명 ·
+        부산진로진학지원센터 88개교 14,331명 전수분석)를 기준으로 한 <b>참고용 추정 범위</b>입니다.
+        일반고 기준이며, 실제 지원은 모집요강 확인이 필요합니다.</p>
     </div>
 
     <div id="out"></div>
@@ -340,9 +342,22 @@ var MEMBER=/[?&]m=1/.test(location.search);
 /* 신청 접수 서버 (Cloudflare Worker). 비우면 '준비 중' 안내가 나온다. */
 var API='https://daol105-form.daol105.workers.dev';
 var SUBJ=['국어','수학','영어','과학','사회'];
-var N=30;                                   /* 한 과목 수강 인원 (사용자 조절) */
-var CUM=[10,34,66,90,100];                  /* 5등급 누적 비율 */
-var MID=[5,22,50,78,95];                    /* 각 등급의 대표 백분위 = 구간 중앙값 */
+var N=200;                                  /* 우리 학년 전체 인원 (사용자 조절) */
+/* ── 평균등급 → 상위 백분위 실측표 ──────────────────────────────
+   P(평균등급 <= g) x 100,  g = 1.0 + 0.1*i
+   2025학년도 고1(5등급제 첫 세대) 1·2학기 전 과목 전수분석 2건:
+     · 경기진학지도협의회   63개교 16,110명 (1.000~3.000 을 1/12 간격 전량 + 4.000)
+     · 부산진로진학지원센터 88개교 14,331명 (1.00/1.16/1.50/2.00/2.50)
+   국가 대조: 전국 고1 423,257명 중 전 과목 1등급 4,588명 = 1.08%
+   3.1~3.9 / 4.1~4.9 는 실측점 3.00·4.00 에 고정한 모형 보간이다(오차 +-2.5%p).
+   ★ 이론식(등급 구간 중앙값 보간)을 쓰면 안 된다. 여러 과목을 평균내면 분산이
+     줄어들어, 평균 1.30 은 상위 10% 가 아니라 상위 4.6% 다.
+   ★ 이 표는 일반고 기준. 특목·자사고는 상위권이 더 좁다(전 과목 1등급 0.44%). */
+var PCT=[  1.2,  2.3,  3.3,  4.6,  6.0,  7.6,  9.4, 11.4, 13.6, 15.9,   /* 1.0~1.9 */
+          18.3, 20.9, 23.7, 26.6, 29.7, 33.0, 36.5, 40.2, 44.0, 47.9,   /* 2.0~2.9 */
+          51.9, 55.8, 59.7, 63.5, 67.1, 70.6, 73.9, 77.1, 80.0, 82.7,   /* 3.0~3.9 */
+          85.1, 87.1, 89.0, 90.6, 92.1, 93.5, 94.8, 95.9, 97.1, 98.2,   /* 4.0~4.9 */
+         100.0];                                                        /* 5.0     */
 var DONE={'고1':[['고1-1','1학년 1학기']],
           '고2':[['고1-1','1학년 1학기'],['고1-2','1학년 2학기'],['고2-1','2학년 1학기']]};
 var LEFT={'고1':[['고1-2','1학년 2학기',1],['고2-1','2학년 1학기',1],['고2-2','2학년 2학기',1],['고3-1','3학년 1학기',.5]],
@@ -352,40 +367,57 @@ var grade=null,mode='simple',scen='keep',DATA=null,GAP=null;
 function $(i){return document.getElementById(i)}
 function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 
-/* ── 평균등급 → 백분위 → 등수 ──
+/* ── 평균등급 → 백분위 → 등수 ─────────────────────────────
    평균등급은 '그 등급 구간 안의 위치'가 아니다.
-   평균 1.30등급 = 전 과목 1등급이 아니라 일부 과목이 2등급이라는 뜻.
-   그래서 등급 대표 백분위(MID) 사이를 보간해 백분위를 먼저 구한 뒤 등수로 옮긴다. */
+   개별 과목 1등급은 상위 10% 지만, 여러 과목 평균이 1.30 이하이려면
+   거의 모든 과목에서 그 10% 안에 들어야 해서 실제로는 상위 4.6% 다.
+   그래서 이론식을 버리고 실측표 PCT 를 보간해 쓴다. */
 function pctOf(g){
-  if(g<=1)return MID[0];
-  if(g>=5)return MID[4];
-  var i=Math.floor(g),f=g-i;
-  return MID[i-1]+f*(MID[i]-MID[i-1]);
+  var x=Math.min(5,Math.max(1,g)),t=(x-1)/0.1;
+  var i=Math.min(PCT.length-2,Math.floor(t));
+  return PCT[i]+(t-i)*(PCT[i+1]-PCT[i]);
 }
-function rankOf(g){return Math.max(1,Math.min(N,Math.round(pctOf(g)*N/100)))}
-/* 등급 커트라인 등수 — 구간이 겹치지 않게 앞 구간 끝+1 로 이어붙인다 */
-function bands(){
-  var o=[],hi0=0;
-  for(var i=0;i<5;i++){
-    var hi=Math.max(hi0+1,Math.round(CUM[i]*N/100));
-    if(i===4)hi=Math.max(hi0+1,N);
-    o.push([hi0+1,hi]); hi0=hi;
-  }
-  return o;
+/* 역방향 — 상위 p% 커트라인은 평균 몇 등급인가. 상위 10% => 1.63 */
+function gradeAtPct(p){
+  if(p<=PCT[0])return 1.0;
+  for(var i=0;i<PCT.length-1;i++)
+    if(p<=PCT[i+1])return 1+(i+(p-PCT[i])/(PCT[i+1]-PCT[i]))*0.1;
+  return 5.0;
+}
+/* 정직한 오차 폭(+-%p). 실측 구간은 좁고 보간 구간은 넓다 */
+function bandOf(g){
+  var x=Math.min(5,Math.max(1,g)),c;
+  if(x<=2)c=1.0; else if(x<=3)c=1.0+0.5*(x-2);
+  else if(x<=4)c=1.5+1.0*(x-3); else c=2.5;
+  return Math.min(c,Math.max(0.3,0.25*pctOf(x)));
+}
+function rankOf(g){ return Math.max(1,Math.min(N,Math.round(pctOf(g)/100*N))) }
+/* 점 하나가 아니라 범위로 낸다. 소수점 정밀도를 가장하지 않기 위해서다. */
+function rankRange(g){
+  var p=pctOf(g),b=bandOf(g);
+  var lo=Math.min(N,Math.max(1,Math.ceil((p-b)/100*N)));
+  var hi=Math.min(N,Math.max(lo,Math.ceil((p+b)/100*N)));
+  var tie='';
+  if(g<=1.001){ lo=1; hi=Math.max(1,Math.round(PCT[0]/100*N)); tie='top'; }
+  else if(g>=4.999){ lo=Math.min(N,Math.round(PCT[39]/100*N)+1); hi=N; tie='bottom'; }
+  return {lo:lo,hi:hi,p:p,tie:tie};
+}
+function rankText(g){
+  var r=rankRange(g);
+  return r.lo===r.hi ? ('약 '+r.lo+'등') : (r.lo+'~'+r.hi+'등');
 }
 function posOf(g){var f=g-Math.floor(g);if(f<0.005||g>=5)return '';return f<0.34?'초반':(f<0.67?'중반':'후반')}
-/* 바로 윗 정수 등급까지 가려면 몇 명을 앞서야 하는가
-   2.80 → 2.00 / 2.00 → 1.00 / 1.30 → 1.00 */
+/* 바로 윗 정수 등급까지 몇 명을 앞서야 하는가. 2.80→2.00 / 2.00→1.00 / 1.30→1.00 */
 function needUp(g){
   if(g<=1.005)return {n:0,to:1,tgtRank:rankOf(1)};
   var t=Math.floor(g);
   if(t>=g-0.005)t=g-1;
   t=Math.max(1,t);
   var tr=rankOf(t);
-  return {n:Math.max(0,rankOf(g)-tr),to:t,tgtRank:tr};
+  return {n:Math.max(0,rankOf(g)-tr),to:t,tgtRank:tr,dp:pctOf(g)-pctOf(t)};
 }
-/* 다올105 권장 학습량 — 앞서야 할 인원에 비례 */
-function hoursFor(n){var wk=Math.round(5+n*1.5);return {wk:wk,mo:wk*4}}
+/* 다올105 권장 학습량 — 앞서야 할 인원이 아니라 백분위 격차에 비례시킨다 */
+function hoursFor(dp){var wk=Math.max(6,Math.min(22,Math.round(6+dp*0.45)));return {wk:wk,mo:wk*4}}
 
 /* ── 진입 ── */
 function start(g){
@@ -461,25 +493,37 @@ function calcNow(){
 
 /* ── 경각심 카드 ── */
 function alertHtml(g){
-  var rank=rankOf(g),pos=posOf(g),up=needUp(g),h=hoursFor(up.n);
+  var pos=posOf(g),up=needUp(g),h=hoursFor(up.dp||0),r=rankRange(g);
   var lv=Math.floor(g);
   var col=lv<=1?['#059669','#047857']:lv<=2?['#2563EB','#1D4ED8']:lv<=3?['#D97706','#B45309']:['#DC2626','#991B1B'];
-  var pct=Math.round(pctOf(g)*10)/10;      /* 등수 나눗셈이 아니라 백분위 그대로 */
+  var pct=Math.round(pctOf(g)*10)/10;
+  /* 전 과목 5등급은 동점 덩어리라 '상위 100%'가 정보가 없다. 하위 비율로 바꿈. */
+  var pctTxt=r.tie==='bottom'
+    ? '하위 약 '+(Math.round((100-PCT[39])*10)/10)+'%'
+    : '상위 '+pct+'%';
+  var barPct=r.tie==='bottom' ? (PCT[39]+100)/2 : pct;
+  var CUT10=gradeAtPct(10);                /* 상위 10% 커트라인 = 평균 1.63등급 */
   var msg = up.n===0
     ? '이미 최상위입니다. 이 자리를 지키는 것이 과제입니다.'
     : '<b>'+up.n+'명</b>을 앞서면 <b>'+up.to.toFixed(2)+'등급</b>입니다';
   var body='<div class="krow"><span class="ki" style="background:'+col[0]+'22;color:'+col[0]+'">📍</span>'+
-    '<span class="kt"><b>약 '+rank+'등 / '+N+'명 중</b>상위 '+pct+'% · '+g.toFixed(2)+'등급'+(pos?' '+pos:'')+'</span></div>';
+    '<span class="kt"><b>'+rankText(g)+' / '+N+'명 중</b>'+pctTxt+' · '+g.toFixed(2)+'등급'+(pos?' '+pos:'')+
+    (r.tie==='bottom'?' · 전 과목 5등급 구간':'')+'</span></div>';
   if(up.n>0){
     body+='<div class="krow"><span class="ki" style="background:#FEF3C7;color:#92400E">🎯</span>'+
       '<span class="kt"><b>'+up.n+'명만 앞서면 됩니다</b>평균 '+up.to.toFixed(2)+'등급 자리는 약 '+up.tgtRank+'등입니다</span></div>'+
       '<div class="krow"><span class="ki" style="background:#EFF6FF;color:#2563EB">⏱</span>'+
       '<span class="kt"><b>주 '+h.wk+'시간 · 한 달 '+h.mo+'시간</b>이 과목에만 쓰는 순공 시간 (다올105 권장 기준)</span></div>';
   }
-  body+='<div class="bar"><i style="width:'+Math.max(4,100-pct)+'%;background:linear-gradient(90deg,'+col[0]+','+col[1]+')"></i></div>'+
+  if(g>CUT10+0.005){
+    body+='<div class="krow"><span class="ki" style="background:#F1F5F9;color:#475569">📊</span>'+
+      '<span class="kt"><b>상위 10%는 평균 '+CUT10.toFixed(2)+'등급입니다</b>'+
+      '한 과목 1등급이 상위 10%라고 평균 1.00~2.00이 다 1등급대인 것은 아닙니다</span></div>';
+  }
+  body+='<div class="bar"><i style="width:'+Math.max(4,100-barPct)+'%;background:linear-gradient(90deg,'+col[0]+','+col[1]+')"></i></div>'+
     '<div class="barlb"><span>상위 0%</span><span>하위 100%</span></div>'+
-    '<div class="bnote">5등급제 비율(1등급 10% · 2등급 24% · 3등급 32% · 4등급 24% · 5등급 10%)로 '+
-    '환산한 추정치입니다. 실제 등수는 과목별 수강 인원에 따라 달라집니다.</div>';
+    '<div class="bnote">2025학년도 고1 <b>실측 분포</b>(경기 63개교 16,110명 · 부산 88개교 14,331명)에 '+
+    '학년 인원을 곱한 <b>추정 범위</b>입니다. 일반고 기준이며 특목·자사고는 상위권이 더 좁습니다.</div>';
   return '<div class="alert an2"><div class="alert-h" style="background:linear-gradient(135deg,'+col[0]+','+col[1]+')">'+
     '<div class="t">지금 내 위치</div><div class="m">'+msg+'</div></div>'+
     '<div class="alert-b">'+body+'</div></div>';
@@ -762,7 +806,7 @@ async function run(){
   var L={keep:'지금처럼 갔을 때',up1:'한 등급 올렸을 때',
          dn1:'한 등급 떨어졌을 때',custom:'직접 입력한 목표'}[scen];
   var h='<p class="rhead">'+grade+' · 지금까지 '+cur.toFixed(2)+'등급 · <b>'+L+'</b><br>'+
-    '졸업 시 예상 평균 <b>'+g.toFixed(2)+'등급</b> (약 '+rankOf(g)+'등 / '+N+'명 중)</p>';
+    '졸업 시 예상 평균 <b>'+g.toFixed(2)+'등급</b> ('+(g>=4.999?'하위 약 '+(Math.round((100-PCT[39])*10)/10)+'%':'상위 '+(Math.round(pctOf(g)*10)/10)+'%')+' · '+rankText(g)+' / '+N+'명 중)</p>';
   h+=section('s-fit','🎯 적정','#2563EB','컷 ±0.11~0.16등급',fit,gaps);
   h+=section('s-safe','🛡 안정','#059669','컷이 0.16등급 이상 아래',safe,gaps);
   h+=section('s-try','🔥 도전','#D97706','컷보다 0.11~0.44등급 부족',tryy,gaps);
@@ -784,7 +828,7 @@ async function run(){
 })();
 $('nInput').addEventListener('input',function(){
   var v=parseInt($('nInput').value,10);
-  N=(!isNaN(v)&&v>=5&&v<=500)?v:30;
+  N=(!isNaN(v)&&v>=20&&v<=800)?v:200;
   calcNow();
 });
 $('p1').addEventListener('click',function(){start('고1')});
