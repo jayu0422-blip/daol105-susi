@@ -270,6 +270,58 @@ async function load() {
   return DATA;
 }
 function cutOf(r) { return r[8] ?? r[9] ?? r[10]; }
+
+/* ── 내 등급 위치 막대 (hs12 이식) ── */
+function medOf(rows){
+  var v=[],i;
+  for(i=0;i<rows.length;i++){var c=cutOf(rows[i]);if(c!=null)v.push(c)}
+  if(!v.length)return null;
+  v.sort(function(a,b){return a-b});
+  return v[Math.floor(v.length/2)];
+}
+
+function uniBar(data,g){
+  var gy=data.filter(function(r){return r[5]==='학생부교과'&&cutOf(r)!=null});
+  var seoul=gy.filter(function(r){return r[1]==='서울'});
+  var gg=gy.filter(function(r){return r[1]==='경기'||r[1]==='인천'});
+  var lo=gy.filter(function(r){return r[1]!=='서울'&&r[1]!=='경기'&&r[1]!=='인천'});
+  var gc=gy.filter(function(r){return r[0].indexOf('가천')>=0});
+  var L=[
+    {g:medOf(seoul), n:seoul.length, t:'서울 소재',      s:'서울에 있는 대학 교과 전형', c:'#2563EB'},
+    {g:medOf(gc),    n:gc.length,    t:'가천대 등 경기 주요대', s:'가천대 교과 전형', c:'#7C3AED'},
+    {g:medOf(gg),    n:gg.length,    t:'경기·인천 전체', s:'경기·인천 교과 전형', c:'#0891B2'},
+    {g:medOf(lo),    n:lo.length,    t:'비수도권',       s:'서울·경기·인천 밖 교과 전형', c:'#D97706'}
+  ].filter(function(x){return x.g!=null});
+  if(!L.length)return '';
+  var X=function(v){return Math.max(0,Math.min(100,(v-1)/6*100))};
+  var NM=['1등급대','2등급대','3등급대','4등급대','5등급대','6등급대'];
+  var seg='',i;
+  for(i=0;i<6;i++)seg+='<i class="s'+(i+1)+'"><span>'+NM[i]+'</span></i>';
+  var tick='';
+  for(i=0;i<L.length;i++)tick+='<u style="left:'+X(L[i].g).toFixed(1)+'%;border-bottom-color:'+L[i].c+'"></u>';
+  var me='<b class="me" style="left:'+X(g).toFixed(1)+'%">'+
+         '<span>나 '+g.toFixed(2)+'</span></b>';
+  var leg='';
+  for(i=0;i<L.length;i++){
+    leg+='<div class="lg"><em style="background:'+L[i].c+'"></em>'+
+      '<b>'+L[i].g.toFixed(2)+'</b><span>'+L[i].t+
+      '<i>'+L[i].s+' '+L[i].n.toLocaleString()+'개의 절반이 이보다 낮은 컷</i></span></div>';
+  }
+  /* 내 위치가 어느 구간인지 한 줄로 */
+  var above=[],below=[];
+  for(i=0;i<L.length;i++)(g<=L[i].g?above:below).push(L[i].t);
+  var msg = above.length
+    ? '지금 <b>'+g.toFixed(2)+'</b>은 <b>'+above.join(' · ')+'</b> 중앙값보다 위쪽입니다.'
+    : '지금 <b>'+g.toFixed(2)+'</b>은 표시된 모든 기준선보다 아래쪽입니다.';
+  return '<div class="uni"><div class="uni-h">교과 전형 기준 · 내 등급은 어디쯤인가</div>'+
+    '<div class="uni-w">'+me+'<div class="uni-bar">'+seg+'</div>'+
+    '<div class="uni-tk">'+tick+'</div>'+
+    '<div class="uni-ax"><span>1.00</span><span>4.00</span><span>7.00</span></div></div>'+
+    '<div class="uni-msg">'+msg+'</div>'+leg+
+    '<div class="uni-n">권역이 서로 겹칩니다. 서울에도 컷 2.0~2.7인 곳이 있고 비수도권에도 1.7 아래가 있습니다. '+
+    '<b>합격선이 아니라 지난 3개년 컷의 중앙값</b>이며, 학생부종합은 등급만으로 판단할 수 없습니다. 현 고3은 <b>9등급제</b> 기준입니다.</div></div>';
+}
+
 function yearOf(r) { return r[8] != null ? 25 : (r[9] != null ? 24 : 23); }
 function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 
@@ -316,7 +368,8 @@ async function run() {
   const fit  = withDiff.filter(x => x.d100 >= -20 && x.d100 < 30).sort(byCut).map(x => x.r);
   const tryy = withDiff.filter(x => x.d100 >= -80 && x.d100 < -20).sort(byCut).map(x => x.r);
   out.innerHTML =
-    '<p style="font-size:13.5px;color:var(--gray2);font-weight:700;text-align:center;margin-top:16px">내신 ' + g.toFixed(1) + '등급 기준 · 최근 연도 입결 컷과 비교한 결과입니다 · 연도별 산출기준(70%컷·평균 등)이 달라 연도 간 직접 비교는 권하지 않습니다</p>'
+    uniBar(data, g)
+    + '<p style="font-size:13.5px;color:var(--gray2);font-weight:700;text-align:center;margin-top:16px">내신 ' + g.toFixed(1) + '등급 기준 · 최근 연도 입결 컷과 비교한 결과입니다 · 연도별 산출기준(70%컷·평균 등)이 달라 연도 간 직접 비교는 권하지 않습니다</p>'
     + section('g-fit', '🎯 적정', '컷 ±0.2~0.3등급', fit)
     + section('g-safe', '🛡 안정', '컷이 내 등급보다 0.3등급 이상 아래', safe)
     + section('g-try', '🔥 도전', '컷보다 0.2~0.8등급 부족', tryy)
@@ -427,6 +480,42 @@ document.getElementById('g').addEventListener('keydown', e => { if (e.key === 'E
  .daol-legal b{color:#e3e9ef}}
 :root[data-theme="dark"] .daol-legal{background:#12171d;color:#98a3b0;border-top-color:#242b34}
 :root[data-theme="dark"] .daol-legal b{color:#e3e9ef}
+
+/* ══ 내 등급은 어디쯤인가 (hs12에서 이식) ══ */
+.uni{background:#fff;border:1px solid var(--line);border-radius:13px;padding:16px 15px 14px;margin-bottom:16px}
+.uni-h{font-size:13.5px;font-weight:800;color:var(--ink);letter-spacing:-.02em;margin-bottom:26px}
+.uni-w{position:relative;margin-bottom:13px}
+.uni-bar{position:relative;display:flex;height:26px;border-radius:7px;overflow:hidden}
+.uni-bar i{position:relative;display:flex;align-items:center;justify-content:center;font-style:normal}
+.uni-bar i span{font-size:10px;font-weight:800;color:#fff;white-space:nowrap;letter-spacing:-.03em;
+  text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.uni-bar .s1{flex:1;background:#059669}
+.uni-bar .s2{flex:1;background:#2563EB}
+.uni-bar .s3{flex:1;background:#D97706}
+.uni-bar .s4{flex:1;background:#EA580C}
+.uni-bar .s5{flex:1;background:#DC2626}
+.uni-bar .s6{flex:1;background:#9F1239}
+.uni-tk{position:relative;height:9px}
+.uni-tk u{position:absolute;top:0;transform:translateX(-50%);width:0;height:0;text-decoration:none;
+  border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:7px solid}
+.uni-w .me{position:absolute;top:-24px;transform:translateX(-50%);z-index:2;font-weight:800}
+.uni-w .me span{display:block;background:var(--ink);color:#fff;font-size:11px;padding:3px 7px;
+  border-radius:6px;white-space:nowrap;letter-spacing:-.02em}
+.uni-w .me:after{content:'';position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);
+  border:4px solid transparent;border-top-color:var(--ink)}
+.uni-ax{display:flex;justify-content:space-between;font-size:10.5px;font-weight:700;
+  color:var(--gray2);margin-top:2px;font-variant-numeric:tabular-nums}
+.uni-msg{font-size:12.5px;color:var(--gray);line-height:1.7;padding:9px 11px;background:var(--soft2);
+  border-radius:9px;margin-bottom:11px}
+.uni-msg b{color:var(--blue-strong);font-weight:800}
+.lg{display:flex;align-items:baseline;gap:8px;padding:6px 0;border-top:1px solid #F1F5F9}
+.lg em{width:8px;height:8px;border-radius:50%;flex:0 0 auto;align-self:center}
+.lg>b{font-size:14px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;flex:0 0 auto}
+.lg span{font-size:12.5px;font-weight:700;color:var(--gray);line-height:1.5}
+.lg i{display:block;font-style:normal;font-size:11px;font-weight:600;color:var(--gray2);margin-top:1px}
+.uni-n{font-size:11px;color:var(--gray2);line-height:1.7;margin-top:10px;padding-top:9px;
+  border-top:1px solid var(--line)}
+.uni-n b{color:var(--gray);font-weight:800}
 </style>
 <footer class="daol-legal" id="daol-legal-footer"><div class="in">
 <span class="r">학원 명칭 <b>다올105학원</b></span>
