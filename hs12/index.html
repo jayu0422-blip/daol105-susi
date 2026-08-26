@@ -193,9 +193,10 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .chip{font-size:11.5px;font-weight:700;padding:5px 9px;border-radius:7px;background:var(--bg);color:var(--g1)}
 .chip.cut{background:var(--bs);color:var(--b3)}
 .chip.min{background:#FEF3C7;color:#92400E}
-.chip.gen{background:var(--gns);color:#065F46}
-.chip.warn{background:var(--rds);color:var(--rd2)}
-.chip.lock{background:#F1F5F9;color:#94A3B8}
+.chip.warn{background:var(--rds);color:var(--rd2);font-weight:800}
+.chip.lock{background:#EFF6FF;color:var(--b3);border:1px dashed #93C5FD;
+  font-family:inherit;cursor:pointer;transition:.15s}
+.chip.lock:hover{background:#DBEAFE;border-style:solid}
 .more{width:100%;padding:12px;background:var(--card);border:1.5px solid var(--ln);border-radius:11px;
   font-size:13.5px;font-weight:700;color:var(--g1);cursor:pointer;font-family:inherit}
 .empty{text-align:center;padding:30px 18px;color:var(--g2);font-size:14px;line-height:1.75;
@@ -232,6 +233,31 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .gf-c span{flex:1;font-size:11.5px;color:var(--g2);line-height:1.7}
 .gf-c span b{display:block;font-size:13.5px;color:var(--ink);font-weight:800;margin-bottom:4px}
 .gf-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.gf-all{display:flex;gap:10px;align-items:center;padding:13px;background:var(--bs);
+  border:1.5px solid #93C5FD;border-radius:11px;margin-bottom:10px;cursor:pointer}
+.gf-all input{width:19px;height:19px;flex:0 0 auto;accent-color:var(--b);cursor:pointer}
+.gf-all span b{font-size:14.5px;font-weight:800;color:var(--b3)}
+.gf-c span u{display:inline-block;min-width:52px;text-decoration:none;font-weight:800;color:var(--g1)}
+.gf-c span b.in{color:var(--b3);display:inline;font-size:inherit;margin:0}
+.gf-c span b i{font-style:normal;margin-right:4px}
+.gf-c span b i.req{color:#DC2626}
+.gf-c span b i.opt{color:#94A3B8}
+
+/* 결과 상단 · 지금 무엇이 가려져 있는지 */
+.locknote{background:var(--bs);border:1.5px solid #BFDBFE;border-radius:13px;
+  padding:15px 16px;margin-bottom:16px}
+.locknote .lh{font-size:14.5px;font-weight:800;color:var(--b3);letter-spacing:-.02em;margin-bottom:7px}
+.locknote .lb{font-size:13px;color:var(--g1);line-height:1.7;margin-bottom:11px}
+.locknote .lb b{color:var(--b3);font-weight:800}
+.locknote .ll{display:flex;align-items:baseline;gap:8px;padding:6px 0;border-top:1px solid #DBEAFE}
+.locknote .ll span{font-size:13.5px;font-weight:800;color:var(--ink);flex:0 0 auto}
+.locknote .ll em{font-style:normal;font-size:12px;color:var(--g2);line-height:1.5}
+.lockbtn{width:100%;margin-top:12px;padding:12px;background:var(--b);color:#fff;border:0;
+  border-radius:10px;font-size:14.5px;font-weight:800;font-family:inherit;cursor:pointer;transition:.15s}
+.lockbtn:hover{background:var(--b3)}
+@keyframes flash{0%,100%{box-shadow:var(--sh2)}
+  35%{box-shadow:0 0 0 5px rgba(37,99,235,.28),var(--sh2)}}
+.prep.flash{animation:flash 1.3s ease-out}
 .gf-err{display:none;background:#FEF2F2;border:1px solid #FECACA;color:#991B1B;border-radius:10px;
   padding:11px 13px;font-size:13px;font-weight:700;line-height:1.6;margin-bottom:11px}
 .gf-err.on{display:block}
@@ -362,7 +388,6 @@ var DONE={'고1':[['고1-1','1학년 1학기']],
           '고2':[['고1-1','1학년 1학기'],['고1-2','1학년 2학기'],['고2-1','2학년 1학기']]};
 var LEFT={'고1':[['고1-2','1학년 2학기',1],['고2-1','2학년 1학기',1],['고2-2','2학년 2학기',1],['고3-1','3학년 1학기',.5]],
           '고2':[['고2-2','2학년 2학기',1],['고3-1','3학년 1학기',.5]]};
-var GEN=['지역균형','학교장추천','교과우수','학생부우수','고교추천','추천전형','지역인재','기회균형','고른기회','농어촌','사회통합','특성화'];
 var grade=null,mode='simple',scen='keep',DATA=null,GAP=null;
 function $(i){return document.getElementById(i)}
 function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
@@ -602,7 +627,6 @@ function buildGap(d){
     if(v['학생부교과']!=null&&v['학생부종합']!=null&&v['학생부교과']-v['학생부종합']>=.8)GAP[k]=true});
   return GAP;
 }
-function isGen(n){for(var i=0;i<GEN.length;i++)if(String(n).indexOf(GEN[i])>=0)return true;return false}
 
 function rowHtml(r,gaps){
   var F=MEMBER,c=[],p0=(r.length>12?r[12]:null);
@@ -610,12 +634,18 @@ function rowHtml(r,gaps){
   if(F){if(r[9]!=null)c.push('직전 '+r[9].toFixed(2));if(r[10]!=null)c.push('3년전 '+r[10].toFixed(2))}
   var hasMin=r[7]&&r[7]!=='-'&&r[7]!=='없음';
   var warn=gaps[r[0]+'|'+r[4]]&&r[5]==='학생부종합';
-  var gen=isGen(r[6]);
   var ch='<span class="chip cut">'+c.join(' / ')+'</span>';
-  if(gen)ch+='<span class="chip gen">✓ 일반고 유리</span>';
-  if(warn)ch+='<span class="chip warn">특목·자사 비중 주의</span>';
-  ch+=F?'<span class="chip min">'+(hasMin?'수능최저 '+esc(String(r[7]).slice(0,22)):'수능최저 없음')+'</span>'
-       :'<span class="chip min">'+(hasMin?'수능최저 있음':'수능최저 없음')+'</span><span class="chip lock">🔒 3개년 추이</span>';
+  /* 학생부종합인데 교과보다 컷이 크게 낮은 곳 = 특목·자사 지원자가 많이 붙은 전형.
+     일반고 학생이 이 숫자를 그대로 자기 기준으로 보면 안 된다. */
+  if(warn)ch+='<span class="chip warn">⚠ 일반고 지원 전 확인 · 특목·자사 강세</span>';
+  if(F){
+    ch+='<span class="chip min">'+(hasMin?'수능최저 '+esc(String(r[7]).slice(0,22)):'수능최저 없음')+'</span>';
+  }else{
+    ch+=hasMin
+      ? '<button type="button" class="chip lock js-lock">🔒 수능최저 있음 · 조건 보기</button>'
+      : '<span class="chip min">수능최저 없음</span>';
+    ch+='<button type="button" class="chip lock js-lock">🔒 3개년 추이</button>';
+  }
   return '<div class="row"><div class="u">'+esc(r[0])+'<em>'+esc(r[1])+' '+esc(r[2]||'')+'</em></div>'+
     '<div class="m">'+esc(r[4])+' · '+esc(r[6])+'</div><div class="chips">'+ch+'</div></div>';
 }
@@ -680,10 +710,9 @@ function prepHtml(){
     '<div class="prep-b">'+
     '<div class="d">나머지는 <b>문자로 보내드립니다.</b><br>번호를 받는 이유는 그것 하나입니다.</div>'+
     '<div class="prep-list">'+
-      '<div>① 3개년 합격 컷 추이 14,611개 — 오르는 과인지 내리는 과인지</div>'+
-      '<div>② 수능 최저 충족 판정 4,721개 전형</div>'+
-      '<div>③ 특목·자사 강세 전형 판별 — 일반고면 피해야 할 곳</div>'+
-      '<div>④ 지금 등급의 상위 백분위와 목표 등수</div>'+
+      '<div>① <b>3개년 컷 추이</b> — 지금은 가장 최근 컷 하나만 보입니다</div>'+
+      '<div>② <b>전형별 수능 최저 조건</b> — 지금은 있음·없음만 보입니다</div>'+
+      '<div>③ <b>합격자 상위 백분위</b> — 그 학과가 실제로 몇 %를 뽑았는지</div>'+
     '</div>'+
     '<button type="button" class="prep-cta" id="gfOpen">문자로 자료 받기</button>'+
     '<div class="gf" id="gfBox">'+
@@ -701,17 +730,20 @@ function prepHtml(){
         ['유튜브','인스타그램','네이버 블로그·검색','카카오톡','지인 소개','학원 안내물','기타']
           .map(function(x){return '<option'+(x===s?' selected':'')+'>'+x+'</option>'}).join('')+
       '</select></div>'+
+      '<label class="gf-all"><input type="checkbox" id="gfAll"><span><b>아래 내용에 모두 동의합니다</b></span></label>'+
       '<label class="gf-c"><input type="checkbox" id="gfAgree"><span>'+
-        '<b>[필수] 개인정보 수집·이용에 동의합니다</b>'+
-        '수집 항목 : 이름 · 학년 · 학교 · 휴대폰 번호 (보호자 번호는 선택)<br>'+
-        '수집 목적 : 신청하신 자료 발송, 자료에 대한 문의 응대<br>'+
-        '보유 기간 : 1년, 이후 지체 없이 파기<br>'+
-        '동의하지 않으셔도 위 조회는 그대로 쓰실 수 있습니다.'+
+        '<b><i class="req">[필수]</i> 개인정보 수집·이용 및 입시 자료 수신 동의</b>'+
+        '<u>수집항목</u> 이름 · 학년 · 학교 · 휴대폰 (보호자 번호는 선택)<br>'+
+        '<u>이용목적</u> 조회 결과 상세 제공 및 <b class="in">입시 자료 제공</b>'+
+        ' (입시 설명회 영상, 기출 분석 자료, 모의고사·수시 일정 안내)<br>'+
+        '<u>보유기간</u> 수집일로부터 6개월<br>'+
+        '동의를 거부하실 수 있으며, 이 경우 상세 결과와 자료 제공이 제한됩니다.'+
       '</span></label>'+
       '<label class="gf-c"><input type="checkbox" id="gfAd"><span>'+
-        '<b>[선택] 설명회·특강 안내를 문자로 받겠습니다</b>'+
-        '한 달 2회 이내. 체크하지 않으셔도 신청한 자료는 그대로 보내드립니다.<br>'+
-        '언제든 031-794-8158로 말씀하시면 즉시 중단합니다.'+
+        '<b><i class="opt">[선택]</i> 광고성 정보 수신 동의</b>'+
+        '수강 안내, 모집 일정, 할인·혜택 등 <b class="in">영리목적 광고성 정보</b>를 문자·알림톡으로 받습니다.<br>'+
+        '동의하지 않으셔도 <b class="in">위 입시 자료와 상세 결과는 그대로</b> 받으실 수 있습니다.'+
+        ' 언제든 무료로 수신거부 가능합니다.'+
       '</span></label>'+
       '<input type="text" id="gfHp" tabindex="-1" autocomplete="off" aria-hidden="true" class="gf-hp">'+
       '<div class="gf-err" id="gfErr"></div>'+
@@ -736,12 +768,29 @@ function telFmt(v){
   if(d.length<8)return d.slice(0,3)+'-'+d.slice(3);
   return d.slice(0,3)+'-'+d.slice(3,d.length-4)+'-'+d.slice(d.length-4);
 }
+/* 잠긴 칩을 누르면 신청 폼을 펼치고 그 자리로 데려간다 */
+function openForm(focus){
+  var box=$('gfBox'),open=$('gfOpen');
+  if(!box)return;
+  box.classList.add('on');
+  if(open)open.style.display='none';
+  var card=$('gfCard')||box;
+  card.scrollIntoView({behavior:'smooth',block:'center'});
+  card.classList.add('flash');
+  setTimeout(function(){card.classList.remove('flash')},1400);
+  if(focus)setTimeout(function(){var n=$('gfName');if(n)n.focus({preventScroll:true})},420);
+}
 function bindForm(){
   var open=$('gfOpen');if(!open)return;
-  open.addEventListener('click',function(){
-    $('gfBox').classList.add('on');open.style.display='none';
-    $('gfName').focus();
+  open.addEventListener('click',function(){openForm(true)});
+  document.addEventListener('click',function(ev){
+    var t=ev.target.closest?ev.target.closest('.js-lock'):null;
+    if(t){ev.preventDefault();openForm(false)}
   });
+  var all=$('gfAll'),boxes=[$('gfAgree'),$('gfAd')];
+  all.addEventListener('change',function(){boxes.forEach(function(x){x.checked=all.checked})});
+  boxes.forEach(function(x){x.addEventListener('change',function(){
+    all.checked=boxes.every(function(y){return y.checked})})});
   ['gfTel','gfPTel'].forEach(function(id){
     var el=$(id);
     el.addEventListener('input',function(){
@@ -762,7 +811,7 @@ function bindForm(){
       [body.school.trim().length<2,'학교를 적어주세요.'],
       [!/^01[016789]-?\d{3,4}-?\d{4}$/.test(body.tel.trim()),'휴대폰 번호를 확인해 주세요. 010-1234-5678 형식입니다.'],
       [!!body.parentTel.trim()&&!/^01[016789]-?\d{3,4}-?\d{4}$/.test(body.parentTel.trim()),'보호자 번호 형식을 확인해 주세요.'],
-      [!body.agree,'개인정보 수집·이용에 동의하셔야 자료를 보내드릴 수 있습니다.']
+      [!body.agree,'[필수] 개인정보 수집·이용 및 입시 자료 수신에 동의해 주세요.']
     ];
     for(var i=0;i<검사.length;i++){
       if(검사[i][0]){err.textContent=검사[i][1];err.classList.add('on');return}
@@ -807,6 +856,15 @@ async function run(){
          dn1:'한 등급 떨어졌을 때',custom:'직접 입력한 목표'}[scen];
   var h='<p class="rhead">'+grade+' · 지금까지 '+cur.toFixed(2)+'등급 · <b>'+L+'</b><br>'+
     '졸업 시 예상 평균 <b>'+g.toFixed(2)+'등급</b> ('+(g>=4.999?'하위 약 '+(Math.round((100-PCT[39])*10)/10)+'%':'상위 '+(Math.round(pctOf(g)*10)/10)+'%')+' · '+rankText(g)+' / '+N+'명 중)</p>';
+  if(!MEMBER&&API){
+    h+='<div class="locknote"><div class="lh">🔒 지금 화면에 안 나오는 것이 있습니다</div>'+
+      '<div class="lb">아래 세 가지는 <b>가려져 있습니다.</b> 화면 맨 아래에서 신청하시면 '+
+      '<b>같은 자리에 바로 열립니다.</b></div>'+
+      '<div class="ll"><span>3개년 컷 추이</span><em>지금은 최근 컷 하나만</em></div>'+
+      '<div class="ll"><span>전형별 수능 최저 조건</span><em>지금은 있음·없음만</em></div>'+
+      '<div class="ll"><span>합격자 상위 백분위</span><em>지금은 안 나옴</em></div>'+
+      '<button type="button" class="lockbtn js-lock">가려진 항목 열기</button></div>';
+  }
   h+=section('s-fit','🎯 적정','#2563EB','컷 ±0.11~0.16등급',fit,gaps);
   h+=section('s-safe','🛡 안정','#059669','컷이 0.16등급 이상 아래',safe,gaps);
   h+=section('s-try','🔥 도전','#D97706','컷보다 0.11~0.44등급 부족',tryy,gaps);
