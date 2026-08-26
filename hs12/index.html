@@ -139,19 +139,21 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .uni-w{position:relative;margin-bottom:13px}
 .uni-bar{position:relative;display:flex;height:26px;border-radius:7px;overflow:hidden}
 .uni-bar i{position:relative;display:flex;align-items:center;justify-content:center;font-style:normal}
-.uni-bar i span{font-size:9.5px;font-weight:800;color:#fff;opacity:.9;white-space:nowrap;letter-spacing:-.02em}
+.uni-bar i span{font-size:10px;font-weight:800;color:#fff;white-space:nowrap;letter-spacing:-.03em;
+  text-shadow:0 1px 2px rgba(0,0,0,.25)}
 .uni-bar .s1{flex:1;background:#059669}.uni-bar .s2{flex:1;background:#2563EB}
 .uni-bar .s3{flex:1;background:#D97706}.uni-bar .s4{flex:1;background:#EA580C}
 .uni-bar .s5{flex:1;background:#DC2626}
-.uni-bar u{position:absolute;top:-3px;bottom:-3px;width:2.5px;border-radius:2px;
-  box-shadow:0 0 0 1.5px #fff;text-decoration:none}
+.uni-tk{position:relative;height:9px}
+.uni-tk u{position:absolute;top:0;transform:translateX(-50%);width:0;height:0;text-decoration:none;
+  border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:7px solid}
 .uni-w .me{position:absolute;top:-24px;transform:translateX(-50%);z-index:2;font-weight:800}
 .uni-w .me span{display:block;background:var(--ink);color:#fff;font-size:11px;padding:3px 7px;
   border-radius:6px;white-space:nowrap;letter-spacing:-.02em}
 .uni-w .me:after{content:'';position:absolute;left:50%;transform:translateX(-50%);
   border:4px solid transparent;border-top-color:var(--ink)}
 .uni-ax{display:flex;justify-content:space-between;font-size:10.5px;font-weight:700;
-  color:var(--g3);margin-top:5px;font-variant-numeric:tabular-nums}
+  color:var(--g3);margin-top:2px;font-variant-numeric:tabular-nums}
 .uni-msg{font-size:12.5px;color:var(--g1);line-height:1.7;padding:9px 11px;background:var(--bg);
   border-radius:9px;margin-bottom:11px}
 .uni-msg b{color:var(--b3);font-weight:800}
@@ -728,7 +730,7 @@ function uniBar(data,g){
   var seg='',i;
   for(i=0;i<5;i++)seg+='<i class="s'+(i+1)+'"><span>'+NM[i]+'</span></i>';
   var tick='';
-  for(i=0;i<L.length;i++)tick+='<u style="left:'+X(L[i].g).toFixed(1)+'%;background:'+L[i].c+'"></u>';
+  for(i=0;i<L.length;i++)tick+='<u style="left:'+X(L[i].g).toFixed(1)+'%;border-bottom-color:'+L[i].c+'"></u>';
   var me='<b class="me" style="left:'+X(g).toFixed(1)+'%">'+
          '<span>나 '+g.toFixed(2)+'</span></b>';
   var leg='';
@@ -744,7 +746,8 @@ function uniBar(data,g){
     ? '지금 <b>'+g.toFixed(2)+'</b>은 <b>'+above.join(' · ')+'</b> 중앙값보다 위쪽입니다.'
     : '지금 <b>'+g.toFixed(2)+'</b>은 표시된 모든 기준선보다 아래쪽입니다.';
   return '<div class="uni"><div class="uni-h">교과 전형 기준 · 내 등급은 어디쯤인가</div>'+
-    '<div class="uni-w">'+me+'<div class="uni-bar">'+seg+tick+'</div>'+
+    '<div class="uni-w">'+me+'<div class="uni-bar">'+seg+'</div>'+
+    '<div class="uni-tk">'+tick+'</div>'+
     '<div class="uni-ax"><span>1.00</span><span>3.00</span><span>5.00</span></div></div>'+
     '<div class="uni-msg">'+msg+'</div>'+leg+
     '<div class="uni-n">권역이 서로 겹칩니다. 서울에도 컷 2.0~2.7인 곳이 있고 비수도권에도 1.7 아래가 있습니다. '+
