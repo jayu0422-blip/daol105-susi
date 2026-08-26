@@ -204,6 +204,17 @@ function 관리자화면(rows, key) {
   const 칩 = arr => arr.map(([k, v]) =>
     `<span class="chip">${esc(k)} <b>${v}</b></span>`).join('');
 
+  /* 신청이 0건일 때 표의 모양을 보여주는 예시 두 줄. 실제 데이터가 아니다. */
+  const 예시행 = `
+    <tr class="demo"><td>–</td><td><span class="demolb">예시</span>2026-08-27 21:14</td>
+      <td><b>김ㅇㅇ</b></td><td>고2</td><td>미사강변고</td>
+      <td class="tel">010-1234-5678</td><td class="tel">010-8765-4321</td>
+      <td>유튜브</td><td><span class="y">동의</span></td></tr>
+    <tr class="demo"><td>–</td><td><span class="demolb">예시</span>2026-08-27 22:03</td>
+      <td><b>이ㅇㅇ</b></td><td>고1</td><td>하남고</td>
+      <td class="tel">010-2222-3333</td><td class="tel">–</td>
+      <td>인스타그램</td><td><span class="n">–</span></td></tr>`;
+
   const tr = rows.map(r => `<tr class="${r.sent ? 'done' : ''}">
     <td><input type="checkbox" data-tel="${esc(r.tel)}" ${r.sent ? 'checked' : ''}></td>
     <td>${esc(KST(r.at))}</td>
@@ -256,9 +267,20 @@ tr.done b{color:#94A3B8;font-weight:700}
 .n{color:#CBD5E1}
 input[type=checkbox]{width:17px;height:17px;cursor:pointer;accent-color:#2563EB}
 .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.empty{background:#fff;border:1px solid #E2E8F0;border-radius:13px;padding:50px;
-  text-align:center;color:#94A3B8;font-size:14px}
+.empty{background:#fff;border:1px solid #E2E8F0;border-radius:13px;padding:34px 20px;
+  text-align:center;color:#64748B;font-size:14px;line-height:1.8;margin-bottom:16px}
+.empty b{color:#0F172A;font-weight:800;display:block;font-size:15.5px;margin-bottom:6px}
 .note{font-size:12px;color:#94A3B8;line-height:1.75;margin-top:14px}
+tr.demo td{color:#CBD5E1;font-style:italic}
+tr.demo b{color:#CBD5E1;font-weight:700}
+.demolb{display:inline-block;background:#F1F5F9;color:#64748B;border-radius:6px;
+  padding:2px 7px;font-size:11px;font-weight:800;font-style:normal;margin-right:6px}
+.fields{background:#fff;border:1px solid #E2E8F0;border-radius:13px;padding:14px 16px;margin-bottom:16px}
+.fields h3{font-size:12.5px;font-weight:800;color:#64748B;margin-bottom:10px}
+.fields ul{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:7px}
+.fields li{font-size:13px;color:#334155;line-height:1.5;padding-left:17px;position:relative}
+.fields li:before{content:'✓';position:absolute;left:0;color:#2563EB;font-weight:800}
+.fields li i{font-style:normal;color:#94A3B8;font-size:12px}
 </style></head><body><div class="w">
 <h1>자료 신청 관리</h1>
 <div class="sub">다올105 · 내신 상세 진단 자료 신청 현황</div>
@@ -269,9 +291,25 @@ input[type=checkbox]{width:17px;height:17px;cursor:pointer;accent-color:#2563EB}
   <div class="st c"><div class="k">광고 수신 동의</div><div class="v">${광고동의}</div></div>
 </div>
 
+<div class="fields"><h3>신청 한 건에서 받는 항목</h3><ul>
+  <li>학생 이름</li>
+  <li>학년 <i>고1 / 고2 / 고3·N수</i></li>
+  <li>학교</li>
+  <li>휴대폰 번호 <i>형식 검증함</i></li>
+  <li>보호자 번호 <i>선택</i></li>
+  <li>유입 경로 <i>어디서 보고 왔나</i></li>
+  <li>개인정보 동의 <i>필수</i></li>
+  <li>광고 수신 동의 <i>선택</i></li>
+  <li>신청 일시</li>
+</ul></div>
+
 ${총 ? `<div class="box"><h3>학년</h3>${칩(집계(r => r.grade))}</div>
 <div class="box"><h3>유입 경로</h3>${칩(집계(r => r.src))}</div>
-<div class="box"><h3>학교</h3>${칩(집계(r => r.school))}</div>
+<div class="box"><h3>학교</h3>${칩(집계(r => r.school))}</div>` : `<div class="empty">
+  <b>아직 신청이 없습니다</b>
+  신청이 들어오면 아래 표에 한 줄씩 쌓입니다.<br>
+  지금 보이는 회색 줄은 <b style="display:inline;font-size:inherit">모양을 보여드리는 예시</b>이고, 실제 데이터가 아닙니다.
+</div>`}
 
 <div class="bar">
   <a class="btn p" href="/api/csv?k=${encodeURIComponent(key)}">발송 대기 ${미발송}건 CSV 받기</a>
@@ -282,14 +320,14 @@ ${총 ? `<div class="box"><h3>학년</h3>${칩(집계(r => r.grade))}</div>
 <div class="scroll"><table>
 <thead><tr><th>발송</th><th>신청일시</th><th>이름</th><th>학년</th><th>학교</th>
 <th>휴대폰</th><th>보호자</th><th>유입</th><th>광고동의</th></tr></thead>
-<tbody>${tr}</tbody></table></div>
+<tbody>${총 ? tr : 예시행}</tbody></table></div>
 
 <div class="note">
   체크박스를 누르면 발송 완료로 기록됩니다. 다음 CSV에서 제외됩니다.<br>
   <b>광고동의</b>가 없는 분께는 설명회·특강 안내 문자를 보내면 안 됩니다.
   신청하신 자료를 보내는 것은 동의 없이도 가능합니다.<br>
   이 화면 주소는 공유하지 마세요. 개인정보가 들어 있습니다.
-</div>` : '<div class="empty">아직 신청이 없습니다.</div>'}
+</div>
 </div>
 <script>
 document.querySelectorAll('input[type=checkbox]').forEach(function(c){
