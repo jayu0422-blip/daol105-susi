@@ -1,0 +1,13 @@
+name = "daol105-form"
+main = "src/index.js"
+compatibility_date = "2026-08-01"
+
+[[kv_namespaces]]
+binding = "DB"
+id = "b6a587428309440dad4d922a633c0598"
+
+[vars]
+# 허용 출처. 여기에 없는 사이트에서는 폼이 동작하지 않는다.
+ALLOWED = "https://jayu0422-blip.github.io,http://localhost:8795,http://127.0.0.1:8795"
+
+preview_urls = false

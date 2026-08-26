@@ -208,10 +208,42 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .prep-b .d b{color:var(--b3);font-weight:800}
 .prep-list{background:var(--bs2);border:1px solid var(--bs);border-radius:12px;padding:13px 15px;text-align:left;margin-bottom:15px}
 .prep-list div{font-size:13px;line-height:1.9;color:var(--b3);font-weight:700}
-.prep-cta{display:block;width:100%;padding:16px;background:var(--b);color:#fff;border-radius:13px;
+.prep-cta{display:block;width:100%;padding:16px;background:var(--b);color:#fff;border:0;border-radius:13px;
   font-size:16.5px;font-weight:800;letter-spacing:-.02em;text-decoration:none;text-align:center;
-  box-shadow:0 6px 18px rgba(37,99,235,.28);transition:.16s}
+  font-family:inherit;cursor:pointer;box-shadow:0 6px 18px rgba(37,99,235,.28);transition:.16s}
 .prep-cta:hover{background:var(--b3);transform:translateY(-1px)}
+.prep-cta:disabled{background:#94A3B8;box-shadow:none;transform:none;cursor:default}
+
+/* ── 신청 폼 ── */
+.gf{display:none;text-align:left;margin-bottom:14px}
+.gf.on{display:block;animation:fade .3s both}
+.gf-r{margin-bottom:13px}
+.gf-r label{display:block;font-size:12.5px;font-weight:800;color:var(--g1);margin-bottom:6px}
+.gf-r label i{font-style:normal;font-weight:700;color:var(--g3);font-size:11.5px;margin-left:4px}
+.gf-r input,.gf-r select{width:100%;padding:13px 12px;border:1.5px solid var(--ln);border-radius:11px;
+  font-size:16px;font-weight:600;font-family:inherit;background:var(--card);color:var(--ink);
+  -webkit-appearance:none;appearance:none;transition:.15s}
+.gf-r select{background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394A3B8' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 13px center;padding-right:34px}
+.gf-h{display:block;font-size:11.5px;color:var(--g2);line-height:1.6;margin-top:6px}
+.gf-c{display:flex;gap:10px;align-items:flex-start;padding:12px 13px;background:var(--bg);
+  border:1px solid var(--ln);border-radius:11px;margin-bottom:10px;cursor:pointer}
+.gf-c input{width:19px;height:19px;flex:0 0 auto;margin-top:1px;accent-color:var(--b);cursor:pointer}
+.gf-c span{flex:1;font-size:11.5px;color:var(--g2);line-height:1.7}
+.gf-c span b{display:block;font-size:13.5px;color:var(--ink);font-weight:800;margin-bottom:4px}
+.gf-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.gf-err{display:none;background:#FEF2F2;border:1px solid #FECACA;color:#991B1B;border-radius:10px;
+  padding:11px 13px;font-size:13px;font-weight:700;line-height:1.6;margin-bottom:11px}
+.gf-err.on{display:block}
+.gf-ok{display:none;text-align:center;padding:8px 0 4px}
+.gf-ok.on{display:block;animation:fade .35s both}
+.gf-ok .ic{width:52px;height:52px;margin:0 auto 13px;border-radius:50%;background:#ECFDF5;color:#059669;
+  font-size:27px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.gf-ok .t{font-size:18px;font-weight:800;color:var(--ink);letter-spacing:-.03em;margin-bottom:9px}
+.gf-ok .m{font-size:13.5px;color:var(--g1);line-height:1.8}
+.gf-ok .m b{color:var(--b3);font-weight:800}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
 .prep-fine{font-size:12.5px;color:var(--g2);line-height:1.85;margin-top:14px;text-align:left}
 .prep-fine b{color:var(--g1);font-weight:800}
 .prep-reg{font-size:11px;color:var(--g3);line-height:1.7;margin-top:13px;padding-top:12px;
@@ -305,11 +337,8 @@ footer b{color:var(--g1)}
 <script>
 'use strict';
 var MEMBER=/[?&]m=1/.test(location.search);
-/* 구글폼 주소. 비워두면 아래 '준비 중' 안내가 나온다.
-   _구글폼/폼생성.gs 를 실행해 나온 ① 주소를 여기에 넣으면 신청 CTA로 바뀐다. */
-var FORM_URL='';
-/* 폼 프리필 entry 번호 — 폼생성.gs 로그의 ④ 주소에서 확인해 채운다. 비워도 동작한다. */
-var FORM_ENTRY={grade:'',src:''};
+/* 신청 접수 서버 (Cloudflare Worker). 비우면 '준비 중' 안내가 나온다. */
+var API='https://daol105-form.daol105.workers.dev';
 var SUBJ=['국어','수학','영어','과학','사회'];
 var N=30;                                   /* 한 과목 수강 인원 (사용자 조절) */
 var CUM=[10,34,66,90,100];                  /* 5등급 누적 비율 */
@@ -594,24 +623,16 @@ function srcOf(){
          litt:'인스타그램',print:'학원 안내물'};
   return T[raw]||'';
 }
-function formUrl(){
-  if(!FORM_URL)return '';
-  var q=[],s=srcOf();
-  if(FORM_ENTRY.grade&&grade)q.push('entry.'+FORM_ENTRY.grade+'='+encodeURIComponent(grade));
-  if(FORM_ENTRY.src&&s)     q.push('entry.'+FORM_ENTRY.src+'='+encodeURIComponent(s));
-  if(!q.length)return FORM_URL;
-  return FORM_URL+(FORM_URL.indexOf('?')<0?'?':'&')+'usp=pp_url&'+q.join('&');
-}
+function formUrl(){return API}
 function prepHtml(){
   if(MEMBER)return '';
-  if(!FORM_URL){
+  if(!API){
     return '<div class="prep an2"><div class="prep-h"><h3>🛠️ 상세 정보는<br>곧 열립니다</h3></div>'+
       '<div class="prep-b"><div class="d">더 정확한 정보를 드리려고 <b>막바지 정비 중</b>입니다.</div>'+
-      '<div class="prep-list"><div>① 3개년 컷 추이 14,611개</div><div>② 수능최저 전문 4,721개 전형</div>'+
-      '<div>③ 특목·자사 판별 상세</div><div>④ 상위 백분위 표시</div></div>'+
       '<div style="font-size:13px;color:#64748B;line-height:1.75">위 조회는 <b>그대로 무료</b>입니다 · 문의 <b>031-794-8158</b></div></div></div>';
   }
-  return '<div class="prep an2"><div class="prep-h"><h3>여기까지가 무료로<br>보여드릴 수 있는 전부입니다</h3></div>'+
+  var s=srcOf(),g=grade||'고1';
+  return '<div class="prep an2" id="gfCard"><div class="prep-h"><h3>여기까지가 무료로<br>보여드릴 수 있는 전부입니다</h3></div>'+
     '<div class="prep-b">'+
     '<div class="d">나머지는 <b>문자로 보내드립니다.</b><br>번호를 받는 이유는 그것 하나입니다.</div>'+
     '<div class="prep-list">'+
@@ -620,15 +641,104 @@ function prepHtml(){
       '<div>③ 특목·자사 강세 전형 판별 — 일반고면 피해야 할 곳</div>'+
       '<div>④ 지금 등급의 상위 백분위와 목표 등수</div>'+
     '</div>'+
-    '<a class="prep-cta" href="'+formUrl()+'" target="_blank" rel="noopener">문자로 자료 받기</a>'+
-    '<div class="prep-fine">'+
-      '받는 번호로만 보냅니다. 번호가 틀리면 자료가 가지 않습니다.<br>'+
-      '<b>설명회·특강 안내 문자는 따로 동의하셔야 보냅니다.</b> 원치 않으시면 안 보냅니다.<br>'+
-      '삭제를 원하시면 <b>031-794-8158</b>로 말씀만 주세요. 바로 지웁니다.'+
+    '<button type="button" class="prep-cta" id="gfOpen">문자로 자료 받기</button>'+
+    '<div class="gf" id="gfBox">'+
+      '<div class="gf-r"><label>학생 이름</label><input id="gfName" type="text" maxlength="20" autocomplete="name" placeholder="홍길동"></div>'+
+      '<div class="gf-r"><label>학년</label><select id="gfGrade">'+
+        ['고1','고2','고3·N수'].map(function(x){return '<option'+(x===g?' selected':'')+'>'+x+'</option>'}).join('')+
+      '</select></div>'+
+      '<div class="gf-r"><label>학교</label><input id="gfSchool" type="text" maxlength="30" placeholder="미사강변고"></div>'+
+      '<div class="gf-r"><label>자료 받으실 휴대폰 번호</label>'+
+        '<input id="gfTel" type="tel" inputmode="numeric" maxlength="13" autocomplete="tel" placeholder="010-1234-5678">'+
+        '<span class="gf-h">이 번호로만 보냅니다. 틀리면 자료가 가지 않습니다.</span></div>'+
+      '<div class="gf-r"><label>보호자 번호 <i>선택</i></label>'+
+        '<input id="gfPTel" type="tel" inputmode="numeric" maxlength="13" autocomplete="off" placeholder="비워두셔도 됩니다"></div>'+
+      '<div class="gf-r"><label>어떻게 알고 오셨나요</label><select id="gfSrc">'+
+        ['유튜브','인스타그램','네이버 블로그·검색','카카오톡','지인 소개','학원 안내물','기타']
+          .map(function(x){return '<option'+(x===s?' selected':'')+'>'+x+'</option>'}).join('')+
+      '</select></div>'+
+      '<label class="gf-c"><input type="checkbox" id="gfAgree"><span>'+
+        '<b>[필수] 개인정보 수집·이용에 동의합니다</b>'+
+        '수집 항목 : 이름 · 학년 · 학교 · 휴대폰 번호 (보호자 번호는 선택)<br>'+
+        '수집 목적 : 신청하신 자료 발송, 자료에 대한 문의 응대<br>'+
+        '보유 기간 : 1년, 이후 지체 없이 파기<br>'+
+        '동의하지 않으셔도 위 조회는 그대로 쓰실 수 있습니다.'+
+      '</span></label>'+
+      '<label class="gf-c"><input type="checkbox" id="gfAd"><span>'+
+        '<b>[선택] 설명회·특강 안내를 문자로 받겠습니다</b>'+
+        '한 달 2회 이내. 체크하지 않으셔도 신청한 자료는 그대로 보내드립니다.<br>'+
+        '언제든 031-794-8158로 말씀하시면 즉시 중단합니다.'+
+      '</span></label>'+
+      '<input type="text" id="gfHp" tabindex="-1" autocomplete="off" aria-hidden="true" class="gf-hp">'+
+      '<div class="gf-err" id="gfErr"></div>'+
+      '<button type="button" class="prep-cta" id="gfSend">신청하기</button>'+
+    '</div>'+
+    '<div class="gf-ok" id="gfOk">'+
+      '<div class="ic">✓</div>'+
+      '<div class="t">신청이 접수되었습니다</div>'+
+      '<div class="m">입력하신 번호로 <b>열람 링크를 문자로</b> 보내드립니다.<br>'+
+        '평일 기준 당일, 늦어도 다음 날 오전까지 도착합니다.<br><br>'+
+        '문자가 오지 않으면 <b>031-794-8158</b>로 연락 주세요.</div>'+
     '</div>'+
     '<div class="prep-reg">다올105 · 등록번호 제 하남 298호 · 교습과정 진학상담·지도<br>'+
-      '교습비 490,000원 (1개월 · 총 교습시간 2,107분)</div>'+
+      '교습비 490,000원 (1개월 · 총 교습시간 2,107분)<br>'+
+      '개인정보 삭제를 원하시면 031-794-8158로 말씀만 주세요. 바로 지웁니다.</div>'+
     '</div></div>';
+}
+/* 010-1234-5678 로 자동 정리 */
+function telFmt(v){
+  var d=String(v).replace(/[^0-9]/g,'').slice(0,11);
+  if(d.length<4)return d;
+  if(d.length<8)return d.slice(0,3)+'-'+d.slice(3);
+  return d.slice(0,3)+'-'+d.slice(3,d.length-4)+'-'+d.slice(d.length-4);
+}
+function bindForm(){
+  var open=$('gfOpen');if(!open)return;
+  open.addEventListener('click',function(){
+    $('gfBox').classList.add('on');open.style.display='none';
+    $('gfName').focus();
+  });
+  ['gfTel','gfPTel'].forEach(function(id){
+    var el=$(id);
+    el.addEventListener('input',function(){
+      var p=el.selectionStart,before=el.value.length;
+      el.value=telFmt(el.value);
+      el.setSelectionRange(p+(el.value.length-before),p+(el.value.length-before));
+    });
+  });
+  $('gfSend').addEventListener('click',async function(){
+    var b=$('gfSend'),err=$('gfErr');
+    var body={
+      name:$('gfName').value, grade:$('gfGrade').value, school:$('gfSchool').value,
+      tel:$('gfTel').value, parentTel:$('gfPTel').value, src:$('gfSrc').value,
+      agree:$('gfAgree').checked, ad:$('gfAd').checked, website:$('gfHp').value
+    };
+    var 검사=[
+      [body.name.trim().length<2,'학생 이름을 적어주세요.'],
+      [body.school.trim().length<2,'학교를 적어주세요.'],
+      [!/^01[016789]-?\d{3,4}-?\d{4}$/.test(body.tel.trim()),'휴대폰 번호를 확인해 주세요. 010-1234-5678 형식입니다.'],
+      [!!body.parentTel.trim()&&!/^01[016789]-?\d{3,4}-?\d{4}$/.test(body.parentTel.trim()),'보호자 번호 형식을 확인해 주세요.'],
+      [!body.agree,'개인정보 수집·이용에 동의하셔야 자료를 보내드릴 수 있습니다.']
+    ];
+    for(var i=0;i<검사.length;i++){
+      if(검사[i][0]){err.textContent=검사[i][1];err.classList.add('on');return}
+    }
+    err.classList.remove('on');
+    b.disabled=true;b.textContent='보내는 중...';
+    try{
+      var r=await fetch(API+'/api/submit',{method:'POST',
+        headers:{'content-type':'application/json'},body:JSON.stringify(body)});
+      var j=await r.json();
+      if(!j.ok)throw new Error(j.err||'잠시 후 다시 시도해 주세요.');
+      $('gfBox').classList.remove('on');
+      $('gfOk').classList.add('on');
+      $('gfOk').scrollIntoView({behavior:'smooth',block:'center'});
+    }catch(e){
+      err.textContent=e.message||'연결에 실패했습니다. 잠시 후 다시 시도해 주세요.';
+      err.classList.add('on');
+      b.disabled=false;b.textContent='신청하기';
+    }
+  });
 }
 
 async function run(){
@@ -658,7 +768,7 @@ async function run(){
   h+=section('s-try','🔥 도전','#D97706','컷보다 0.11~0.44등급 부족',tryy,gaps);
   if(!fit.length&&!safe.length&&!tryy.length)h+='<div class="empty">조건에 맞는 전형이 없습니다.<br>계열·지역·전형 유형을 넓혀 보세요.</div>';
   out.innerHTML=h+actHtml()+prepHtml();
-  bindAct();
+  bindAct();bindForm();
   out.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
