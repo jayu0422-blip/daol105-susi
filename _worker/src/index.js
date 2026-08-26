@@ -8,7 +8,7 @@
  *   POST /api/mark?k=KEY      발송 완료 표시
  *
  * 저장 구조 — 전화번호를 키로 쓴다. 같은 번호로 다시 신청하면 덮어쓴다.
- *   s:{tel}  →  { name, grade, school, tel, parentTel, src, note, ad, at, sent }
+ *   s:{tel}  →  { name, grade, school, tel, parentTel, src, note, at, sent }
  */
 
 const 학년 = ['고1', '고2', '고3·N수'];
@@ -126,7 +126,6 @@ export default {
         parentTel: parentTel || '',
         src: 유입.includes(src) ? src : '기타',
         note,
-        ad: b.ad === true,                    // 광고성 정보 수신 동의(선택)
         at: 기존?.at || new Date().toISOString(),
         up: new Date().toISOString(),
         sent: 기존?.sent || '',
@@ -196,7 +195,6 @@ export default {
 function 관리자화면(rows, key) {
   const 총 = rows.length;
   const 미발송 = rows.filter(r => !r.sent).length;
-  const 광고동의 = rows.filter(r => r.ad).length;
 
   const 집계 = (fn) => {
     const m = {};
@@ -211,11 +209,11 @@ function 관리자화면(rows, key) {
     <tr class="demo"><td>–</td><td><span class="demolb">예시</span>2026-08-27 21:14</td>
       <td><b>김ㅇㅇ</b></td><td>고2</td><td>미사강변고</td>
       <td class="tel">010-1234-5678</td><td class="tel">010-8765-4321</td>
-      <td class="memo">내신 2.4 · 자연 · 서울</td><td>유튜브</td><td><span class="y">동의</span></td></tr>
+      <td class="memo">내신 2.4 · 자연 · 서울</td><td>유튜브</td></tr>
     <tr class="demo"><td>–</td><td><span class="demolb">예시</span>2026-08-27 22:03</td>
       <td><b>이ㅇㅇ</b></td><td>고1</td><td>하남고</td>
       <td class="tel">010-2222-3333</td><td class="tel">–</td>
-      <td class="memo">–</td><td>인스타그램</td><td><span class="n">–</span></td></tr>`;
+      <td class="memo">–</td><td>인스타그램</td></tr>`;
 
   const tr = rows.map(r => `<tr class="${r.sent ? 'done' : ''}">
     <td><input type="checkbox" data-tel="${esc(r.tel)}" ${r.sent ? 'checked' : ''}></td>
@@ -227,7 +225,6 @@ function 관리자화면(rows, key) {
     <td class="tel">${esc(r.parentTel ? r.parentTel.replace(/^(01[016789])(\d{3,4})(\d{4})$/, '$1-$2-$3') : '–')}</td>
     <td class="memo">${esc(r.note || '–')}</td>
     <td>${esc(r.src)}</td>
-    <td>${r.ad ? '<span class="y">동의</span>' : '<span class="n">–</span>'}</td>
   </tr>`).join('');
 
   return `<!doctype html><html lang="ko"><head><meta charset="utf-8">
@@ -292,7 +289,6 @@ tr.demo b{color:#CBD5E1;font-weight:700}
 <div class="stats">
   <div class="st a"><div class="k">전체 신청</div><div class="v">${총}</div></div>
   <div class="st b"><div class="k">발송 대기</div><div class="v">${미발송}</div></div>
-  <div class="st c"><div class="k">광고 수신 동의</div><div class="v">${광고동의}</div></div>
 </div>
 
 <div class="fields"><h3>신청 한 건에서 받는 항목</h3><ul>
@@ -303,8 +299,7 @@ tr.demo b{color:#CBD5E1;font-weight:700}
   <li>보호자 번호 <i>선택</i></li>
   <li>상담 맥락 <i>내신·계열·지역·전형</i></li>
   <li>유입 경로 <i>어디서 보고 왔나</i></li>
-  <li>개인정보 동의 <i>필수</i></li>
-  <li>광고 수신 동의 <i>선택</i></li>
+  <li>개인정보 동의 <i>필수 · 체크해야 제출됨</i></li>
   <li>신청 일시</li>
 </ul></div>
 
@@ -324,13 +319,13 @@ ${총 ? `<div class="box"><h3>학년</h3>${칩(집계(r => r.grade))}</div>
 
 <div class="scroll"><table>
 <thead><tr><th>발송</th><th>신청일시</th><th>이름</th><th>학년</th><th>학교</th>
-<th>휴대폰</th><th>보호자</th><th>상담 맥락</th><th>유입</th><th>광고동의</th></tr></thead>
+<th>휴대폰</th><th>보호자</th><th>상담 맥락</th><th>유입</th></tr></thead>
 <tbody>${총 ? tr : 예시행}</tbody></table></div>
 
 <div class="note">
   체크박스를 누르면 발송 완료로 기록됩니다. 다음 CSV에서 제외됩니다.<br>
-  <b>광고동의</b>가 없는 분께는 설명회·특강 안내 문자를 보내면 안 됩니다.
-  신청하신 자료를 보내는 것은 동의 없이도 가능합니다.<br>
+  동의는 <b>입시 자료 제공</b>까지입니다. 수강 안내·모집·할인 같은
+  <b>광고성 문자는 보내면 안 됩니다.</b><br>
   이 화면 주소는 공유하지 마세요. 개인정보가 들어 있습니다.
 </div>
 </div>

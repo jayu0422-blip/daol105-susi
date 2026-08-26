@@ -133,6 +133,38 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .bar i{display:block;height:100%;border-radius:99px;animation:grow .7s cubic-bezier(.22,1,.36,1) both}
 .barlb{display:flex;justify-content:space-between;font-size:11.5px;font-weight:700;color:var(--g2)}
 
+/* ═══ 컨설팅 유도 ═══ */
+.cta{margin-top:22px;border-radius:var(--r);overflow:hidden;padding:26px 20px 22px;
+  background:linear-gradient(150deg,#1E3A8A,#1D4ED8 55%,#2563EB);color:#fff;text-align:center;
+  box-shadow:0 12px 30px rgba(29,78,216,.26)}
+.cta .k{font-size:12.5px;font-weight:700;opacity:.8;letter-spacing:.02em;margin-bottom:8px}
+.cta .t{font-size:clamp(21px,5.6vw,27px);font-weight:800;letter-spacing:-.04em;line-height:1.32;margin-bottom:12px}
+.cta p{font-size:14px;line-height:1.8;opacity:.92;margin-bottom:18px}
+.cta p b{font-weight:800;color:#fff}
+.cta-n{display:flex;gap:10px;margin-bottom:18px}
+.cta-n>div{flex:1;background:rgba(255,255,255,.13);border-radius:13px;padding:14px 10px}
+.cta-n b{display:block;font-size:26px;font-weight:800;letter-spacing:-.04em;line-height:1.1;margin-bottom:5px}
+.cta-n .up b{color:#86EFAC}
+.cta-n .dn b{color:#FCA5A5}
+.cta-n span{font-size:11.5px;line-height:1.5;opacity:.85}
+.cta-b{display:block;padding:15px;background:#fff;color:#1D4ED8;border-radius:12px;
+  font-size:16px;font-weight:800;text-decoration:none;letter-spacing:-.02em;transition:.15s}
+.cta-b:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.cta-t{display:block;margin-top:10px;font-size:13.5px;font-weight:700;color:#fff;
+  opacity:.85;text-decoration:none}
+
+/* ═══ 고지 ═══ */
+.legal{margin-top:18px;background:var(--bg);border:1px solid var(--ln);border-radius:13px;
+  padding:17px 18px;font-size:12.5px;color:var(--g2);line-height:1.8}
+.legal b{color:var(--g1);font-weight:800}
+.legal>b{display:block;font-size:13.5px;color:var(--ink);margin-bottom:9px}
+.legal p{margin-bottom:11px}
+.legal ul{list-style:none;margin-bottom:12px}
+.legal li{padding-left:13px;position:relative;margin-bottom:5px}
+.legal li:before{content:'·';position:absolute;left:2px;font-weight:800}
+.legal .fin{margin:0;padding-top:12px;border-top:1px solid var(--ln);color:var(--g1)}
+.legal .fin b{color:var(--b3)}
+
 /* ═══ 시나리오 ═══ */
 .sc{display:grid;gap:8px}
 .sc button{display:flex;align-items:center;gap:12px;padding:13px 14px;border:1.5px solid var(--ln);
@@ -233,10 +265,8 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .gf-c span{flex:1;font-size:11.5px;color:var(--g2);line-height:1.7}
 .gf-c span b{display:block;font-size:13.5px;color:var(--ink);font-weight:800;margin-bottom:4px}
 .gf-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
-.gf-all{display:flex;gap:10px;align-items:center;padding:13px;background:var(--bs);
-  border:1.5px solid #93C5FD;border-radius:11px;margin-bottom:10px;cursor:pointer}
-.gf-all input{width:19px;height:19px;flex:0 0 auto;accent-color:var(--b);cursor:pointer}
-.gf-all span b{font-size:14.5px;font-weight:800;color:var(--b3)}
+.gf-c.need{border-color:#DC2626;background:#FEF2F2;animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 .gf-c span u{display:inline-block;min-width:52px;text-decoration:none;font-weight:800;color:var(--g1)}
 .gf-c span b.in{color:var(--b3);display:inline;font-size:inherit;margin:0}
 .gf-c span b i{font-style:normal;margin-right:4px}
@@ -441,8 +471,6 @@ function needUp(g){
   var tr=rankOf(t);
   return {n:Math.max(0,rankOf(g)-tr),to:t,tgtRank:tr,dp:pctOf(g)-pctOf(t)};
 }
-/* 다올105 권장 학습량 — 앞서야 할 인원이 아니라 백분위 격차에 비례시킨다 */
-function hoursFor(dp){var wk=Math.max(6,Math.min(22,Math.round(6+dp*0.45)));return {wk:wk,mo:wk*4}}
 
 /* ── 진입 ── */
 function start(g){
@@ -518,7 +546,7 @@ function calcNow(){
 
 /* ── 경각심 카드 ── */
 function alertHtml(g){
-  var pos=posOf(g),up=needUp(g),h=hoursFor(up.dp||0),r=rankRange(g);
+  var pos=posOf(g),up=needUp(g),r=rankRange(g);
   var lv=Math.floor(g);
   var col=lv<=1?['#059669','#047857']:lv<=2?['#2563EB','#1D4ED8']:lv<=3?['#D97706','#B45309']:['#DC2626','#991B1B'];
   var pct=Math.round(pctOf(g)*10)/10;
@@ -536,9 +564,7 @@ function alertHtml(g){
     (r.tie==='bottom'?' · 전 과목 5등급 구간':'')+'</span></div>';
   if(up.n>0){
     body+='<div class="krow"><span class="ki" style="background:#FEF3C7;color:#92400E">🎯</span>'+
-      '<span class="kt"><b>'+up.n+'명만 앞서면 됩니다</b>평균 '+up.to.toFixed(2)+'등급 자리는 약 '+up.tgtRank+'등입니다</span></div>'+
-      '<div class="krow"><span class="ki" style="background:#EFF6FF;color:#2563EB">⏱</span>'+
-      '<span class="kt"><b>주 '+h.wk+'시간 · 한 달 '+h.mo+'시간</b>이 과목에만 쓰는 순공 시간 (다올105 권장 기준)</span></div>';
+      '<span class="kt"><b>'+up.n+'명만 앞서면 됩니다</b>평균 '+up.to.toFixed(2)+'등급 자리는 약 '+up.tgtRank+'등입니다</span></div>';
   }
   if(g>CUT10+0.005){
     body+='<div class="krow"><span class="ki" style="background:#F1F5F9;color:#475569">📊</span>'+
@@ -613,6 +639,62 @@ function targetAvg(){
     if(vals.length){any=true;s+=(vals.reduce(function(a,b){return a+b},0)/vals.length)*t[2];w+=t[2]}
   });
   return any?s/w:null;
+}
+
+/* ── 컨설팅 랜딩 유도 ──
+   고3처럼 '지원 시점'이 아니라 '준비 시점'이라, 남은 학기가 목록을 얼마나
+   바꾸는지 실제 개수로 보여준다. */
+function reachCount(rows,g){
+  var g100=Math.round(g*100),n=0;
+  for(var i=0;i<rows.length;i++){
+    var c=cutOf(rows[i]); if(c==null)continue;
+    if(Math.round(c*100)-g100>=-11)n++;    /* 적정 이상 = 지금 노려볼 수 있는 곳 */
+  }
+  return n;
+}
+function ctaHtml(rows,gaps,g){
+  var cur=avgOf($('inputArea'));
+  if(cur==null)return '';
+  var nL=LEFT[grade].length;
+  var now=reachCount(rows,g);
+  var up=reachCount(rows,finalAvg(cur,Math.max(1,cur-1)));
+  var dn=reachCount(rows,finalAvg(cur,Math.min(5,cur+1)));
+  var gain=Math.max(0,up-now),lose=Math.max(0,now-dn);
+  var body='';
+  if(gain>0||lose>0){
+    body='<div class="cta-n">'+
+      (gain>0?'<div class="up"><b>+'+gain.toLocaleString()+'</b><span>한 등급 올리면<br>새로 들어오는 곳</span></div>':'')+
+      (lose>0?'<div class="dn"><b>-'+lose.toLocaleString()+'</b><span>한 등급 떨어지면<br>빠지는 곳</span></div>':'')+
+      '</div>';
+  }
+  return '<div class="cta an2">'+
+    '<div class="k">지금 갈 수 있는 곳을 보셨다면</div>'+
+    '<div class="t">이 목록은<br>남은 '+nL+'개 학기로 바뀝니다</div>'+
+    '<p>지금 보신 '+now.toLocaleString()+'개는 <b>오늘 기준</b>입니다.<br>'+
+    '남은 학기를 어떻게 쓰느냐에 따라 목록 자체가 달라집니다.</p>'+
+    body+
+    '<a class="cta-b" href="../consulting/">남은 학기 설계 상담 보기 →</a>'+
+    '<a class="cta-t" href="tel:031-794-8158">☎ 031-794-8158 문의</a>'+
+    '</div>';
+}
+
+/* ── 고지 ── */
+function legalHtml(){
+  return '<div class="legal an2">'+
+    '<b>꼭 읽어주세요</b>'+
+    '<p>이 화면의 숫자는 각 대학이 공표한 <b>2023~2025학년도 입시 결과</b>와 '+
+    '<b>2025학년도 고1 성적 분포 통계</b>를 모아 다시 계산한 참고 자료입니다. '+
+    '<b>합격 가능성을 예측하거나 보장하지 않으며, 그럴 수도 없습니다.</b></p>'+
+    '<ul>'+
+      '<li>입결은 <b>지난 3개년</b> 결과입니다. 여러분이 지원할 때는 모집인원 · 전형방법 · 수능최저가 달라집니다.</li>'+
+      '<li>등수와 백분위는 실측 분포에 학년 인원을 곱한 <b>추정 범위</b>입니다. 일반고 기준이며 특목·자사고는 다릅니다.</li>'+
+      '<li>대학마다 <b>반영 교과와 가중치가 달라</b>, 같은 내신도 대학별로 등급이 다시 계산됩니다.</li>'+
+      '<li>학생부종합은 등급보다 <b>서류와 활동</b>이 중심입니다. 등급만으로 판단할 수 없습니다.</li>'+
+    '</ul>'+
+    '<p class="fin">정확한 판단은 이 화면으로 하실 수 없습니다.<br>'+
+    '본인 성적표와 학교 상황을 놓고 <b>다올105 입시 컨설턴트와 직접 상담</b>하셔야 '+
+    '실제로 쓸 수 있는 답이 나옵니다.</p>'+
+    '</div>';
 }
 
 /* ── 데이터 ── */
@@ -730,20 +812,14 @@ function prepHtml(){
         ['유튜브','인스타그램','네이버 블로그·검색','카카오톡','지인 소개','학원 안내물','기타']
           .map(function(x){return '<option'+(x===s?' selected':'')+'>'+x+'</option>'}).join('')+
       '</select></div>'+
-      '<label class="gf-all"><input type="checkbox" id="gfAll"><span><b>아래 내용에 모두 동의합니다</b></span></label>'+
-      '<label class="gf-c"><input type="checkbox" id="gfAgree"><span>'+
+      '<label class="gf-c" id="gfAgreeBox"><input type="checkbox" id="gfAgree"><span>'+
         '<b><i class="req">[필수]</i> 개인정보 수집·이용 및 입시 자료 수신 동의</b>'+
         '<u>수집항목</u> 이름 · 학년 · 학교 · 휴대폰 (보호자 번호는 선택)<br>'+
         '<u>이용목적</u> 조회 결과 상세 제공 및 <b class="in">입시 자료 제공</b>'+
         ' (입시 설명회 영상, 기출 분석 자료, 모의고사·수시 일정 안내)<br>'+
         '<u>보유기간</u> 수집일로부터 6개월<br>'+
+        '<b class="in">광고성 정보(수강 안내·모집·할인)는 보내지 않습니다.</b><br>'+
         '동의를 거부하실 수 있으며, 이 경우 상세 결과와 자료 제공이 제한됩니다.'+
-      '</span></label>'+
-      '<label class="gf-c"><input type="checkbox" id="gfAd"><span>'+
-        '<b><i class="opt">[선택]</i> 광고성 정보 수신 동의</b>'+
-        '수강 안내, 모집 일정, 할인·혜택 등 <b class="in">영리목적 광고성 정보</b>를 문자·알림톡으로 받습니다.<br>'+
-        '동의하지 않으셔도 <b class="in">위 입시 자료와 상세 결과는 그대로</b> 받으실 수 있습니다.'+
-        ' 언제든 무료로 수신거부 가능합니다.'+
       '</span></label>'+
       '<input type="text" id="gfHp" tabindex="-1" autocomplete="off" aria-hidden="true" class="gf-hp">'+
       '<div class="gf-err" id="gfErr"></div>'+
@@ -787,10 +863,9 @@ function bindForm(){
     var t=ev.target.closest?ev.target.closest('.js-lock'):null;
     if(t){ev.preventDefault();openForm(false)}
   });
-  var all=$('gfAll'),boxes=[$('gfAgree'),$('gfAd')];
-  all.addEventListener('change',function(){boxes.forEach(function(x){x.checked=all.checked})});
-  boxes.forEach(function(x){x.addEventListener('change',function(){
-    all.checked=boxes.every(function(y){return y.checked})})});
+  $('gfAgree').addEventListener('change',function(){
+    $('gfAgreeBox').classList.remove('need');
+  });
   ['gfTel','gfPTel'].forEach(function(id){
     var el=$(id);
     el.addEventListener('input',function(){
@@ -804,7 +879,7 @@ function bindForm(){
     var body={
       name:$('gfName').value, grade:$('gfGrade').value, school:$('gfSchool').value,
       tel:$('gfTel').value, parentTel:$('gfPTel').value, src:$('gfSrc').value,
-      agree:$('gfAgree').checked, ad:$('gfAd').checked, website:$('gfHp').value
+      agree:$('gfAgree').checked, website:$('gfHp').value
     };
     var 검사=[
       [body.name.trim().length<2,'학생 이름을 적어주세요.'],
@@ -814,7 +889,14 @@ function bindForm(){
       [!body.agree,'[필수] 개인정보 수집·이용 및 입시 자료 수신에 동의해 주세요.']
     ];
     for(var i=0;i<검사.length;i++){
-      if(검사[i][0]){err.textContent=검사[i][1];err.classList.add('on');return}
+      if(검사[i][0]){
+        err.textContent=검사[i][1];err.classList.add('on');
+        if(!body.agree){
+          var box=$('gfAgreeBox');box.classList.add('need');
+          box.scrollIntoView({behavior:'smooth',block:'center'});
+        }
+        return;
+      }
     }
     err.classList.remove('on');
     b.disabled=true;b.textContent='보내는 중...';
@@ -869,7 +951,7 @@ async function run(){
   h+=section('s-safe','🛡 안정','#059669','컷이 0.16등급 이상 아래',safe,gaps);
   h+=section('s-try','🔥 도전','#D97706','컷보다 0.11~0.44등급 부족',tryy,gaps);
   if(!fit.length&&!safe.length&&!tryy.length)h+='<div class="empty">조건에 맞는 전형이 없습니다.<br>계열·지역·전형 유형을 넓혀 보세요.</div>';
-  out.innerHTML=h+actHtml()+prepHtml();
+  out.innerHTML=h+actHtml()+ctaHtml(rows,gaps,g)+prepHtml()+legalHtml();
   bindAct();bindForm();
   out.scrollIntoView({behavior:'smooth',block:'start'});
 }

@@ -222,19 +222,14 @@
       <input type="text" id="ghp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
     </div>
     <div class="agbox">
-      <label class="ag-all"><input type="checkbox" id="gaAll"><span><b>아래 내용에 모두 동의합니다</b></span></label>
-      <label class="gate-agree"><input type="checkbox" id="ga">
+      <label class="gate-agree" id="gaBox"><input type="checkbox" id="ga">
         <span><b class="req">[필수]</b> 개인정보 수집·이용 및 입시 자료 수신 동의<br>
         <em>수집항목</em> 이름·학교·학년·휴대폰<br>
         <em>이용목적</em> 조회 결과 상세 제공 및 <b>입시 자료 제공</b>
         (입시 설명회 영상, 기출 분석 자료, 모의고사·수시 일정 안내)<br>
         <em>보유기간</em> 수집일로부터 6개월<br>
+        <b>광고성 정보(수강 안내·모집·할인)는 보내지 않습니다.</b><br>
         동의를 거부하실 수 있으며, 이 경우 상세 결과와 자료 제공이 제한됩니다.</span>
-      </label>
-      <label class="gate-agree"><input type="checkbox" id="gm">
-        <span><b class="opt">[선택]</b> 광고성 정보 수신 동의<br>
-        수강 안내, 모집 일정, 할인·혜택 등 <b>영리목적 광고성 정보</b>를 문자·알림톡으로 받습니다.<br>
-        <em>동의하지 않으셔도 위 입시 자료와 상세 결과는 그대로 받으실 수 있습니다.</em> 언제든 무료로 수신거부 가능합니다.</span>
       </label>
     </div>
     <button class="gate-btn" id="gb">상세 결과 열어보기</button>
@@ -255,7 +250,7 @@
     <a href="consulting/">실패 없이 지원하는 법 →</a>
   </div>
 
-  <div class="note"><b>꼭 읽어주세요.</b> 이 자료는 각 대학이 발표한 2023~2025학년도 수시 입결(대부분 최종등록자 70%컷·평균 등)을 정리한 참고 자료입니다. 대학별 등급 산출 방식(반영 교과·가중치)이 서로 다르고, 해마다 컷은 오르내립니다. 특히 학생부종합은 등급보다 서류·활동이 중심입니다. <b>실제 지원 판단은 반드시 원서 시점의 모집요강과 상담을 통해 확정하세요.</b></div>
+  <div class="note"><b>꼭 읽어주세요.</b> 이 자료는 각 대학이 발표한 2023~2025학년도 수시 입결(대부분 최종등록자 70%컷·평균 등)을 정리한 참고 자료입니다. 대학별 등급 산출 방식(반영 교과·가중치)이 서로 다르고, 해마다 컷은 오르내립니다. 특히 학생부종합은 등급보다 서류·활동이 중심입니다. <b>이 자료는 합격 가능성을 예측하거나 보장하지 않습니다.</b> 실제 지원 판단은 원서 시점의 모집요강을 확인하시고, 본인 성적표를 놓고 <b>다올105 입시 컨설턴트와 직접 상담</b>하셔야 확정하실 수 있습니다.</div>
 
   <div class="cta">
     <div class="t">우리 아이 성적표로 정확히 보고 싶다면</div>
@@ -374,28 +369,27 @@ function srcOf(){
 }
 function bindGate(){
   var b=document.getElementById('gb'); if(!b) return;
-  var all=document.getElementById('gaAll');
-  var boxes=[document.getElementById('ga'),document.getElementById('gm')];
-  if(all){
-    all.addEventListener('change',function(){ boxes.forEach(function(x){ if(x) x.checked=all.checked; }); });
-    boxes.forEach(function(x){ if(x) x.addEventListener('change',function(){
-      all.checked = boxes.every(function(y){ return y && y.checked; });
-    }); });
-  }
+  document.getElementById('ga').addEventListener('change',function(){
+    document.getElementById('gaBox').classList.remove('need');
+  });
   b.addEventListener('click', function(){
     var n=document.getElementById('gn').value.trim();
     var s=document.getElementById('gs').value.trim();
     var g=document.getElementById('gg').value;
     var p=document.getElementById('gp').value.replace(/[^0-9]/g,'');
     var a=document.getElementById('ga').checked;
-    var mk=document.getElementById('gm').checked;
     var e=document.getElementById('ge');
     function fail(m){ e.textContent=m; e.style.display='block'; }
     if(!n) return fail('이름을 입력해 주세요.');
     if(!s) return fail('학교를 입력해 주세요.');
     if(!g) return fail('학년을 선택해 주세요.');
     if(!/^01[016789][0-9]{7,8}$/.test(p)) return fail('휴대폰 번호를 정확히 입력해 주세요. (예: 01012345678)');
-    if(!a) return fail('[필수] 개인정보 수집·이용에 동의해 주세요.');
+    if(!a){
+      var box=document.getElementById('gaBox');
+      box.classList.add('need');
+      box.scrollIntoView({behavior:'smooth',block:'center'});
+      return fail('[필수] 개인정보 수집·이용 및 입시 자료 수신에 동의해 주세요.');
+    }
     e.style.display='none'; b.disabled=true; b.textContent='처리 중...';
     /* 상담에 쓸 맥락을 한 줄로 붙여둔다 — 내신·계열·지역·전형 */
     var note=[document.getElementById('g').value?('내신 '+document.getElementById('g').value):'',
@@ -404,7 +398,7 @@ function bindGate(){
     var payload={ name:n, school:s,
       grade:(g==='고3'||g==='N수')?'고3·N수':g,
       tel:p, parentTel:'', src:srcOf(), note:note,
-      agree:true, ad:!!mk, website:document.getElementById('ghp')?document.getElementById('ghp').value:'' };
+      agree:true, website:document.getElementById('ghp')?document.getElementById('ghp').value:'' };
     function done(){
       try{ localStorage.setItem(GATE_KEY,'1'); }catch(err){}
       document.getElementById('gateForm').style.display='none';
