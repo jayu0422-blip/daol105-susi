@@ -133,6 +133,36 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .bar i{display:block;height:100%;border-radius:99px;animation:grow .7s cubic-bezier(.22,1,.36,1) both}
 .barlb{display:flex;justify-content:space-between;font-size:11.5px;font-weight:700;color:var(--g2)}
 
+/* ═══ 권역 기준선 막대 ═══ */
+.uni{background:var(--card);border:1px solid var(--ln);border-radius:13px;padding:16px 15px 14px;margin-bottom:16px}
+.uni-h{font-size:13.5px;font-weight:800;color:var(--ink);letter-spacing:-.02em;margin-bottom:26px}
+.uni-w{position:relative;margin-bottom:13px}
+.uni-bar{position:relative;display:flex;height:26px;border-radius:7px;overflow:hidden}
+.uni-bar i{position:relative;display:flex;align-items:center;justify-content:center;font-style:normal}
+.uni-bar i span{font-size:9.5px;font-weight:800;color:#fff;opacity:.9;white-space:nowrap;letter-spacing:-.02em}
+.uni-bar .s1{flex:1;background:#059669}.uni-bar .s2{flex:1;background:#2563EB}
+.uni-bar .s3{flex:1;background:#D97706}.uni-bar .s4{flex:1;background:#EA580C}
+.uni-bar .s5{flex:1;background:#DC2626}
+.uni-bar u{position:absolute;top:-3px;bottom:-3px;width:2.5px;border-radius:2px;
+  box-shadow:0 0 0 1.5px #fff;text-decoration:none}
+.uni-w .me{position:absolute;top:-24px;transform:translateX(-50%);z-index:2;font-weight:800}
+.uni-w .me span{display:block;background:var(--ink);color:#fff;font-size:11px;padding:3px 7px;
+  border-radius:6px;white-space:nowrap;letter-spacing:-.02em}
+.uni-w .me:after{content:'';position:absolute;left:50%;transform:translateX(-50%);
+  border:4px solid transparent;border-top-color:var(--ink)}
+.uni-ax{display:flex;justify-content:space-between;font-size:10.5px;font-weight:700;
+  color:var(--g3);margin-top:5px;font-variant-numeric:tabular-nums}
+.uni-msg{font-size:12.5px;color:var(--g1);line-height:1.7;padding:9px 11px;background:var(--bg);
+  border-radius:9px;margin-bottom:11px}
+.uni-msg b{color:var(--b3);font-weight:800}
+.lg{display:flex;align-items:baseline;gap:8px;padding:6px 0;border-top:1px solid #F1F5F9}
+.lg em{width:8px;height:8px;border-radius:50%;flex:0 0 auto;align-self:center}
+.lg>b{font-size:14px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;flex:0 0 auto}
+.lg span{font-size:12.5px;font-weight:700;color:var(--g1);line-height:1.5}
+.lg i{display:block;font-style:normal;font-size:11px;font-weight:600;color:var(--g3);margin-top:1px}
+.uni-n{font-size:11px;color:var(--g3);line-height:1.7;margin-top:10px;padding-top:9px;border-top:1px solid var(--ln)}
+.uni-n b{color:var(--g2);font-weight:800}
+
 /* ═══ 근거 표 ═══ */
 .tbl{margin-top:11px;background:var(--card);border:1px solid var(--ln);border-radius:13px;overflow:hidden}
 .tbl summary{padding:13px 15px;font-size:13.5px;font-weight:800;color:var(--b3);cursor:pointer;
@@ -670,6 +700,57 @@ function targetAvg(){
   return any?s/w:null;
 }
 
+/* ── 권역 기준선 막대 ──
+   학생부교과 컷의 권역별 중앙값을 실제 데이터에서 매번 계산해 막대에 찍는다.
+   합격선이 아니라 '그 권역 전형의 절반이 이보다 낮은 컷'이라는 뜻이다. */
+function medOf(rows){
+  var v=[],i;
+  for(i=0;i<rows.length;i++){var c=cutOf(rows[i]);if(c!=null)v.push(c)}
+  if(!v.length)return null;
+  v.sort(function(a,b){return a-b});
+  return v[Math.floor(v.length/2)];
+}
+function uniBar(data,g){
+  var gy=data.filter(function(r){return r[5]==='학생부교과'&&cutOf(r)!=null});
+  var seoul=gy.filter(function(r){return r[1]==='서울'});
+  var gg=gy.filter(function(r){return r[1]==='경기'||r[1]==='인천'});
+  var lo=gy.filter(function(r){return r[1]!=='서울'&&r[1]!=='경기'&&r[1]!=='인천'});
+  var gc=gy.filter(function(r){return r[0].indexOf('가천')>=0});
+  var L=[
+    {g:medOf(seoul), n:seoul.length, t:'서울 소재',      s:'서울에 있는 대학 교과 전형', c:'#2563EB'},
+    {g:medOf(gc),    n:gc.length,    t:'가천대 등 경기 주요대', s:'가천대 교과 전형', c:'#7C3AED'},
+    {g:medOf(gg),    n:gg.length,    t:'경기·인천 전체', s:'경기·인천 교과 전형', c:'#0891B2'},
+    {g:medOf(lo),    n:lo.length,    t:'비수도권',       s:'서울·경기·인천 밖 교과 전형', c:'#D97706'}
+  ].filter(function(x){return x.g!=null});
+  if(!L.length)return '';
+  var X=function(v){return Math.max(0,Math.min(100,(v-1)/4*100))};
+  var NM=['1등급대','2등급대','3등급대','4등급대','5등급대'];
+  var seg='',i;
+  for(i=0;i<5;i++)seg+='<i class="s'+(i+1)+'"><span>'+NM[i]+'</span></i>';
+  var tick='';
+  for(i=0;i<L.length;i++)tick+='<u style="left:'+X(L[i].g).toFixed(1)+'%;background:'+L[i].c+'"></u>';
+  var me='<b class="me" style="left:'+X(g).toFixed(1)+'%">'+
+         '<span>나 '+g.toFixed(2)+'</span></b>';
+  var leg='';
+  for(i=0;i<L.length;i++){
+    leg+='<div class="lg"><em style="background:'+L[i].c+'"></em>'+
+      '<b>'+L[i].g.toFixed(2)+'</b><span>'+L[i].t+
+      '<i>'+L[i].s+' '+L[i].n.toLocaleString()+'개의 절반이 이보다 낮은 컷</i></span></div>';
+  }
+  /* 내 위치가 어느 구간인지 한 줄로 */
+  var above=[],below=[];
+  for(i=0;i<L.length;i++)(g<=L[i].g?above:below).push(L[i].t);
+  var msg = above.length
+    ? '지금 <b>'+g.toFixed(2)+'</b>은 <b>'+above.join(' · ')+'</b> 중앙값보다 위쪽입니다.'
+    : '지금 <b>'+g.toFixed(2)+'</b>은 표시된 모든 기준선보다 아래쪽입니다.';
+  return '<div class="uni"><div class="uni-h">교과 전형 기준 · 내 등급은 어디쯤인가</div>'+
+    '<div class="uni-w">'+me+'<div class="uni-bar">'+seg+tick+'</div>'+
+    '<div class="uni-ax"><span>1.00</span><span>3.00</span><span>5.00</span></div></div>'+
+    '<div class="uni-msg">'+msg+'</div>'+leg+
+    '<div class="uni-n">권역이 서로 겹칩니다. 서울에도 컷 2.0~2.7인 곳이 있고 비수도권에도 1.7 아래가 있습니다. '+
+    '<b>합격선이 아니라 지난 3개년 컷의 중앙값</b>이며, 학생부종합은 등급만으로 판단할 수 없습니다.</div></div>';
+}
+
 /* ── '이 숫자는 어떻게 나왔나' 표 ──
    원장·학부모가 가장 많이 헷갈리는 지점을 표 두 개로 갈라 보여준다.
    과목 하나의 1등급은 상위 10%지만, 여러 과목 평균 1.00은 상위 1.2%다. */
@@ -1017,6 +1098,7 @@ async function run(){
          dn1:'한 등급 떨어졌을 때',custom:'직접 입력한 목표'}[scen];
   var h='<p class="rhead">'+grade+' · 지금까지 '+cur.toFixed(2)+'등급 · <b>'+L+'</b><br>'+
     '졸업 시 예상 평균 <b>'+g.toFixed(2)+'등급</b> ('+(g>=4.999?'하위 약 '+(Math.round((100-PCT[39])*10)/10)+'%':'상위 '+(Math.round(pctOf(g)*10)/10)+'%')+' · '+rankText(g)+' / '+N+'명 중)</p>';
+  h+=uniBar(data,g);
   if(!MEMBER&&API){
     h+='<div class="locknote"><div class="lh">🔒 지금 화면에 안 나오는 것이 있습니다</div>'+
       '<div class="lb">아래 세 가지는 <b>가려져 있습니다.</b> 화면 맨 아래에서 신청하시면 '+
