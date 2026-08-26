@@ -14,6 +14,8 @@ sys.stdout.reconfigure(encoding="utf-8")
 os.chdir(r"F:\작업\03_기출분석\하남고1_수학_기출분석_SNS\수시조회웹")
 os.makedirs("member", exist_ok=True)
 
+from _member_calc import blocks as _calc_blocks
+
 s = io.open("index.html", encoding="utf-8", errors="replace").read()
 orig = len(s)
 
@@ -208,6 +210,24 @@ CSS = """
 """
 i = s.rfind("</style>")
 s = s[:i] + CSS + s[i:]
+
+# ── 7.5 내신 계산기 (평균등급을 모르는 학생용) ───────────────
+CALC_HTML, CALC_CSS, CALC_JS = _calc_blocks()
+
+# ① 모드 전환 + 계산 패널 — 첫 frow(내신/계열) 바로 앞에
+mg = re.search(r'<div class="frow">\s*<div class="fld"><label>내신 평균 등급</label>', s)
+assert mg, "내신 입력 frow 못 찾음"
+s = s[:mg.start()] + CALC_HTML + s[mg.start():]
+
+# ② CSS
+i = s.rfind("</style>")
+assert i > 0
+s = s[:i] + CALC_CSS + s[i:]
+
+# ③ JS — 마지막 인라인 script 닫기 직전
+j = s.rfind("</script>")
+assert j > 0, "script 없음"
+s = s[:j] + chr(10) + CALC_JS + chr(10) + s[j:]
 
 # ── 8. 문구 · 메타 ──────────────────────────────────────────
 rep("'<a href=\"consulting/\">실패 없이 지원하는 법 &rarr;</a>'",
