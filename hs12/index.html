@@ -133,6 +133,35 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .bar i{display:block;height:100%;border-radius:99px;animation:grow .7s cubic-bezier(.22,1,.36,1) both}
 .barlb{display:flex;justify-content:space-between;font-size:11.5px;font-weight:700;color:var(--g2)}
 
+/* ═══ 근거 표 ═══ */
+.tbl{margin-top:11px;background:var(--card);border:1px solid var(--ln);border-radius:13px;overflow:hidden}
+.tbl summary{padding:13px 15px;font-size:13.5px;font-weight:800;color:var(--b3);cursor:pointer;
+  list-style:none;display:flex;align-items:center;gap:7px;background:var(--bg)}
+.tbl summary::-webkit-details-marker{display:none}
+.tbl summary:before{content:'📊';font-size:14px}
+.tbl summary:after{content:'＋';margin-left:auto;font-size:15px;color:var(--g3);font-weight:700}
+.tbl[open] summary:after{content:'－'}
+.tbl-b{padding:4px 15px 16px}
+.tbl-h{font-size:13.5px;font-weight:800;color:var(--ink);margin:15px 0 6px;letter-spacing:-.02em}
+.tbl-p{font-size:12.5px;color:var(--g2);line-height:1.75;margin-bottom:9px}
+.tbl-p b{color:var(--b3);font-weight:800}
+.tbl table{width:100%;border-collapse:collapse;font-size:12.5px}
+.tbl th{background:var(--bg);color:var(--g2);font-weight:800;font-size:11.5px;
+  padding:7px 8px;text-align:left;border-bottom:1px solid var(--ln);white-space:nowrap}
+.tbl td{padding:7px 8px;border-bottom:1px solid #F1F5F9;color:var(--g1);white-space:nowrap}
+.tbl td b{color:var(--ink);font-weight:800}
+.tbl .r{text-align:right;font-variant-numeric:tabular-nums}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tr.hl td{background:var(--bs2)}
+.tbl tr.hl td b{color:var(--b3)}
+.tbl tr.hl em{font-style:normal;font-size:10.5px;font-weight:800;color:#fff;
+  background:var(--b);border-radius:5px;padding:1px 5px;margin-left:3px}
+.tbl-src{font-size:11px;color:var(--g3);line-height:1.65;margin-top:8px}
+.tbl-u{list-style:none;margin:0}
+.tbl-u li{font-size:12.5px;color:var(--g2);line-height:1.7;padding-left:14px;position:relative;margin-bottom:5px}
+.tbl-u li:before{content:'·';position:absolute;left:3px;font-weight:800}
+.tbl-u b{color:var(--g1);font-weight:800}
+
 /* ═══ 컨설팅 유도 ═══ */
 .cta{margin-top:22px;border-radius:var(--r);overflow:hidden;padding:26px 20px 22px;
   background:linear-gradient(150deg,#1E3A8A,#1D4ED8 55%,#2563EB);color:#fff;text-align:center;
@@ -540,7 +569,7 @@ function avgOf(root){
 }
 function calcNow(){
   var g=avgOf($('inputArea'));
-  $('alertBox').innerHTML=g==null?'':alertHtml(g);
+  $('alertBox').innerHTML=g==null?'':(alertHtml(g)+tableHtml());
   return g;
 }
 
@@ -639,6 +668,56 @@ function targetAvg(){
     if(vals.length){any=true;s+=(vals.reduce(function(a,b){return a+b},0)/vals.length)*t[2];w+=t[2]}
   });
   return any?s/w:null;
+}
+
+/* ── '이 숫자는 어떻게 나왔나' 표 ──
+   원장·학부모가 가장 많이 헷갈리는 지점을 표 두 개로 갈라 보여준다.
+   과목 하나의 1등급은 상위 10%지만, 여러 과목 평균 1.00은 상위 1.2%다. */
+function tableHtml(){
+  var CUT=[10,34,66,90,100],NM=['1등급','2등급','3등급','4등급','5등급'],PCTV=[10,24,32,24,10];
+  var a='',prev=0;
+  for(var i=0;i<5;i++){
+    var lo=Math.floor(prev*N/100)+1,hi=Math.round(CUT[i]*N/100);
+    if(i===4)hi=N;
+    a+='<tr><td><b>'+NM[i]+'</b></td><td>'+PCTV[i]+'%</td><td>'+CUT[i]+'%</td>'+
+       '<td class="r">'+lo+'~'+hi+'등</td></tr>';
+    prev=CUT[i];
+  }
+  var GS=[1.0,1.2,1.4,1.63,1.8,2.0,2.5,3.0,3.5,4.0,4.5,5.0];
+  var b='';
+  for(var j=0;j<GS.length;j++){
+    var g=GS[j],r=rankRange(g),cut=Math.abs(g-1.63)<0.001;
+    b+='<tr'+(cut?' class="hl"':'')+'><td><b>'+g.toFixed(2)+'</b>'+(cut?' <em>1등급 자리</em>':'')+'</td>'+
+       '<td>'+(g>=4.999?'하위 '+(Math.round((100-PCT[39])*10)/10)+'%':'상위 '+(Math.round(pctOf(g)*10)/10)+'%')+'</td>'+
+       '<td class="r">'+(r.lo===r.hi?r.lo+'등':r.lo+'~'+r.hi+'등')+'</td></tr>';
+  }
+  return '<details class="tbl"><summary>이 숫자는 어떻게 나온 건가요</summary><div class="tbl-b">'+
+
+    '<div class="tbl-h">① 과목 하나의 등급 — 정해진 비율입니다</div>'+
+    '<p class="tbl-p">국어 하나, 수학 하나. <b>과목별로</b> 이 비율대로 등급이 갈립니다. '+
+    '교육부가 정한 값이라 학교가 바꿀 수 없습니다.</p>'+
+    '<table><thead><tr><th>등급</th><th>비율</th><th>누적</th><th class="r">'+N+'명 중</th></tr></thead>'+
+    '<tbody>'+a+'</tbody></table>'+
+
+    '<div class="tbl-h">② 여러 과목 평균 — 훨씬 좁아집니다</div>'+
+    '<p class="tbl-p">여기가 갈리는 지점입니다. 한 과목 1등급은 <b>'+
+    Math.round(10*N/100)+'명</b>이지만, <b>모든 과목 평균이 1.00</b>이려면 거의 전 과목에서 '+
+    '그 안에 들어야 합니다. 그런 학생은 <b>'+rankText(1.0)+'</b>뿐입니다.<br>'+
+    '상위 10%에 해당하는 평균등급은 1.00이 아니라 <b>1.63</b>입니다.</p>'+
+    '<table><thead><tr><th>평균등급</th><th>위치</th><th class="r">'+N+'명 중</th></tr></thead>'+
+    '<tbody>'+b+'</tbody></table>'+
+    '<p class="tbl-src">2025학년도 고1 1·2학기 전 과목 실측 — 경기진학지도협의회 63개교 16,110명 · '+
+    '부산진로진학지원센터 88개교 14,331명. 전국 고1 423,257명 중 전 과목 1등급은 4,588명(1.08%)입니다.</p>'+
+
+    '<div class="tbl-h">③ 왜 "약 몇 등~몇 등"으로 나오나요</div>'+
+    '<p class="tbl-p">점 하나로 찍으면 맞는 척하는 것이 됩니다. 아래 이유로 폭을 둡니다.</p>'+
+    '<ul class="tbl-u">'+
+      '<li>실측 표본이 <b>경기·부산 두 지역 3만여 명</b>입니다. 전국 값과 1~2%p 차이가 납니다.</li>'+
+      '<li>학교마다 <b>이수 과목 수와 단위</b>가 달라 같은 평균등급도 위치가 조금씩 다릅니다.</li>'+
+      '<li>평균 <b>3.0등급 위쪽 구간</b>은 실측점이 적어 폭이 더 넓습니다.</li>'+
+      '<li><b>특목·자사고는 이 표가 맞지 않습니다.</b> 전 과목 1등급 비율이 일반고 2.09%, 특목고 0.44%로 4.7배 차이 납니다.</li>'+
+    '</ul>'+
+    '</div></details>';
 }
 
 /* ── 컨설팅 랜딩 유도 ──
