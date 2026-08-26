@@ -133,6 +133,33 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .bar i{display:block;height:100%;border-radius:99px;animation:grow .7s cubic-bezier(.22,1,.36,1) both}
 .barlb{display:flex;justify-content:space-between;font-size:11.5px;font-weight:700;color:var(--g2)}
 
+.sgrid.s3{grid-template-columns:repeat(3,1fr)}
+.w5{font-weight:600;color:var(--g3);font-size:11.5px}
+.elab{font-size:12.5px;font-weight:800;color:var(--g1);margin:13px 0 7px}
+.elab em{display:block;font-style:normal;font-size:11.5px;font-weight:600;color:var(--g3);
+  line-height:1.55;margin-top:2px}
+.ebox{display:grid;gap:7px}
+.erow{display:grid;grid-template-columns:1fr 74px 30px;gap:6px;align-items:center}
+.esel{width:100%;padding:11px 26px 11px 10px;border:1.5px solid var(--ln);border-radius:10px;
+  font-size:13.5px;font-weight:700;font-family:inherit;background:var(--card);color:var(--ink);
+  -webkit-appearance:none;appearance:none;text-overflow:ellipsis;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%2394A3B8' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center}
+.esel.done{background-color:var(--bs2);border-color:#93C5FD}
+.esel option:disabled{color:#CBD5E1}
+.erow input{width:100%;padding:11px 4px;border:1.5px solid var(--ln);border-radius:10px;
+  font-size:15px;font-weight:800;text-align:center;font-family:inherit;-moz-appearance:textfield}
+.ex{border:0;background:none;color:#CBD5E1;font-size:19px;font-weight:700;cursor:pointer;
+  padding:0;line-height:1;font-family:inherit}
+.ex:hover{color:#DC2626}
+.eadd{width:100%;padding:10px;background:var(--bs);border:1.5px dashed #93C5FD;border-radius:10px;
+  color:var(--b3);font-size:13px;font-weight:800;cursor:pointer;font-family:inherit}
+.eadd:hover{background:var(--bs2)}
+.eadd:disabled{opacity:.4;cursor:default;border-style:solid}
+.ngen{margin-top:14px;padding:12px 13px;background:#FFFBEB;border:1px solid #FDE68A;
+  border-radius:11px;font-size:12px;color:#92400E;line-height:1.7}
+.ngen b{font-weight:800}
+
 /* ═══ 권역 기준선 막대 ═══ */
 .uni{background:var(--card);border:1px solid var(--ln);border-radius:13px;padding:16px 15px 14px;margin-bottom:16px}
 .uni-h{font-size:13.5px;font-weight:800;color:var(--ink);letter-spacing:-.02em;margin-bottom:26px}
@@ -459,6 +486,29 @@ var MEMBER=/[?&]m=1/.test(location.search);
 /* 신청 접수 서버 (Cloudflare Worker). 비우면 '준비 중' 안내가 나온다. */
 var API='https://daol105-form.daol105.workers.dev';
 var SUBJ=['국어','수학','영어','과학','사회'];
+/* 2022 개정 보통교과 — 사회·과학 선택과목. w = 학점(일반선택 4, 진로선택 3).
+   ★ 사회·과학 '융합선택' 9과목은 성취도 A~E만 나오고 석차등급이 없다.
+     고를 수 없게 막아 두되 목록에는 보여줘야 학생이 왜 없는지 안다.
+   ★ 국어·수학·영어의 융합선택은 등급이 정상 산출된다. 제외 대상이 아니다.
+   ★ 진로선택은 2022 개정에서 등급이 나온다. 9등급제 때와 반대다. */
+var ELEC={
+  '사회':{
+    '일반선택':[['세계시민과 지리',4],['세계사',4],['사회와 문화',4],['현대사회와 윤리',4]],
+    '진로선택':[['한국지리 탐구',3],['도시의 미래 탐구',3],['동아시아 역사 기행',3],['정치',3],
+                ['법과 사회',3],['경제',3],['윤리와 사상',3],['인문학과 윤리',3],['국제 관계의 이해',3]],
+    '등급없음':['여행지리','역사로 탐구하는 현대 세계','사회문제 탐구','금융과 경제생활',
+                '윤리문제 탐구','기후변화와 지속가능한 세계']
+  },
+  '과학':{
+    '일반선택':[['물리학',4],['화학',4],['생명과학',4],['지구과학',4]],
+    '진로선택':[['역학과 에너지',3],['전자기와 양자',3],['물질과 에너지',3],['화학 반응의 세계',3],
+                ['세포와 물질대사',3],['생물의 유전',3],['지구시스템과학',3],['행성우주과학',3]],
+    '등급없음':['과학의 역사와 문화','기후변화와 환경생태','융합과학 탐구']
+  }
+};
+var ELEC_MAX=8, ELEC_MIN=3;
+/* 고1 학기는 통합사회·통합과학 고정, 고2부터 선택 */
+function isCommon(code){return code.indexOf('고1-')===0}
 var N=300;                                  /* 우리 학년 전체 인원 (사용자 조절) */
 /* ── 평균등급 → 상위 백분위 실측표 ──────────────────────────────
    P(평균등급 <= g) x 100,  g = 1.0 + 0.1*i
@@ -557,6 +607,44 @@ function buildTabs(){
   $('tabs').querySelectorAll('button').forEach(function(b){
     b.onclick=function(){mode=b.dataset.m;buildTabs();buildInput()}});
 }
+/* 한 학기 블록 — 고1은 공통 5과목 고정, 고2부터 국·수·영 + 탐구 선택 가변 */
+function semHtml(t){
+  var head='<div class="tgrp"><div class="tgrp-h">'+t[1]+
+    (t[2]!=null&&t[2]<1?' <span class="w5">· 이수단위 적어 0.5 반영</span>':'')+'</div>';
+  var w=(t[2]==null?1:t[2]);
+  if(isCommon(t[0])){
+    return head+'<div class="sgrid">'+
+      ['국어','수학','영어','통합사회','통합과학'].map(function(s){
+        return '<div><label>'+s+'</label><input type="number" step="0.1" min="1" max="5" '+
+          'inputmode="decimal" placeholder="–" data-w="'+w+'" data-c="4"></div>'}).join('')+
+      '</div></div>';
+  }
+  var opt='<option value="">과목 선택</option>';
+  ['사회','과학'].forEach(function(k){
+    ['일반선택','진로선택'].forEach(function(ty){
+      opt+='<option disabled>── '+k+' '+ty+' ──</option>';
+      ELEC[k][ty].forEach(function(x){
+        opt+='<option value="'+x[0]+'" data-c="'+x[1]+'">'+x[0]+'</option>'});
+    });
+    opt+='<option disabled>── '+k+' 융합선택 · 석차등급 없음 ──</option>';
+    ELEC[k]['등급없음'].forEach(function(n){
+      opt+='<option disabled>'+n+' (등급 미산출)</option>'});
+  });
+  opt+='<option value="__etc" data-c="3">그 밖의 과목 (직접)</option>';
+  var rows='';
+  for(var i=0;i<ELEC_MIN;i++){
+    rows+='<div class="erow"><select class="esel">'+opt+'</select>'+
+      '<input type="number" step="0.1" min="1" max="5" inputmode="decimal" placeholder="등급" '+
+      'data-w="'+w+'" data-c="4"><button type="button" class="ex" title="이 줄 지우기">×</button></div>';
+  }
+  return head+
+    '<div class="sgrid s3">'+['국어','수학','영어'].map(function(s){
+      return '<div><label>'+s+'</label><input type="number" step="0.1" min="1" max="5" '+
+        'inputmode="decimal" placeholder="–" data-w="'+w+'" data-c="4"></div>'}).join('')+'</div>'+
+    '<div class="elab">탐구 선택과목 <em>사회·과학을 합쳐 보통 3~4과목입니다. 안 들은 줄은 비워두세요.</em></div>'+
+    '<div class="ebox" data-opt="'+encodeURIComponent(opt)+'" data-w="'+w+'">'+rows+
+    '<button type="button" class="eadd">＋ 과목 추가</button></div></div>';
+}
 function buildInput(){
   var a=$('inputArea'),ts=DONE[grade];
   if(mode==='simple'&&grade==='고1'){
@@ -572,15 +660,58 @@ function buildInput(){
     a.innerHTML='<div class="quick"><span>전 과목 한 번에</span>'+
       '<input id="qv" type="number" step="0.1" min="1" max="5" placeholder="2.5" inputmode="decimal">'+
       '<button id="qb" type="button">채우기</button></div>'+
-      ts.map(function(t){return '<div class="tgrp"><div class="tgrp-h">'+t[1]+'</div><div class="sgrid">'+
-        SUBJ.map(function(s){return '<div><label>'+s+'</label><input type="number" step="0.1" min="1" max="5" inputmode="decimal" placeholder="–"></div>'}).join('')+
-        '</div></div>'}).join('');
+      ts.map(semHtml).join('')+nonGenHtml();
   }
   wire(a);calcNow();buildScen();
 }
+/* 일반고가 아닌 학교 안내 */
+function nonGenHtml(){
+  return '<div class="ngen">특목고 · 자사고 · 영재고 · 국제고 등 <b>일반고가 아닌 학교</b>는 '+
+    '개설 과목과 이수 구조가 학교마다 다릅니다. 같은 등급이라도 학교별 여건에 따라 해석이 달라지므로 '+
+    '이 결과는 <b>참고용</b>으로만 보시고, 정확한 판단은 상담에서 확인해 주세요.</div>';
+}
 function wire(root){
+  /* 과목 선택 → 그 과목의 학점을 등급칸에 실어 준다 (일반선택 4 / 진로선택 3) */
+  root.querySelectorAll('.esel').forEach(function(sel){
+    if(sel.dataset.b)return; sel.dataset.b='1';
+    sel.addEventListener('change',function(){
+      var o=sel.options[sel.selectedIndex],inp=sel.parentNode.querySelector('input');
+      inp.dataset.c=(o&&o.dataset.c)||4;
+      sel.classList.toggle('done',!!sel.value);
+      if(sel.value&&inp.value==='')inp.focus();
+      calcNow();buildScen();
+    });
+  });
+  /* 줄 지우기 */
+  root.querySelectorAll('.ex').forEach(function(b){
+    if(b.dataset.b)return; b.dataset.b='1';
+    b.addEventListener('click',function(){
+      var box=b.closest('.ebox');
+      if(box.querySelectorAll('.erow').length<=1){
+        var s=b.parentNode.querySelector('select'),i=b.parentNode.querySelector('input');
+        s.value='';s.classList.remove('done');i.value='';i.classList.remove('done');
+      }else b.parentNode.remove();
+      calcNow();buildScen();
+    });
+  });
+  /* 줄 추가 */
+  root.querySelectorAll('.eadd').forEach(function(b){
+    if(b.dataset.b)return; b.dataset.b='1';
+    b.addEventListener('click',function(){
+      var box=b.closest('.ebox'),n=box.querySelectorAll('.erow').length;
+      if(n>=ELEC_MAX){b.disabled=true;return}
+      var d=document.createElement('div');d.className='erow';
+      d.innerHTML='<select class="esel">'+decodeURIComponent(box.dataset.opt)+'</select>'+
+        '<input type="number" step="0.1" min="1" max="5" inputmode="decimal" placeholder="등급" '+
+        'data-w="'+box.dataset.w+'" data-c="4"><button type="button" class="ex" title="이 줄 지우기">×</button>';
+      box.insertBefore(d,b);
+      if(n+1>=ELEC_MAX)b.disabled=true;
+      wire(box);d.querySelector('select').focus();
+    });
+  });
   var ins=[].slice.call(root.querySelectorAll('input[type=number]')).filter(function(e){return e.id!=='qv'});
   ins.forEach(function(el,i){
+    if(el.dataset.b)return; el.dataset.b='1';
     el.addEventListener('input',function(){el.classList.toggle('done',el.value!=='');calcNow();buildScen()});
     el.addEventListener('keydown',function(ev){if(ev.key==='Enter'){ev.preventDefault();if(ins[i+1])ins[i+1].focus();else el.blur()}});
   });
@@ -588,15 +719,25 @@ function wire(root){
   if(qb)qb.onclick=function(){
     var v=parseFloat(root.querySelector('#qv').value);
     if(isNaN(v)||v<1||v>5){alert('1.0 ~ 5.0 사이로 입력해 주세요.');return}
-    ins.forEach(function(el){if(el.value===''){el.value=v.toFixed(1);el.classList.add('done')}});
+    ins.forEach(function(el){
+      var row=el.closest('.erow');
+      if(row&&!row.querySelector('select').value)return;   /* 과목 안 고른 줄은 비워둔다 */
+      if(el.value===''){el.value=v.toFixed(1);el.classList.add('done')}
+    });
     calcNow();buildScen();
   };
 }
 function avgOf(root){
+  /* 학점 가중평균. 일반선택 4학점, 진로선택 3학점이 섞이므로 단순평균은 틀린다. */
   var s=0,n=0;
   root.querySelectorAll('input[type=number]').forEach(function(el){
-    if(el.id==='qv')return;var v=parseFloat(el.value);
-    if(isNaN(v)||v<1||v>5)return;s+=v;n++});
+    if(el.id==='qv')return;
+    var row=el.closest('.erow');
+    if(row&&!row.querySelector('select').value)return;   /* 과목 미선택 줄 제외 */
+    var v=parseFloat(el.value);
+    if(isNaN(v)||v<1||v>5)return;
+    var c=parseFloat(el.dataset.c)||4;
+    s+=v*c;n+=c});
   return n?s/n:null;
 }
 function calcNow(){
@@ -678,10 +819,7 @@ function buildScen(){
   if(scen==='custom'&&!$('cusArea').innerHTML)buildCustom();
 }
 function buildCustom(){
-  $('cusArea').innerHTML=LEFT[grade].map(function(t){
-    return '<div class="tgrp"><div class="tgrp-h">'+t[1]+(t[2]<1?' <span style="font-weight:600;color:#94A3B8">· 이수단위 적어 0.5 반영</span>':'')+'</div><div class="sgrid">'+
-      SUBJ.map(function(s){return '<div><label>'+s+'</label><input type="number" step="0.1" min="1" max="5" inputmode="decimal" placeholder="–" data-w="'+t[2]+'"></div>'}).join('')+
-      '</div></div>'}).join('')+
+  $('cusArea').innerHTML=LEFT[grade].map(semHtml).join('')+
     '<div class="quick" style="margin:0"><span>남은 학기 전부</span>'+
     '<input id="qv" type="number" step="0.1" min="1" max="5" placeholder="2.0" inputmode="decimal">'+
     '<button id="qb" type="button">채우기</button></div>';
