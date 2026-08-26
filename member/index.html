@@ -1,0 +1,564 @@
+
+<div class="memberbar">🎓 <b>다올105 재원생 전용</b> · 전 기능 무료 — 수능최저 판정 · 3개년 컷 추이 · 출렁임 경고까지 <b>바로 보입니다</b></div>
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>고3 수시지원 프로그램 (재원생 전용) | 다올105</title>
+<meta name="description" content="전국 158개 대학 2023~2025 수시 입결(등급컷)을 내신 등급 하나로 조회. 이름·연락처 입력 없이 바로 확인." />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<style>
+  :root{--blue:#3182F6;--blue-strong:#0064FF;--blue-soft:#E8F1FF;--blue-soft2:#F3F8FF;--ink:#191F28;--gray:#4E5968;--gray2:#8B95A1;--line:#E5E8EB;--soft:#F2F4F6;--soft2:#F9FAFB;--ok:#12B886;--warn:#F59F00;--danger:#F04452;--shadow:0 6px 24px -8px rgba(20,30,50,.14)}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:"Pretendard",-apple-system,sans-serif;color:var(--ink);background:var(--soft2);-webkit-font-smoothing:antialiased;line-height:1.55;letter-spacing:-.01em}
+  .wrap{max-width:760px;margin:0 auto;padding:0 18px}
+  b{font-weight:700}
+  h1{font-size:clamp(24px,5.6vw,34px);font-weight:800;line-height:1.32;letter-spacing:-.03em}
+  .lead{font-size:15.5px;color:var(--gray);line-height:1.65;font-weight:500}
+  .top{padding:44px 0 26px;text-align:center}
+  .made{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--gray);background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 15px;margin-bottom:18px}
+  .made .dot{width:7px;height:7px;border-radius:50%;background:var(--ok)}
+  .trust{font-size:12.5px;color:var(--gray2);margin-top:12px;line-height:1.7}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px 20px;box-shadow:var(--shadow);margin-top:18px}
+  .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+  @media(max-width:520px){.frow{grid-template-columns:1fr 1fr}}
+  .fld label{display:block;font-size:12.5px;font-weight:800;color:var(--gray);margin-bottom:6px}
+  .fld input,.fld select{width:100%;font-family:inherit;font-size:16px;font-weight:700;color:var(--ink);background:var(--soft2);border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;outline:none}
+  .fld input:focus,.fld select:focus{border-color:var(--blue)}
+  .go{width:100%;margin-top:6px;font-family:inherit;font-size:17px;font-weight:800;color:#fff;background:var(--blue);border:none;border-radius:14px;padding:16px;cursor:pointer;box-shadow:0 8px 20px -8px rgba(49,130,246,.6)}
+  .go:hover{background:var(--blue-strong)}
+  .go:active{transform:scale(.99)}
+  .hint{font-size:12px;color:var(--gray2);margin-top:10px;line-height:1.65;text-align:center}
+  .result{padding:8px 0 40px}
+  .grp{margin-top:22px}
+  .grp-h{display:flex;align-items:center;gap:9px;font-size:16.5px;font-weight:800;margin-bottom:10px}
+  .grp-h .bd{width:10px;height:10px;border-radius:50%}
+  .grp-h small{font-weight:700;color:var(--gray2);font-size:13px}
+  .g-safe .bd{background:var(--ok)} .g-fit .bd{background:var(--blue)} .g-try .bd{background:var(--warn)}
+  .rows{display:grid;gap:8px}
+  .row{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .row .u{font-size:15.5px;font-weight:800}
+  .row .u small{font-weight:700;color:var(--gray2);font-size:12.5px;margin-left:6px}
+  .row .m{font-size:14px;color:var(--gray);font-weight:600;margin-top:2px}
+  .row .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+  .chip{font-size:11.5px;font-weight:800;border-radius:7px;padding:4px 9px;background:var(--soft);color:var(--gray)}
+  .chip.cut{background:var(--blue-soft);color:var(--blue-strong)}
+  .chip.min{background:#FFF4E0;color:#9a6700}
+  .chip.comp{background:#F3F0FF;color:#6741D9}
+  .more{width:100%;margin-top:10px;font-family:inherit;font-size:14px;font-weight:800;color:var(--blue);background:var(--blue-soft2);border:1px solid var(--blue-soft);border-radius:12px;padding:12px;cursor:pointer}
+  .empty{background:#fff;border:1px dashed var(--line);border-radius:14px;padding:22px;text-align:center;font-size:14px;color:var(--gray2);font-weight:600}
+  .note{background:var(--blue-soft2);border-radius:14px;padding:15px 17px;font-size:12.5px;color:var(--gray);line-height:1.75;margin-top:24px}
+  .note b{color:var(--ink)}
+  .endcta{margin-top:22px;background:linear-gradient(135deg,#0F2E4A,#16406B);
+  border-radius:20px;padding:26px 22px;text-align:center;box-shadow:var(--shadow)}
+.endcta .et{font-size:12.5px;font-weight:800;letter-spacing:.04em;color:#7FD9F5;margin-bottom:11px}
+.endcta .eq{font-size:20px;font-weight:800;color:#fff;line-height:1.45;letter-spacing:-.025em}
+.endcta .eq b{color:#7FD9F5}
+.endcta p{font-size:13.5px;color:#C3D4E4;line-height:1.72;margin-top:12px}
+.endcta a.tel{display:block;margin-top:11px;background:none;color:#C3D4E4;font-weight:700;
+  font-size:12.5px;line-height:1.6;padding:0;box-shadow:none;text-decoration:none}
+.endcta a{display:block;margin-top:18px;background:#fff;color:#0F2E4A;font-weight:800;
+  font-size:16.5px;border-radius:13px;padding:16px;text-decoration:none}
+.stick{position:fixed;left:0;right:0;bottom:0;z-index:60;transform:translateY(110%);
+  transition:transform .35s cubic-bezier(.22,1,.36,1);pointer-events:none}
+.stick.on{transform:none;pointer-events:auto}
+@media (prefers-reduced-motion:reduce){ .stick{transition:none} .next.on{animation:none} }
+.stick .in{max-width:640px;margin:0 auto;padding:10px 14px calc(10px + env(safe-area-inset-bottom))}
+.stick .bar{display:flex;align-items:center;gap:12px;background:#0F2E4A;border-radius:16px;
+  padding:12px 14px;box-shadow:0 10px 30px -6px rgba(10,25,45,.45)}
+.stick .msg{flex:1;min-width:0;color:#fff;font-size:13.5px;line-height:1.45;font-weight:700}
+.stick .msg span{display:block;font-size:11.5px;font-weight:600;color:#9FC4E0;margin-top:2px}
+.stick .btn2{flex:0 0 auto;background:#fff;color:#0F2E4A;font-weight:800;font-size:14px;
+  border-radius:11px;padding:11px 15px;text-decoration:none;white-space:nowrap}
+.stick .x{flex:0 0 auto;background:none;border:none;color:#7C9CB8;font-size:19px;
+  line-height:1;padding:4px 2px 4px 4px;cursor:pointer}
+@media (max-width:360px){ .stick .msg{font-size:12.5px} .stick .btn2{padding:10px 12px;font-size:13px} }
+.next{margin-top:22px;background:linear-gradient(135deg,#0F2E4A,#123A5E);border-radius:20px;
+  padding:24px 20px;text-align:center;box-shadow:var(--shadow);display:none}
+.next.on{display:block;animation:nx .45s ease both}
+@keyframes nx{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.next .k{font-size:12px;font-weight:800;letter-spacing:.06em;color:#7FD9F5;margin-bottom:10px}
+.next .t{font-size:19px;font-weight:800;color:#fff;line-height:1.45;letter-spacing:-.02em}
+.next p{font-size:13.5px;color:#C3D4E4;line-height:1.7;margin-top:10px}
+.next a{display:block;margin-top:16px;background:#fff;color:#0F2E4A;font-weight:800;font-size:16px;
+  border-radius:13px;padding:15px;text-decoration:none}
+.cta{margin-top:26px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px 20px;box-shadow:var(--shadow)}
+  .cta .t{font-size:17px;font-weight:800;line-height:1.5;margin-bottom:6px}
+  .cta p{font-size:13.5px;color:var(--gray);line-height:1.65}
+  .cta a{display:inline-flex;margin-top:14px;font-size:16px;font-weight:800;color:#fff;background:var(--blue);border-radius:12px;padding:14px 26px;text-decoration:none}
+  footer{padding:30px 0 40px;text-align:center;color:var(--gray2);font-size:12px;line-height:1.8;border-top:1px solid var(--line);margin-top:34px}
+  footer b{color:var(--gray)}
+  .hidden{display:none}
+  .loading{text-align:center;padding:30px;color:var(--gray2);font-weight:700;font-size:14px}
+
+/* -- detail gate -- */
+.gate{margin:26px 0 8px;border:2px solid #2563eb;border-radius:16px;overflow:hidden;background:#fff;color:#191F28;color-scheme:light}
+
+.gate-h{background:linear-gradient(135deg,#2563eb,#1e40af);color:#fff;padding:18px}
+.gate-h .k{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:.06em;background:rgba(255,255,255,.2);padding:5px 11px;border-radius:99px;margin-bottom:9px}
+.gate-h h3{font-size:clamp(18px,4.6vw,23px);font-weight:800;letter-spacing:-.03em;line-height:1.35;margin:0}
+.gate-h p{font-size:13.5px;line-height:1.7;margin:8px 0 0;color:#cfe0ff}
+.gate-b{padding:16px 18px 18px}
+.gate-list{display:grid;gap:9px;margin-bottom:16px}
+.gate-li{display:flex;gap:9px;align-items:flex-start;font-size:15px;line-height:1.65;color:#191F28}
+.gate-li i{color:#fff;background:#2563eb;font-weight:800;font-style:normal;flex:0 0 auto;width:21px;height:21px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12.5px;margin-top:2px}
+
+.gate-li span{flex:1;min-width:0;color:#191F28}
+.gate-li span b{color:#0b1220;font-weight:800}
+.gate-note{font-size:13.5px;font-weight:700;line-height:1.7;color:#0d3b8f;background:#e8f1ff;border-radius:9px;padding:11px 13px;margin-bottom:14px}
+
+.gf{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.gf label{display:block;font-size:12.5px;font-weight:700;color:#3d4650;margin-bottom:4px}
+.gf input,.gf select{width:100%;padding:11px 12px;border:1.5px solid #d7dee7;border-radius:9px;font-size:15px;background:#fff;color:#12161c;font-family:inherit}
+
+.gf .full{grid-column:1/-1}
+.gf input:focus,.gf select:focus{outline:none;border-color:#2563eb}
+.gate-agree{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.7;color:#3d4650;margin:13px 0 12px}
+.gate-agree input{margin-top:3px;flex:0 0 auto;width:16px;height:16px}
+.gate-btn{width:100%;padding:15px;background:#2563eb;color:#fff;border:0;border-radius:11px;font-size:16.5px;font-weight:800;letter-spacing:-.02em;cursor:pointer;font-family:inherit}
+.gate-btn:disabled{background:#aebdd2;cursor:not-allowed}
+.gate-err{font-size:13px;color:#d13b3b;margin-top:9px;display:none}
+.gate-ok{display:none;padding:20px 18px;text-align:center}
+.gate-ok b{display:block;font-size:18px;font-weight:800;margin-bottom:7px;color:#0a6b45}
+
+
+
+.agbox{border:1px solid #dfe5ec;border-radius:11px;padding:4px 12px 10px;margin:14px 0 12px;background:#fbfcfe;color:#3d4650}
+
+.ag-all{display:flex;gap:8px;align-items:center;padding:11px 0 10px;border-bottom:1px solid #e5eaf0;font-size:14px;cursor:pointer}
+
+.ag-all input{width:18px;height:18px;flex:0 0 auto}
+.ag-all b{font-weight:800}
+.gate-agree em{font-style:normal;color:#5b6572;font-size:12px;font-weight:700}
+.gate-agree b.req{color:#d13b3b;font-weight:800;font-size:12px}
+.gate-agree b.opt{color:#2563eb;font-weight:800;font-size:12px}
+
+
+
+/* 준비중 모달 */
+.pm-bg{position:fixed;inset:0;background:rgba(15,22,32,.55);z-index:9998;display:none;
+  align-items:center;justify-content:center;padding:20px}
+.pm-bg.on{display:flex}
+.pm{background:#fff;border-radius:18px;max-width:380px;width:100%;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.3);color:#191F28}
+.pm-h{background:linear-gradient(135deg,#2563eb,#1e40af);color:#fff;padding:22px 20px 20px;text-align:center}
+.pm-h .ic{font-size:34px;line-height:1;margin-bottom:9px}
+.pm-h h3{font-size:19px;font-weight:800;letter-spacing:-.03em;line-height:1.4}
+.pm-b{padding:20px}
+.pm-b p{font-size:14.5px;line-height:1.75;color:#3d4650;margin-bottom:14px}
+.pm-b p b{color:#0d3b8f;font-weight:800}
+.pm-list{background:#F3F8FF;border-radius:11px;padding:13px 14px;margin-bottom:16px}
+.pm-list div{font-size:13.5px;line-height:1.8;color:#0d3b8f;font-weight:700}
+.pm-btn{width:100%;padding:14px;background:#2563eb;color:#fff;border:0;border-radius:11px;
+  font-size:16px;font-weight:800;cursor:pointer;font-family:inherit}
+.pm-x{width:100%;padding:11px;background:none;border:0;color:#6B7684;font-size:13.5px;
+  font-weight:700;cursor:pointer;font-family:inherit;margin-top:6px}
+
+</style>
+
+<div class="top">
+  <div class="wrap">
+    <div class="made"><span class="dot"></span>다올105 · 대치더올 제공 · 무료</div>
+    <h1>내신 등급 하나로 보는<br /><span style="color:var(--blue)">수시 지원 라인</span></h1>
+    <p class="lead" style="margin-top:12px">전국 158개 대학, <b style="color:var(--ink)">2023~2025 실제 입결(등급컷) 19,705개 전형</b>을 기준으로 안정 · 적정 · 도전 라인을 보여드립니다.</p>
+    <p class="trust">🔒 이름·연락처 입력 없음 · 결과는 이 화면에서만 계산됩니다</p>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="panel">
+    <div class="frow">
+      <div class="fld"><label>내신 평균 등급</label><input id="g" type="number" min="1" max="9" step="0.1" placeholder="예: 3.5" inputmode="decimal" /></div>
+      <div class="fld"><label>계열</label><select id="tr"><option value="">전체</option><option>인문</option><option>자연</option><option>예체능</option>
+            <option value="통합">통합·공통</option></select></div>
+    </div>
+    <div class="frow">
+      <div class="fld"><label>지역</label><select id="rg">
+            <option value="">전국 전체</option>
+            <option value="__CAP">── 수도권 ──</option>
+            <option value="서울">서울 (3,657)</option>
+            <option value="경기">경기 (2,966)</option>
+            <option value="인천">인천 (551)</option>
+            <option value="__LOC">── 비수도권 ──</option>
+            <option value="부산">부산 (2,085)</option>
+            <option value="대구">대구 (624)</option>
+            <option value="광주">광주 (883)</option>
+            <option value="대전">대전 (884)</option>
+            <option value="울산">울산 (50)</option>
+            <option value="세종">세종 (87)</option>
+            <option value="강원">강원 (1,238)</option>
+            <option value="충북">충북 (1,226)</option>
+            <option value="충남">충남 (2,289)</option>
+            <option value="전북">전북 (606)</option>
+            <option value="전남">전남 (322)</option>
+            <option value="경북">경북 (1,195)</option>
+            <option value="경남">경남 (796)</option>
+            <option value="제주">제주 (246)</option>
+          </select></div>
+      
+      <div class="minbox">
+        <div class="mb-h">🎯 수능 예상 등급 <span>넣으면 전형별 <b>최저 충족 여부</b>를 자동으로 판정합니다 · 비워도 조회됩니다</span></div>
+        <div class="mb-g">
+          <div><label>국어</label><input id="sk" type="number" step="0.5" min="1" max="9" placeholder="-"></div>
+          <div><label>수학</label><input id="sm" type="number" step="0.5" min="1" max="9" placeholder="-"></div>
+          <div><label>영어</label><input id="se" type="number" step="0.5" min="1" max="9" placeholder="-"></div>
+          <div><label>탐구</label><input id="ss" type="number" step="0.5" min="1" max="9" placeholder="-"></div>
+        </div>
+      </div>
+<div class="fld"><label>전형 유형</label><select id="ty"><option value="학생부교과">학생부교과 (권장)</option><option value="학생부종합">학생부종합</option><option value="논술">논술</option><option value="">전체</option></select></div>
+    </div>
+    <button class="go" onclick="run()">지원 라인 조회하기</button>
+    <p class="hint">※ 등급 비교는 <b>학생부교과</b> 전형이 가장 유의미합니다. 종합·논술은 서류·논술 실력이 중심이라 등급컷은 참고치입니다.</p>
+  </div>
+
+  <div id="out" class="result"></div>
+
+<!-- 재원생 버전: 리드 폼 없음. 상세가 처음부터 열려 있다. -->
+
+
+  <div class="note"><b>꼭 읽어주세요.</b> 이 자료는 각 대학이 발표한 2023~2025학년도 수시 입결(대부분 최종등록자 70%컷·평균 등)을 정리한 참고 자료입니다. 대학별 등급 산출 방식(반영 교과·가중치)이 서로 다르고, 해마다 컷은 오르내립니다. 특히 학생부종합은 등급보다 서류·활동이 중심입니다. <b>이 자료는 합격 가능성을 예측하거나 보장하지 않습니다.</b> 실제 지원 판단은 원서 시점의 모집요강을 확인하시고, 본인 성적표를 놓고 <b>다올105 입시 컨설턴트와 직접 상담</b>하셔야 확정하실 수 있습니다.</div>
+
+</div>
+
+<footer>
+  <div class="wrap"><b>다올105</b> 국어 · 영어 · 진학상담<br /><b>대치더올</b> 수학 · 과학 전문관<br />하남 미사 · ☎ 031-794-8158 · 010-8337-8158<br />본 조회는 교육 정보 제공 목적이며, 개인정보를 수집·저장·전송하지 않습니다.</div>
+</footer>
+
+<div class="stick" id="stick">
+  <div class="in"><div class="bar">
+    <div class="msg">이 라인, 그대로 쓰면 될까요?<span>작년 컷은 올해의 기준이 아닙니다</span></div>
+    <a class="btn2" href="../consulting/">지원 전략 보기</a>
+    <button class="x" onclick="document.getElementById('stick').classList.remove('on')" aria-label="닫기">&times;</button>
+  </div></div>
+</div>
+
+<script>
+var DATA_ALL = [];
+
+'use strict';
+let DATA = null;
+async function load() {
+  if (DATA) return DATA;
+  const res = await fetch('../data.json?v=20260825b');
+  DATA = await res.json();
+  return DATA;
+}
+function cutOf(r) { return r[8] ?? r[9] ?? r[10]; }
+
+/* ══ 재원생 버전 — 게이트가 약속만 하던 항목을 실제로 계산한다 ══ */
+
+/* 수능 최저 문자열 파싱.
+   실제 데이터에 있는 형태: "국,수,영,탐(1) 2합7" / "1개4" / "3합13" / 뒤에 "한5" 같은 부가조건. */
+function parseMin(txt){
+  if(!txt || txt === '-' || txt.indexOf('없음') === 0) return null;
+  var sum = /(\d)\s*합\s*(\d+)/.exec(txt);
+  if(sum) return {kind:'sum', n:+sum[1], v:+sum[2], raw:txt};
+  var cnt = /(\d)\s*개\s*(\d+)/.exec(txt);
+  if(cnt) return {kind:'each', n:+cnt[1], v:+cnt[2], raw:txt};
+  return {kind:'etc', raw:txt};
+}
+
+/* 내 수능 예상 등급(국·수·영·탐) 으로 충족 여부를 본다.
+   상위 n과목을 쓰는 규정이라 정렬해서 앞에서부터 센다. */
+function judgeMin(txt, my){
+  var p = parseMin(txt);
+  if(!p) return {t:'none', s:'수능 최저 없음 — 내신만 본다'};
+  if(!my || !my.length) return {t:'ask', s:'최저 있음'};
+  if(p.kind === 'etc') return {t:'ask', s:'최저 확인 필요'};
+  var g = my.slice().sort(function(a,b){return a-b});
+  if(p.kind === 'sum'){
+    if(g.length < p.n) return {t:'ask', s:'등급 더 입력'};
+    var t = 0, i;
+    for(i=0;i<p.n;i++) t += g[i];
+    return t <= p.v ? {t:'ok', s:'최저 충족 (' + p.n + '합 ' + t + ' ≤ ' + p.v + ')'}
+                    : {t:'no', s:'최저 미달 (' + p.n + '합 ' + t + ' > ' + p.v + ')'};
+  }
+  var c = 0, j;
+  for(j=0;j<g.length;j++) if(g[j] <= p.v) c++;
+  return c >= p.n ? {t:'ok', s:'최저 충족 (' + p.v + '등급 이내 ' + c + '개)'}
+                  : {t:'no', s:'최저 미달 (' + p.v + '등급 이내 ' + c + '개 / ' + p.n + '개 필요)'};
+}
+
+/* 3개년 컷 방향 — 숫자가 커지면 컷이 낮아진 것(= 들어가기 쉬워짐) */
+function trendOf(r){
+  var v = [r[8], r[9], r[10]];           /* 25 / 24 / 23 */
+  if(v[0] == null || v[2] == null) return null;
+  var diff = v[0] - v[2];                /* +면 최근이 더 높은 등급 = 쉬워짐 */
+  var all = v.filter(function(x){return x != null});
+  var spread = Math.max.apply(null, all) - Math.min.apply(null, all);
+  var dir = Math.abs(diff) < 0.15 ? 'flat' : (diff > 0 ? 'easy' : 'hard');
+  return {dir:dir, diff:diff, spread:spread};
+}
+
+/* 종합 컷이 교과보다 크게 낮은 학과 — 일반고 학생이 그대로 보면 안 되는 숫자 */
+var COMP_GAP = null;
+function buildGap(data){
+  if(COMP_GAP) return COMP_GAP;
+  var m = {}, i, r, c, k;
+  for(i=0;i<data.length;i++){
+    r = data[i]; c = cutOf(r);
+    if(c == null) continue;
+    if(r[5] !== '학생부교과' && r[5] !== '학생부종합') continue;
+    k = r[0] + '|' + r[4];
+    if(!m[k]) m[k] = {};
+    if(m[k][r[5]] == null || c < m[k][r[5]]) m[k][r[5]] = c;
+  }
+  COMP_GAP = {};
+  for(k in m) if(m[k]['학생부교과'] != null && m[k]['학생부종합'] != null
+                 && m[k]['학생부종합'] - m[k]['학생부교과'] >= 0.8) COMP_GAP[k] = 1;
+  return COMP_GAP;
+}
+
+/* 입력한 수능 예상 등급 읽기 */
+function myMin(){
+  var out = [], ids = ['sk','sm','se','ss'], i, v;
+  for(i=0;i<ids.length;i++){
+    var el = document.getElementById(ids[i]);
+    if(!el) continue;
+    v = parseFloat(el.value);
+    if(v >= 1 && v <= 9) out.push(v);
+  }
+  return out;
+}
+
+
+
+/* ── 내 등급 위치 막대 (hs12 이식) ── */
+function medOf(rows){
+  var v=[],i;
+  for(i=0;i<rows.length;i++){var c=cutOf(rows[i]);if(c!=null)v.push(c)}
+  if(!v.length)return null;
+  v.sort(function(a,b){return a-b});
+  return v[Math.floor(v.length/2)];
+}
+
+function uniBar(data,g){
+  var gy=data.filter(function(r){return r[5]==='학생부교과'&&cutOf(r)!=null});
+  var seoul=gy.filter(function(r){return r[1]==='서울'});
+  var gg=gy.filter(function(r){return r[1]==='경기'||r[1]==='인천'});
+  var lo=gy.filter(function(r){return r[1]!=='서울'&&r[1]!=='경기'&&r[1]!=='인천'});
+  var gc=gy.filter(function(r){return r[0].indexOf('가천')>=0});
+  var L=[
+    {g:medOf(seoul), n:seoul.length, t:'서울 소재',      s:'서울에 있는 대학 교과 전형', c:'#2563EB'},
+    {g:medOf(gc),    n:gc.length,    t:'가천대 등 경기 주요대', s:'가천대 교과 전형', c:'#7C3AED'},
+    {g:medOf(gg),    n:gg.length,    t:'경기·인천 전체', s:'경기·인천 교과 전형', c:'#0891B2'},
+    {g:medOf(lo),    n:lo.length,    t:'비수도권',       s:'서울·경기·인천 밖 교과 전형', c:'#D97706'}
+  ].filter(function(x){return x.g!=null});
+  if(!L.length)return '';
+  var X=function(v){return Math.max(0,Math.min(100,(v-1)/6*100))};
+  var NM=['1등급대','2등급대','3등급대','4등급대','5등급대','6등급대'];
+  var seg='',i;
+  for(i=0;i<6;i++)seg+='<i class="s'+(i+1)+'"><span>'+NM[i]+'</span></i>';
+  var tick='';
+  for(i=0;i<L.length;i++)tick+='<u style="left:'+X(L[i].g).toFixed(1)+'%;border-bottom-color:'+L[i].c+'"></u>';
+  var me='<b class="me" style="left:'+X(g).toFixed(1)+'%">'+
+         '<span>나 '+g.toFixed(2)+'</span></b>';
+  var leg='';
+  for(i=0;i<L.length;i++){
+    leg+='<div class="lg"><em style="background:'+L[i].c+'"></em>'+
+      '<b>'+L[i].g.toFixed(2)+'</b><span>'+L[i].t+
+      '<i>'+L[i].s+' '+L[i].n.toLocaleString()+'개의 절반이 이보다 낮은 컷</i></span></div>';
+  }
+  /* 내 위치가 어느 구간인지 한 줄로 */
+  var above=[],below=[];
+  for(i=0;i<L.length;i++)(g<=L[i].g?above:below).push(L[i].t);
+  var msg = above.length
+    ? '지금 <b>'+g.toFixed(2)+'</b>은 <b>'+above.join(' · ')+'</b> 중앙값보다 위쪽입니다.'
+    : '지금 <b>'+g.toFixed(2)+'</b>은 표시된 모든 기준선보다 아래쪽입니다.';
+  return '<div class="uni"><div class="uni-h">교과 전형 기준 · 내 등급은 어디쯤인가</div>'+
+    '<div class="uni-w">'+me+'<div class="uni-bar">'+seg+'</div>'+
+    '<div class="uni-tk">'+tick+'</div>'+
+    '<div class="uni-ax"><span>1.00</span><span>4.00</span><span>7.00</span></div></div>'+
+    '<div class="uni-msg">'+msg+'</div>'+leg+
+    '<div class="uni-n">'+
+    '<b class="h">이 막대는 참고용입니다</b>'+
+    '각 대학이 공표한 <b>지난 3개년 입시 결과를 모아 다시 계산한 것</b>일 뿐입니다. 이 화면을 근거로 지원해서 <b>합격하는 것을 보장하지 않으며, 보장할 수도 없습니다.</b>'+
+    '<u>'+
+      '<li>표시된 값은 합격선이 아니라 <b>지난 3개년 컷의 중앙값</b>입니다.</li>'+
+      '<li>권역은 서로 겹칩니다. 서울에도 컷이 관대한 곳이 있고 비수도권에도 높은 곳이 있습니다.</li>'+
+      '<li><b>학생부교과 전형 기준</b>입니다. <b>특목고·자사고·영재고·국제고</b> 학생이 주로 지원하는 <b>학생부종합</b>은 등급보다 서류와 활동이 중심이라 이 기준이 그대로 적용되지 않습니다.</li>'+
+      '<li>현 고3은 <b>9등급제</b> 기준입니다. 현 고1·고2의 5등급제와 숫자를 직접 비교하시면 안 됩니다.</li>'+
+    '</u>'+
+    '<b class="f">지원 여부는 이 화면으로 정하실 수 없습니다. 본인 성적표를 놓고 <b>다올105 입시 컨설턴트와 직접 상담</b>하셔야 실제로 쓸 수 있는 답이 나옵니다.</b>'+
+    '</div></div>';
+}
+
+function yearOf(r) { return r[8] != null ? 25 : (r[9] != null ? 24 : 23); }
+function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+
+function rowHtml(r) {
+  const cuts = [];
+  if (r[8] != null) cuts.push('25년 ' + r[8]);
+  if (r[9] != null) cuts.push('24년 ' + r[9]);
+  if (r[10] != null) cuts.push('23년 ' + r[10]);
+  const jm = judgeMin(r[7], myMin());
+  const minChip = '<span class="chip ' + (jm.t === 'ok' ? 'mok' : jm.t === 'no' ? 'mno' : jm.t === 'none' ? 'mnone' : 'min') + '">' + jm.s + '</span>';
+  const tr = trendOf(r);
+  const trChip = !tr ? '' :
+    '<span class="chip tr ' + tr.dir + '">' +
+      (tr.dir === 'easy' ? '↘ 컷 내려가는 중' : tr.dir === 'hard' ? '↗ 컷 올라가는 중' : '→ 3년째 비슷') +
+    '</span>';
+  const swChip = (tr && tr.spread >= 1.0)
+    ? '<span class="chip sw">⚠ 3년새 ' + tr.spread.toFixed(1) + '등급 출렁임</span>' : '';
+  const gapChip = (r[5] === '학생부종합' && buildGap(DATA_ALL)[r[0] + '|' + r[4]])
+    ? '<span class="chip gap">⚠ 특목·자사 영향 가능 — 일반고는 그대로 보면 안 됨</span>' : '';
+  const compChip = r[5] === '학생부종합' ? '<span class="chip comp">종합 — 등급은 참고치</span>' : '';
+  return '<div class="row"><div class="u">' + esc(r[0]) + '<small>' + esc(r[1] === r[2] ? r[1] : r[1] + ' ' + r[2]) + '</small></div>'
+    + '<div class="m">' + esc(r[4]) + ' · ' + esc(r[6]) + ' (' + esc(r[5]) + ')</div>'
+    + '<div class="meta"><span class="chip cut">' + cuts.join(' / ') + '</span>' + minChip + trChip + swChip + compChip + gapChip + '</div></div>';
+}
+
+function section(key, title, subtitle, items) {
+  if (!items.length) return '<div class="grp ' + key + '"><div class="grp-h"><span class="bd"></span>' + title + ' <small>' + subtitle + '</small></div><div class="empty">이 구간에 해당하는 전형이 없습니다. 필터를 넓혀 보세요.</div></div>';
+  const first = items.slice(0, 8).map(rowHtml).join('');
+  const rest = items.slice(8).map(rowHtml).join('');
+  const moreBtn = items.length > 8 ? '<button class="more" onclick="this.previousElementSibling.classList.remove(\'hidden\');this.remove()">+ ' + (items.length - 8) + '개 더 보기</button>' : '';
+  return '<div class="grp ' + key + '"><div class="grp-h"><span class="bd"></span>' + title + ' <small>' + subtitle + ' · ' + items.length + '개</small></div><div class="rows">' + first + '</div><div class="rows hidden" style="margin-top:8px">' + rest + '</div>' + moreBtn + '</div>';
+}
+
+/* 결과를 본 뒤에만 하단 바를 띄운다 */
+function showNext(){
+  var s=document.getElementById('stick'); if(s) setTimeout(function(){ s.classList.add('on'); }, 900); }
+async function run() {
+  var _rg = document.getElementById('rg');
+  if (_rg && _rg.value.indexOf('__') === 0) { _rg.value = ''; }
+  const g = parseFloat(document.getElementById('g').value);
+  const out = document.getElementById('out');
+  if (!(g >= 1 && g <= 9)) { out.innerHTML = '<div class="empty">내신 평균 등급을 1.0 ~ 9.0 사이로 입력해 주세요.</div>'; return; }
+  out.innerHTML = '<div class="loading">입결 데이터를 불러오는 중…</div>';
+  const data = await load(); DATA_ALL = data;
+  showNext();
+  const tr = document.getElementById('tr').value, rg = document.getElementById('rg').value, ty = document.getElementById('ty').value;
+  const rows = data.filter(r => (!tr || r[3] === tr) && (!rg || r[1] === rg) && (!ty || r[5] === ty) && cutOf(r) != null);
+  // 부동소수 오차로 경계값 판정이 뒤집히는 것을 막기 위해 100배 정수로 비교한다.
+  // (예: 3.9-3.6 = 0.2999999999999998 이 되어 >=0.3 이 거짓이 되는 문제)
+  const g100 = Math.round(g * 100);
+  const withDiff = rows.map(r => ({ r, cut: cutOf(r), d100: Math.round(cutOf(r) * 100) - g100 }));
+  const byCut = (a, b) => a.cut - b.cut;
+  const safe = withDiff.filter(x => x.d100 >= 30).sort(byCut).map(x => x.r);
+  const fit  = withDiff.filter(x => x.d100 >= -20 && x.d100 < 30).sort(byCut).map(x => x.r);
+  const tryy = withDiff.filter(x => x.d100 >= -80 && x.d100 < -20).sort(byCut).map(x => x.r);
+  out.innerHTML =
+    uniBar(data, g)
+    + '<p style="font-size:13.5px;color:var(--gray2);font-weight:700;text-align:center;margin-top:16px">내신 ' + g.toFixed(1) + '등급 기준 · 최근 연도 입결 컷과 비교한 결과입니다 · 연도별 산출기준(70%컷·평균 등)이 달라 연도 간 직접 비교는 권하지 않습니다</p>'
+    + section('g-fit', '🎯 적정', '컷 ±0.2~0.3등급', fit)
+    + section('g-safe', '🛡 안정', '컷이 내 등급보다 0.3등급 이상 아래', safe)
+    + section('g-try', '🔥 도전', '컷보다 0.2~0.8등급 부족', tryy)
+    + '<div class="endcta">'
+    +   '<div class="et">여기까지 보셨다면, 이제 진짜 질문이 남습니다</div>'
+    +   '<div class="eq">이 중에서 <b>어떤 6장</b>을 고르시겠습니까?</div>'
+    +   '<p>3개년이 모두 공개된 5,101개 모집단위 중 '
+    +     '<b>5곳 중 1곳</b>은 컷이 1등급 이상 움직였습니다.<br />'
+    +     '안정·적정·도전을 어떻게 섞느냐에서 결과가 갈립니다.</p>'
+    +   '<a href="../consulting/">다올105 컨설팅 프로그램 &rarr;</a>'
+    +   '<a class="tel" href="tel:031-794-8158">&#9742; 031-794-8158 &middot; 성적표 지참 시 지원 라인을 함께 정리해 드립니다</a>'
+    + '</div>';
+  window.scrollTo({ top: document.getElementById('out').offsetTop - 20, behavior: 'smooth' });
+}
+
+/* -- detail gate -- */
+
+
+
+
+
+
+/* 신청 접수 서버 (Cloudflare Worker) */
+
+/* 유입경로 — 링크 뒤에 ?src=youtube 같은 값을 붙이면 자동으로 잡힌다 */
+
+
+
+document.getElementById('g').addEventListener('keydown', e => { if (e.key === 'Enter') run(); });
+</script>
+
+<style id="daol-legal-css">
+.daol-legal{font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+ font-size:12px;line-height:1.85;color:#5b6572;background:#f4f6f8;border-top:1px solid #dfe4ea;
+ padding:20px 18px;margin:0;text-align:left;word-break:keep-all}
+.daol-legal .in{max-width:760px;margin:0 auto}
+.daol-legal b{color:#2b323c;font-weight:700}
+.daol-legal .r{display:block;margin:1px 0}
+@media (prefers-color-scheme:dark){
+ .daol-legal{background:#12171d;color:#98a3b0;border-top-color:#242b34}
+ .daol-legal b{color:#e3e9ef}}
+:root[data-theme="dark"] .daol-legal{background:#12171d;color:#98a3b0;border-top-color:#242b34}
+:root[data-theme="dark"] .daol-legal b{color:#e3e9ef}
+
+/* ══ 내 등급은 어디쯤인가 (hs12에서 이식) ══ */
+.uni{background:#fff;border:1px solid var(--line);border-radius:13px;padding:16px 15px 14px;margin-bottom:16px}
+.uni-h{font-size:13.5px;font-weight:800;color:var(--ink);letter-spacing:-.02em;margin-bottom:26px}
+.uni-w{position:relative;margin-bottom:13px}
+.uni-bar{position:relative;display:flex;height:26px;border-radius:7px;overflow:hidden}
+.uni-bar i{position:relative;display:flex;align-items:center;justify-content:center;font-style:normal}
+.uni-bar i span{font-size:10px;font-weight:800;color:#fff;white-space:nowrap;letter-spacing:-.03em;
+  text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.uni-bar .s1{flex:1;background:#059669}
+.uni-bar .s2{flex:1;background:#2563EB}
+.uni-bar .s3{flex:1;background:#D97706}
+.uni-bar .s4{flex:1;background:#EA580C}
+.uni-bar .s5{flex:1;background:#DC2626}
+.uni-bar .s6{flex:1;background:#9F1239}
+.uni-tk{position:relative;height:9px}
+.uni-tk u{position:absolute;top:0;transform:translateX(-50%);width:0;height:0;text-decoration:none;
+  border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:7px solid}
+.uni-w .me{position:absolute;top:-24px;transform:translateX(-50%);z-index:2;font-weight:800}
+.uni-w .me span{display:block;background:var(--ink);color:#fff;font-size:11px;padding:3px 7px;
+  border-radius:6px;white-space:nowrap;letter-spacing:-.02em}
+.uni-w .me:after{content:'';position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);
+  border:4px solid transparent;border-top-color:var(--ink)}
+.uni-ax{display:flex;justify-content:space-between;font-size:10.5px;font-weight:700;
+  color:var(--gray2);margin-top:2px;font-variant-numeric:tabular-nums}
+.uni-msg{font-size:12.5px;color:var(--gray);line-height:1.7;padding:9px 11px;background:var(--soft2);
+  border-radius:9px;margin-bottom:11px}
+.uni-msg b{color:var(--blue-strong);font-weight:800}
+.lg{display:flex;align-items:baseline;gap:8px;padding:6px 0;border-top:1px solid #F1F5F9}
+.lg em{width:8px;height:8px;border-radius:50%;flex:0 0 auto;align-self:center}
+.lg>b{font-size:14px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;flex:0 0 auto}
+.lg span{font-size:12.5px;font-weight:700;color:var(--gray);line-height:1.5}
+.lg i{display:block;font-style:normal;font-size:11px;font-weight:600;color:var(--gray2);margin-top:1px}
+.uni-n{font-size:11.5px;color:var(--gray2);line-height:1.75;margin-top:10px;padding-top:11px;
+  border-top:1px solid var(--line)}
+.uni-n b.h{display:block;font-size:12.5px;color:var(--ink);margin-bottom:5px}
+.uni-n u{display:block;list-style:none;text-decoration:none;margin:8px 0}
+.uni-n li{display:block;padding-left:12px;position:relative;margin-bottom:4px}
+.uni-n li:before{content:'·';position:absolute;left:3px;font-weight:800}
+.uni-n b.f{display:block;margin-top:8px;padding-top:8px;border-top:1px solid var(--line);
+  color:var(--gray);font-weight:700;line-height:1.75}
+.uni-n b.f b{color:var(--blue);font-weight:800}
+.uni-n b{color:var(--gray);font-weight:800}
+
+/* ══ 재원생 버전 추가 스타일 ══ */
+.minbox{background:var(--soft2);border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin:14px 0}
+.mb-h{font-size:13.5px;font-weight:800;color:var(--ink);margin-bottom:10px}
+.mb-h span{display:block;font-size:11.5px;font-weight:600;color:var(--gray2);margin-top:3px;line-height:1.6}
+.mb-h b{color:var(--blue-strong)}
+.mb-g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mb-g label{display:block;font-size:11.5px;font-weight:800;color:var(--gray);margin-bottom:4px}
+.mb-g input{width:100%;padding:9px 8px;border:1px solid var(--line);border-radius:9px;
+  font-size:15px;font-weight:700;text-align:center;color:var(--ink);background:#fff}
+.mb-g input:focus{outline:2px solid rgba(49,130,246,.3);border-color:var(--blue)}
+.chip.mok{background:#E6F7F0;color:#0B7A55;font-weight:800}
+.chip.mno{background:#FFECEC;color:#C2352C;font-weight:800}
+.chip.mnone{background:#ECFDF5;color:#065F46;font-weight:800}
+.chip.tr.easy{background:#EAF3FF;color:#1B5FB8}
+.chip.tr.hard{background:#FFF3E6;color:#B45309}
+.chip.tr.flat{background:var(--soft);color:var(--gray)}
+.chip.sw{background:#FFF6E5;color:#A16207;font-weight:800}
+.chip.gap{background:#F5EEFF;color:#6D28D9;font-weight:800}
+.memberbar{background:#0F2E4A;color:#fff;text-align:center;padding:9px 14px;font-size:12.5px;font-weight:700}
+.memberbar b{color:#FFD98C}
+</style>
+<footer class="daol-legal" id="daol-legal-footer"><div class="in">
+<span class="r">학원 명칭 <b>다올105학원</b></span>
+<span class="r">등록번호 <b>제 하남 298호</b></span>
+<span class="r">교습과정 <b>진학상담·지도</b></span>
+<span class="r">교습비등 <b>진학상담·지도 490,000원 (1개월 · 총교습시간 2,107분)</b></span>
+<span class="r">경기도 하남시 미사강변대로226번안길 35 청담프라자 401~405호 · ☎ 031-794-8158</span>
+<span class="r" style="margin-top:8px">교습비등 게시표 및 반환기준표 전문은 원내에 게시되어 있습니다.
+교습비는 「학원의 설립·운영 및 과외교습에 관한 법률」 제15조에 따라 교육지원청에 등록된 금액입니다.</span>
+</div></footer>
+
+</body>
+</html>
