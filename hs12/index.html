@@ -291,9 +291,9 @@ footer b{color:var(--g1)}
       <div id="inputArea"></div>
       <div class="nbox">
         <span class="nlb">우리 학년 전체 인원</span>
-        <input id="nInput" type="number" min="20" max="800" step="10" value="200" inputmode="numeric">
+        <input id="nInput" type="number" min="20" max="800" step="10" value="300" inputmode="numeric">
         <span class="nsuf">명</span>
-        <span class="nhint">한 반이 아니라 <b>같은 학년 전체</b> 인원입니다. 모르면 200으로 두세요.</span>
+        <span class="nhint">한 반이 아니라 <b>같은 학년 전체</b> 인원입니다. 모르면 300으로 두세요.</span>
       </div>
       <div id="alertBox"></div>
     </div>
@@ -342,7 +342,7 @@ var MEMBER=/[?&]m=1/.test(location.search);
 /* 신청 접수 서버 (Cloudflare Worker). 비우면 '준비 중' 안내가 나온다. */
 var API='https://daol105-form.daol105.workers.dev';
 var SUBJ=['국어','수학','영어','과학','사회'];
-var N=200;                                  /* 우리 학년 전체 인원 (사용자 조절) */
+var N=300;                                  /* 우리 학년 전체 인원 (사용자 조절) */
 /* ── 평균등급 → 상위 백분위 실측표 ──────────────────────────────
    P(평균등급 <= g) x 100,  g = 1.0 + 0.1*i
    2025학년도 고1(5등급제 첫 세대) 1·2학기 전 과목 전수분석 2건:
@@ -828,7 +828,7 @@ async function run(){
 })();
 $('nInput').addEventListener('input',function(){
   var v=parseInt($('nInput').value,10);
-  N=(!isNaN(v)&&v>=20&&v<=800)?v:200;
+  N=(!isNaN(v)&&v>=20&&v<=800)?v:300;
   calcNow();
 });
 $('p1').addEventListener('click',function(){start('고1')});
