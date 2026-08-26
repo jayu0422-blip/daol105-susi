@@ -154,6 +154,42 @@ CALC_CSS = """
 .cuse{width:100%;font-family:inherit;font-size:14.5px;font-weight:800;color:#fff;background:var(--blue);
   border:none;border-radius:11px;padding:13px;cursor:pointer;margin-top:11px;min-height:46px}
 .cwarn{font-size:11.5px;color:#A16207;background:#FFF6E5;border-radius:8px;padding:8px 10px;margin-top:9px;line-height:1.65}
+
+/* ══ 시인성 보정 — 전 뷰포트 실측 기준 ══
+   --gray2(#8B95A1)는 흰 배경에서 대비 2.9 라 실제로 잘 안 읽힌다. 이 변수를 쓰는 곳이
+   페이지 전체에 흩어져 있어 규칙을 하나씩 덮는 대신 변수 자체를 4.9:1 로 올린다. */
+:root{--gray2:#667080}
+.cuse{background:var(--blue-strong)}     /* 흰 글씨 대비 3.71 → 4.9 */
+.more{color:var(--blue-strong)}          /* 3.48 → 4.6 */
+.chip.cut{color:#0B4FB8}                 /* 4.33 → 6.3 */
+.chip.min{color:#7A5200}                 /* 4.47 → 6.6 */
+.endcta a.tel{padding:8px 0;min-height:44px}
+.cnote{font-size:11.5px}
+.cbig em,.cbig em b{font-size:11.5px}
+.csub .l u{font-size:11.5px}
+
+/* 아래는 계산기 자체 */
+   --gray2(#8B95A1)는 흰 배경에서 대비 2.9~3.0 이라 실제로 잘 안 읽힌다.
+   정보를 담은 글자는 --gray(#4E5968, 7.0)로 올린다. 장식이 아니라 읽어야 할 글자다. */
+.gm{color:var(--gray)}                                  /* 비활성 탭 2.76 → 7.0 */
+.cb-h span,.cnote,.cempty{color:var(--gray)}
+.chd{font-size:11.5px;color:var(--gray)}                /* 10.5px → 11.5px */
+.cr input.cu{color:var(--gray)}
+.cbig em{color:var(--gray)}
+.csub .l u{color:var(--gray)}
+.cyh .st{color:#0B4FB8}                                 /* 4.33 → 6.5 */
+.cyh .st.none{color:var(--gray)}
+/* 수능 예상 등급 4칸 — 360px 에서 폭 21px 까지 눌려 손가락으로 못 눌렀다 */
+.mb-g input{min-height:44px}
+@media(max-width:440px){
+  .mb-g{grid-template-columns:repeat(2,1fr);gap:9px}
+}
+/* 기존 페이지 쪽 — 같은 이유로 함께 올린다 */
+.trust,.hint{color:var(--gray)}
+.go{background:var(--blue-strong)}                      /* 흰 글씨 대비 3.71 → 4.9 */
+.stick .x{min-width:44px;min-height:44px;font-size:20px}
+.stick .msg a.tel,.stick a.tel{display:inline-block;padding:6px 0;min-height:32px}
+
 @media(max-width:380px){
   .cr,.chd{grid-template-columns:1fr 54px 48px}
   .cr.sel,.chd.sel{grid-template-columns:1fr 54px 48px 26px}

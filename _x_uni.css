@@ -1,0 +1,24 @@
+.uni{background:var(--card);border:1px solid var(--ln);border-radius:13px;padding:16px 15px 14px;margin-bottom:16px}
+.uni-h{font-size:13.5px;font-weight:800;color:var(--ink);letter-spacing:-.02em;margin-bottom:26px}
+.uni-w{position:relative;margin-bottom:13px}
+.uni-bar{position:relative;display:flex;height:26px;border-radius:7px;overflow:hidden}
+.uni-bar i{position:relative;display:flex;align-items:center;justify-content:center;font-style:normal}
+.uni-bar i span{font-size:10px;font-weight:800;color:#fff;white-space:nowrap;letter-spacing:-.03em; text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.uni-bar .s1{flex:1;background:#059669}
+.uni-bar .s3{flex:1;background:#D97706}
+.uni-bar .s5{flex:1;background:#DC2626}
+.uni-tk{position:relative;height:9px}
+.uni-tk u{position:absolute;top:0;transform:translateX(-50%);width:0;height:0;text-decoration:none; border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:7px solid}
+.uni-w .me{position:absolute;top:-24px;transform:translateX(-50%);z-index:2;font-weight:800}
+.uni-w .me span{display:block;background:var(--ink);color:#fff;font-size:11px;padding:3px 7px; border-radius:6px;white-space:nowrap;letter-spacing:-.02em}
+.uni-w .me:after{content:'';position:absolute;left:50%;transform:translateX(-50%); border:4px solid transparent;border-top-color:var(--ink)}
+.uni-ax{display:flex;justify-content:space-between;font-size:10.5px;font-weight:700; color:var(--g3);margin-top:2px;font-variant-numeric:tabular-nums}
+.uni-msg{font-size:12.5px;color:var(--g1);line-height:1.7;padding:9px 11px;background:var(--bg); border-radius:9px;margin-bottom:11px}
+.uni-msg b{color:var(--b3);font-weight:800}
+.lg{display:flex;align-items:baseline;gap:8px;padding:6px 0;border-top:1px solid #F1F5F9}
+.lg em{width:8px;height:8px;border-radius:50%;flex:0 0 auto;align-self:center}
+.lg>b{font-size:14px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;flex:0 0 auto}
+.lg span{font-size:12.5px;font-weight:700;color:var(--g1);line-height:1.5}
+.lg i{display:block;font-style:normal;font-size:11px;font-weight:600;color:var(--g3);margin-top:1px}
+.uni-n{font-size:11px;color:var(--g3);line-height:1.7;margin-top:10px;padding-top:9px;border-top:1px solid var(--ln)}
+.uni-n b{color:var(--g2);font-weight:800}
