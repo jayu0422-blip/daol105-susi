@@ -8,7 +8,7 @@
  *   POST /api/mark?k=KEY      발송 완료 표시
  *
  * 저장 구조 — 전화번호를 키로 쓴다. 같은 번호로 다시 신청하면 덮어쓴다.
- *   s:{tel}  →  { name, grade, school, tel, parentTel, src, ad, at, sent }
+ *   s:{tel}  →  { name, grade, school, tel, parentTel, src, note, ad, at, sent }
  */
 
 const 학년 = ['고1', '고2', '고3·N수'];
@@ -102,6 +102,7 @@ export default {
       const tel = 번호만(b.tel);
       const parentTel = 번호만(b.parentTel);
       const src = 정리(b.src, 20);
+      const note = 정리(b.note, 100);   // 상담 맥락 (내신·계열·지역·전형)
 
       const 오류 = [];
       if (name.length < 2) 오류.push('이름을 확인해 주세요.');
@@ -124,6 +125,7 @@ export default {
         name, grade, school, tel,
         parentTel: parentTel || '',
         src: 유입.includes(src) ? src : '기타',
+        note,
         ad: b.ad === true,                    // 광고성 정보 수신 동의(선택)
         at: 기존?.at || new Date().toISOString(),
         up: new Date().toISOString(),
@@ -147,8 +149,8 @@ export default {
       const 미발송 = url.searchParams.get('all') !== '1';
       const rows = (await 목록(env)).filter(r => 미발송 ? !r.sent : true);
       const q = s => '"' + String(s == null ? '' : s).replace(/"/g, '""') + '"';
-      const csv = [['수신번호', '이름', '학년', '학교', '신청일시']]
-        .concat(rows.map(r => [r.tel, r.name, r.grade, r.school, KST(r.at)]))
+      const csv = [['수신번호', '이름', '학년', '학교', '상담맥락', '신청일시']]
+        .concat(rows.map(r => [r.tel, r.name, r.grade, r.school, r.note || '', KST(r.at)]))
         .map(r => r.map(q).join(',')).join('\r\n');
       return new Response('﻿' + csv, {
         headers: {
@@ -209,11 +211,11 @@ function 관리자화면(rows, key) {
     <tr class="demo"><td>–</td><td><span class="demolb">예시</span>2026-08-27 21:14</td>
       <td><b>김ㅇㅇ</b></td><td>고2</td><td>미사강변고</td>
       <td class="tel">010-1234-5678</td><td class="tel">010-8765-4321</td>
-      <td>유튜브</td><td><span class="y">동의</span></td></tr>
+      <td class="memo">내신 2.4 · 자연 · 서울</td><td>유튜브</td><td><span class="y">동의</span></td></tr>
     <tr class="demo"><td>–</td><td><span class="demolb">예시</span>2026-08-27 22:03</td>
       <td><b>이ㅇㅇ</b></td><td>고1</td><td>하남고</td>
       <td class="tel">010-2222-3333</td><td class="tel">–</td>
-      <td>인스타그램</td><td><span class="n">–</span></td></tr>`;
+      <td class="memo">–</td><td>인스타그램</td><td><span class="n">–</span></td></tr>`;
 
   const tr = rows.map(r => `<tr class="${r.sent ? 'done' : ''}">
     <td><input type="checkbox" data-tel="${esc(r.tel)}" ${r.sent ? 'checked' : ''}></td>
@@ -223,6 +225,7 @@ function 관리자화면(rows, key) {
     <td>${esc(r.school)}</td>
     <td class="tel">${esc(r.tel.replace(/^(01[016789])(\d{3,4})(\d{4})$/, '$1-$2-$3'))}</td>
     <td class="tel">${esc(r.parentTel ? r.parentTel.replace(/^(01[016789])(\d{3,4})(\d{4})$/, '$1-$2-$3') : '–')}</td>
+    <td class="memo">${esc(r.note || '–')}</td>
     <td>${esc(r.src)}</td>
     <td>${r.ad ? '<span class="y">동의</span>' : '<span class="n">–</span>'}</td>
   </tr>`).join('');
@@ -263,6 +266,7 @@ tr:last-child td{border-bottom:0}
 tr.done{background:#F8FAFC;color:#94A3B8}
 tr.done b{color:#94A3B8;font-weight:700}
 .tel{font-variant-numeric:tabular-nums;font-weight:700}
+.memo{font-size:12.5px;color:#64748B;max-width:190px;overflow:hidden;text-overflow:ellipsis}
 .y{color:#059669;font-weight:800;font-size:12px}
 .n{color:#CBD5E1}
 input[type=checkbox]{width:17px;height:17px;cursor:pointer;accent-color:#2563EB}
@@ -297,6 +301,7 @@ tr.demo b{color:#CBD5E1;font-weight:700}
   <li>학교</li>
   <li>휴대폰 번호 <i>형식 검증함</i></li>
   <li>보호자 번호 <i>선택</i></li>
+  <li>상담 맥락 <i>내신·계열·지역·전형</i></li>
   <li>유입 경로 <i>어디서 보고 왔나</i></li>
   <li>개인정보 동의 <i>필수</i></li>
   <li>광고 수신 동의 <i>선택</i></li>
@@ -319,7 +324,7 @@ ${총 ? `<div class="box"><h3>학년</h3>${칩(집계(r => r.grade))}</div>
 
 <div class="scroll"><table>
 <thead><tr><th>발송</th><th>신청일시</th><th>이름</th><th>학년</th><th>학교</th>
-<th>휴대폰</th><th>보호자</th><th>유입</th><th>광고동의</th></tr></thead>
+<th>휴대폰</th><th>보호자</th><th>상담 맥락</th><th>유입</th><th>광고동의</th></tr></thead>
 <tbody>${총 ? tr : 예시행}</tbody></table></div>
 
 <div class="note">

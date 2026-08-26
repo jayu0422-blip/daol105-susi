@@ -205,7 +205,7 @@
     <h3>이 대학들, 정말 쓸 수 있는지<br>확인해 보시겠습니까?</h3>
     <p>위 목록은 내신만 본 결과입니다. 실제 지원은 수능최저·추합까지 봐야 정해집니다.</p>
   </div>
-  <div class="gate-b" id="gatePrep" style="text-align:center;padding:22px 18px"><div style="font-size:15px;font-weight:800;color:#0d3b8f;line-height:1.6;margin-bottom:6px">🛠️ 8월 26일(수) 오픈 예정</div><div style="font-size:13.5px;color:#4E5968;line-height:1.7;margin-bottom:14px">막바지 정비 중입니다. 준비되는 대로 바로 열어드리겠습니다.</div><button class="gate-btn" id="gbPrep" type="button">무엇이 열리는지 보기</button></div><div class="gate-b" id="gateForm" style="display:none">
+  <div class="gate-b" id="gateForm">
     <div class="gate-list">
       <div class="gate-li"><i>1</i><span><b>수능최저 충족 판정</b> — 수능 예상 등급을 넣으면 <b>4,721개 전형</b>의 최저를 자동 계산합니다. 못 넘기는 곳은 경쟁률이 의미 없습니다.</span></div>
       <div class="gate-li"><i>2</i><span><b>3개년 컷 추이</b> — 오르는 중인지 내리는 중인지 <b>14,611개</b>에서 방향이 보입니다.</span></div>
@@ -219,6 +219,7 @@
       <div><label>학년</label><select id="gg"><option value="">선택</option><option>고1</option><option>고2</option><option>고3</option><option>N수</option></select></div>
       <div class="full"><label>학교</label><input id="gs" type="text" placeholder="미사고등학교" autocomplete="organization"></div>
       <div class="full"><label>휴대폰</label><input id="gp" type="tel" inputmode="numeric" placeholder="01012345678" autocomplete="tel"></div>
+      <input type="text" id="ghp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
     </div>
     <div class="agbox">
       <label class="ag-all"><input type="checkbox" id="gaAll"><span><b>아래 내용에 모두 동의합니다</b></span></label>
@@ -353,26 +354,24 @@ function gateUnlocked(){ try{ return localStorage.getItem(GATE_KEY)==='1'; }catc
 function showGate(){
   var el=document.getElementById('gate'); if(!el) return;
   el.style.display='block';
-  var prep=document.getElementById('gatePrep');
   if(gateUnlocked()){
-    if(prep) prep.style.display='none';
     document.getElementById('gateForm').style.display='none';
     document.getElementById('gateOk').style.display='block';
   }
 }
 
-/* 준비중 모달 */
-(function(){
-  function openPM(){ var b=document.getElementById('pmbg'); if(b) b.classList.add('on'); }
-  function closePM(){ var b=document.getElementById('pmbg'); if(b) b.classList.remove('on'); }
-  document.addEventListener('click', function(ev){
-    var t=ev.target;
-    if(t && t.id==='gbPrep'){ ev.preventDefault(); openPM(); }
-    if(t && (t.id==='pmok' || t.id==='pmbg')){ closePM(); }
-  });
-  document.addEventListener('keydown', function(ev){ if(ev.key==='Escape') closePM(); });
-})();
 
+/* 신청 접수 서버 (Cloudflare Worker) */
+var API='https://daol105-form.daol105.workers.dev';
+/* 유입경로 — 링크 뒤에 ?src=youtube 같은 값을 붙이면 자동으로 잡힌다 */
+function srcOf(){
+  var m=/[?&](?:utm_source|src)=([^&]+)/.exec(location.search);
+  var raw=m?decodeURIComponent(m[1]).toLowerCase():'';
+  var T={youtube:'유튜브',yt:'유튜브',instagram:'인스타그램',ig:'인스타그램',insta:'인스타그램',
+         naver:'네이버 블로그·검색',blog:'네이버 블로그·검색',kakao:'카카오톡',talk:'카카오톡',
+         litt:'인스타그램',print:'학원 안내물'};
+  return T[raw]||'기타';
+}
 function bindGate(){
   var b=document.getElementById('gb'); if(!b) return;
   var all=document.getElementById('gaAll');
@@ -398,13 +397,14 @@ function bindGate(){
     if(!/^01[016789][0-9]{7,8}$/.test(p)) return fail('휴대폰 번호를 정확히 입력해 주세요. (예: 01012345678)');
     if(!a) return fail('[필수] 개인정보 수집·이용에 동의해 주세요.');
     e.style.display='none'; b.disabled=true; b.textContent='처리 중...';
-    var payload={ name:n, school:s, grade:g, phone:p,
-      naesin:document.getElementById('g').value,
-      gyeyeol:document.getElementById('tr').value,
-      jiyeok:document.getElementById('rg').value,
-      jeonhyeong:document.getElementById('ty').value,
-      marketing:(mk?'Y':'N'),
-      ref:(document.referrer||'direct') };
+    /* 상담에 쓸 맥락을 한 줄로 붙여둔다 — 내신·계열·지역·전형 */
+    var note=[document.getElementById('g').value?('내신 '+document.getElementById('g').value):'',
+              document.getElementById('tr').value, document.getElementById('rg').value,
+              document.getElementById('ty').value].filter(Boolean).join(' · ');
+    var payload={ name:n, school:s,
+      grade:(g==='고3'||g==='N수')?'고3·N수':g,
+      tel:p, parentTel:'', src:srcOf(), note:note,
+      agree:true, ad:!!mk, website:document.getElementById('ghp')?document.getElementById('ghp').value:'' };
     function done(){
       try{ localStorage.setItem(GATE_KEY,'1'); }catch(err){}
       document.getElementById('gateForm').style.display='none';
@@ -412,9 +412,17 @@ function bindGate(){
       if(typeof run==='function') run();
       document.getElementById('gate').scrollIntoView({behavior:'smooth',block:'center'});
     }
-    if(GAS_URL){
-      fetch(GAS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)}).then(done).catch(done);
-    } else { done(); }
+    fetch(API+'/api/submit',{method:'POST',headers:{'content-type':'application/json'},
+      body:JSON.stringify(payload)})
+      .then(function(r){return r.json()})
+      .then(function(j){
+        if(!j.ok) throw new Error(j.err||'잠시 후 다시 시도해 주세요.');
+        done();
+      })
+      .catch(function(err){
+        fail(err.message||'연결에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+        b.disabled=false; b.textContent='결과 보기';
+      });
   });
 }
 
@@ -445,28 +453,5 @@ document.getElementById('g').addEventListener('keydown', e => { if (e.key === 'E
 교습비는 「학원의 설립·운영 및 과외교습에 관한 법률」 제15조에 따라 교육지원청에 등록된 금액입니다.</span>
 </div></footer>
 
-<div class="pm-bg" id="pmbg">
-  <div class="pm">
-    <div class="pm-h">
-      <div class="ic">&#128736;</div>
-      <h3>상세 결과는<br>8월 26일에 열립니다</h3>
-    </div>
-    <div class="pm-b">
-      <p>더 정확한 정보를 드리려고 <b>막바지 정비 중</b>입니다.<br>
-        <b>8월 26일(수)</b>까지 준비를 마치고 바로 열어드리겠습니다.</p>
-      <div class="pm-list">
-        <div>&#9312; 수능최저 충족 판정 4,721개 전형</div>
-        <div>&#9313; 3개년 컷 추이 14,611개</div>
-        <div>&#9314; 출렁임 경고 2,546개</div>
-        <div>&#9315; 특목·자사 경고 313개 학과</div>
-        <div>&#9316; 모집인원 · 추합 인원</div>
-      </div>
-      <p style="font-size:13.5px;color:#6B7684;margin-bottom:0">
-        지금 보고 계신 <b>지원 라인 조회는 그대로 무료</b>로 이용하실 수 있습니다.<br>
-        문의 <b>031-794-8158</b></p>
-      <button class="pm-btn" id="pmok" style="margin-top:16px">확인했습니다</button>
-    </div>
-  </div>
-</div>
 </body>
 </html>
