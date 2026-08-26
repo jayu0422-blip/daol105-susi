@@ -53,6 +53,8 @@
 .endcta .eq{font-size:20px;font-weight:800;color:#fff;line-height:1.45;letter-spacing:-.025em}
 .endcta .eq b{color:#7FD9F5}
 .endcta p{font-size:13.5px;color:#C3D4E4;line-height:1.72;margin-top:12px}
+.endcta a.tel{display:block;margin-top:11px;background:none;color:#C3D4E4;font-weight:700;
+  font-size:12.5px;line-height:1.6;padding:0;box-shadow:none;text-decoration:none}
 .endcta a{display:block;margin-top:18px;background:#fff;color:#0F2E4A;font-weight:800;
   font-size:16.5px;border-radius:13px;padding:16px;text-decoration:none}
 .stick{position:fixed;left:0;right:0;bottom:0;z-index:60;transform:translateY(110%);
@@ -242,26 +244,12 @@
 </div>
 
 
-  <div id="next" class="next">
-    <div class="k">지원 라인을 확인하셨다면</div>
-    <div class="t">그런데 이 라인,<br />그대로 쓰면 될까요?</div>
-    <p>작년 컷은 올해의 기준이 아닙니다.<br />
-      3개년이 모두 공개된 5,101개 모집단위 중 <b style="color:#fff">5곳 중 1곳은 컷이 1등급 이상</b> 움직였습니다.</p>
-    <a href="consulting/">실패 없이 지원하는 법 →</a>
-  </div>
-
   <div class="note"><b>꼭 읽어주세요.</b> 이 자료는 각 대학이 발표한 2023~2025학년도 수시 입결(대부분 최종등록자 70%컷·평균 등)을 정리한 참고 자료입니다. 대학별 등급 산출 방식(반영 교과·가중치)이 서로 다르고, 해마다 컷은 오르내립니다. 특히 학생부종합은 등급보다 서류·활동이 중심입니다. <b>이 자료는 합격 가능성을 예측하거나 보장하지 않습니다.</b> 실제 지원 판단은 원서 시점의 모집요강을 확인하시고, 본인 성적표를 놓고 <b>다올105 입시 컨설턴트와 직접 상담</b>하셔야 확정하실 수 있습니다.</div>
 
-  <div class="cta">
-    <div class="t">우리 아이 성적표로 정확히 보고 싶다면</div>
-    <p>대학별 반영 교과로 다시 계산하면 등급이 달라질 수 있습니다.<br />성적표 지참 시 지원 라인을 함께 정리해 드립니다. (등록 권유 없음)</p>
-    <a href="consulting/" style="display:block;background:var(--blue);color:#fff;font-weight:800;border-radius:13px;padding:15px;text-decoration:none;margin-bottom:10px">실패 없이 지원하는 법 →</a>
-    <a href="tel:031-794-8158">☎ 031-794-8158 무료 상담</a>
-  </div>
 </div>
 
 <footer>
-  <div class="wrap"><b>다올105 · 대치더올 수학과학전문관</b><br />하남 미사 · ☎ 031-794-8158 · 010-8337-8158<br />본 조회는 교육 정보 제공 목적이며, 개인정보를 수집·저장·전송하지 않습니다.</div>
+  <div class="wrap"><b>다올105</b> 국어 · 영어 · 진학상담<br /><b>대치더올</b> 수학 · 과학 전문관<br />하남 미사 · ☎ 031-794-8158 · 010-8337-8158<br />본 조회는 교육 정보 제공 목적이며, 개인정보를 수집·저장·전송하지 않습니다.</div>
 </footer>
 
 <div class="stick" id="stick">
@@ -305,7 +293,8 @@ function section(key, title, subtitle, items) {
   return '<div class="grp ' + key + '"><div class="grp-h"><span class="bd"></span>' + title + ' <small>' + subtitle + ' · ' + items.length + '개</small></div><div class="rows">' + first + '</div><div class="rows hidden" style="margin-top:8px">' + rest + '</div>' + moreBtn + '</div>';
 }
 
-function showNext(){ var n=document.getElementById('next'); if(n) n.classList.add('on');
+/* 결과를 본 뒤에만 하단 바를 띄운다 */
+function showNext(){
   var s=document.getElementById('stick'); if(s) setTimeout(function(){ s.classList.add('on'); }, 900); }
 async function run() {
   var _rg = document.getElementById('rg');
@@ -334,9 +323,11 @@ async function run() {
     + '<div class="endcta">'
     +   '<div class="et">여기까지 보셨다면, 이제 진짜 질문이 남습니다</div>'
     +   '<div class="eq">이 중에서 <b>어떤 6장</b>을 고르시겠습니까?</div>'
-    +   '<p>안정·적정·도전을 어떻게 섞느냐에 따라 결과가 갈립니다.<br />'
-    +     '작년 컷이 올해 그대로 유지되는 것도 아닙니다.</p>'
+    +   '<p>3개년이 모두 공개된 5,101개 모집단위 중 '
+    +     '<b>5곳 중 1곳</b>은 컷이 1등급 이상 움직였습니다.<br />'
+    +     '안정·적정·도전을 어떻게 섞느냐에서 결과가 갈립니다.</p>'
     +   '<a href="consulting/">실패 없이 지원하는 법 &rarr;</a>'
+    +   '<a class="tel" href="tel:031-794-8158">&#9742; 031-794-8158 &middot; 성적표 지참 시 지원 라인을 함께 정리해 드립니다</a>'
     + '</div>';
   showGate();
   window.scrollTo({ top: document.getElementById('out').offsetTop - 20, behavior: 'smooth' });
