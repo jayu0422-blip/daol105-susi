@@ -107,6 +107,15 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
   text-align:center;font-weight:800;font-family:inherit;-moz-appearance:textfield}
 .quick button{padding:8px 14px;background:var(--b);color:#fff;border:0;border-radius:9px;
   font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.nbox{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:15px;padding:12px 13px;
+  background:var(--bg);border:1px solid var(--ln);border-radius:12px}
+.nlb{font-size:13px;font-weight:700;color:var(--g1)}
+.nbox input{width:74px;padding:9px 6px;border:1.5px solid var(--ln);border-radius:9px;font-size:16px;
+  font-weight:800;text-align:center;font-family:inherit;-moz-appearance:textfield;background:var(--card)}
+.nsuf{font-size:13.5px;font-weight:700;color:var(--g1)}
+.nhint{flex:1 1 100%;font-size:11.5px;color:var(--g2);line-height:1.6}
+.nhint b{color:var(--b3);font-weight:800}
+.bnote{font-size:11.5px;color:var(--g2);line-height:1.65;margin-top:9px}
 
 /* ═══ 경각심 ═══ */
 .alert{border-radius:var(--r);overflow:hidden;margin-top:16px;box-shadow:var(--sh2)}
@@ -240,6 +249,12 @@ footer b{color:var(--g1)}
       <p class="sub" id="c1s"></p>
       <div class="tabs t2" id="tabs"></div>
       <div id="inputArea"></div>
+      <div class="nbox">
+        <span class="nlb">한 과목 수강 인원</span>
+        <input id="nInput" type="number" min="5" max="500" step="1" value="30" inputmode="numeric">
+        <span class="nsuf">명</span>
+        <span class="nhint">성적표의 <b>수강자수</b>를 넣으면 등수가 정확해집니다. 모르면 30으로 두세요.</span>
+      </div>
       <div id="alertBox"></div>
     </div>
 
@@ -283,8 +298,9 @@ footer b{color:var(--g1)}
 'use strict';
 var MEMBER=/[?&]m=1/.test(location.search);
 var SUBJ=['국어','수학','영어','과학','사회'];
-var N=30;                                   /* 한 과목 수강자 기준 */
+var N=30;                                   /* 한 과목 수강 인원 (사용자 조절) */
 var CUM=[10,34,66,90,100];                  /* 5등급 누적 비율 */
+var MID=[5,22,50,78,95];                    /* 각 등급의 대표 백분위 = 구간 중앙값 */
 var DONE={'고1':[['고1-1','1학년 1학기']],
           '고2':[['고1-1','1학년 1학기'],['고1-2','1학년 2학기'],['고2-1','2학년 1학기']]};
 var LEFT={'고1':[['고1-2','1학년 2학기',1],['고2-1','2학년 1학기',1],['고2-2','2학년 2학기',1],['고3-1','3학년 1학기',.5]],
@@ -294,20 +310,37 @@ var grade=null,mode='simple',scen='keep',DATA=null,GAP=null;
 function $(i){return document.getElementById(i)}
 function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 
-/* ── 등급 → 등수 ── */
-function bands(){var o=[],p=0;for(var i=0;i<5;i++){o.push([Math.floor(p*N/100)+1,Math.round(CUM[i]*N/100)]);p=CUM[i]}return o}
-function rankOf(g){
-  var B=bands(),b=Math.min(5,Math.max(1,Math.floor(g))),f=g-Math.floor(g);
-  if(g>=5)return N;
-  var bd=B[b-1];
-  return Math.max(1,Math.min(N,bd[0]+Math.round(f*(bd[1]-bd[0]))));
+/* ── 평균등급 → 백분위 → 등수 ──
+   평균등급은 '그 등급 구간 안의 위치'가 아니다.
+   평균 1.30등급 = 전 과목 1등급이 아니라 일부 과목이 2등급이라는 뜻.
+   그래서 등급 대표 백분위(MID) 사이를 보간해 백분위를 먼저 구한 뒤 등수로 옮긴다. */
+function pctOf(g){
+  if(g<=1)return MID[0];
+  if(g>=5)return MID[4];
+  var i=Math.floor(g),f=g-i;
+  return MID[i-1]+f*(MID[i]-MID[i-1]);
 }
-function posOf(g){var f=g-Math.floor(g);return f<0.34?'초반':(f<0.67?'중반':'후반')}
+function rankOf(g){return Math.max(1,Math.min(N,Math.round(pctOf(g)*N/100)))}
+/* 등급 커트라인 등수 — 구간이 겹치지 않게 앞 구간 끝+1 로 이어붙인다 */
+function bands(){
+  var o=[],hi0=0;
+  for(var i=0;i<5;i++){
+    var hi=Math.max(hi0+1,Math.round(CUM[i]*N/100));
+    if(i===4)hi=Math.max(hi0+1,N);
+    o.push([hi0+1,hi]); hi0=hi;
+  }
+  return o;
+}
+function posOf(g){var f=g-Math.floor(g);if(f<0.005||g>=5)return '';return f<0.34?'초반':(f<0.67?'중반':'후반')}
+/* 바로 윗 정수 등급까지 가려면 몇 명을 앞서야 하는가
+   2.80 → 2.00 / 2.00 → 1.00 / 1.30 → 1.00 */
 function needUp(g){
-  var b=Math.floor(g);
-  if(b<=1)return {n:0,to:1};
-  var B=bands(),tgt=B[b-2];
-  return {n:Math.max(0,rankOf(g)-tgt[1]),to:b-1};
+  if(g<=1.005)return {n:0,to:1,tgtRank:rankOf(1)};
+  var t=Math.floor(g);
+  if(t>=g-0.005)t=g-1;
+  t=Math.max(1,t);
+  var tr=rankOf(t);
+  return {n:Math.max(0,rankOf(g)-tr),to:t,tgtRank:tr};
 }
 /* 다올105 권장 학습량 — 앞서야 할 인원에 비례 */
 function hoursFor(n){var wk=Math.round(5+n*1.5);return {wk:wk,mo:wk*4}}
@@ -389,20 +422,22 @@ function alertHtml(g){
   var rank=rankOf(g),pos=posOf(g),up=needUp(g),h=hoursFor(up.n);
   var lv=Math.floor(g);
   var col=lv<=1?['#059669','#047857']:lv<=2?['#2563EB','#1D4ED8']:lv<=3?['#D97706','#B45309']:['#DC2626','#991B1B'];
-  var pct=Math.round(rank/N*100);
+  var pct=Math.round(pctOf(g)*10)/10;      /* 등수 나눗셈이 아니라 백분위 그대로 */
   var msg = up.n===0
     ? '이미 최상위입니다. 이 자리를 지키는 것이 과제입니다.'
-    : '<b>'+up.n+'명</b>을 앞서야 <b>'+up.to+'등급</b>이 됩니다';
+    : '<b>'+up.n+'명</b>을 앞서면 <b>'+up.to.toFixed(2)+'등급</b>입니다';
   var body='<div class="krow"><span class="ki" style="background:'+col[0]+'22;color:'+col[0]+'">📍</span>'+
-    '<span class="kt"><b>전교 약 '+rank+'등 / '+N+'명</b>상위 '+pct+'% · '+g.toFixed(2)+'등급 '+pos+'</span></div>';
+    '<span class="kt"><b>약 '+rank+'등 / '+N+'명 중</b>상위 '+pct+'% · '+g.toFixed(2)+'등급'+(pos?' '+pos:'')+'</span></div>';
   if(up.n>0){
     body+='<div class="krow"><span class="ki" style="background:#FEF3C7;color:#92400E">🎯</span>'+
-      '<span class="kt"><b>'+up.n+'명만 앞서면 됩니다</b>'+up.to+'등급 커트라인은 '+bands()[up.to-1][1]+'등입니다</span></div>'+
+      '<span class="kt"><b>'+up.n+'명만 앞서면 됩니다</b>평균 '+up.to.toFixed(2)+'등급 자리는 약 '+up.tgtRank+'등입니다</span></div>'+
       '<div class="krow"><span class="ki" style="background:#EFF6FF;color:#2563EB">⏱</span>'+
       '<span class="kt"><b>주 '+h.wk+'시간 · 한 달 '+h.mo+'시간</b>이 과목에만 쓰는 순공 시간 (다올105 권장 기준)</span></div>';
   }
   body+='<div class="bar"><i style="width:'+Math.max(4,100-pct)+'%;background:linear-gradient(90deg,'+col[0]+','+col[1]+')"></i></div>'+
-    '<div class="barlb"><span>1등</span><span>'+N+'등</span></div>';
+    '<div class="barlb"><span>상위 0%</span><span>하위 100%</span></div>'+
+    '<div class="bnote">5등급제 비율(1등급 10% · 2등급 24% · 3등급 32% · 4등급 24% · 5등급 10%)로 '+
+    '환산한 추정치입니다. 실제 등수는 과목별 수강 인원에 따라 달라집니다.</div>';
   return '<div class="alert an2"><div class="alert-h" style="background:linear-gradient(135deg,'+col[0]+','+col[1]+')">'+
     '<div class="t">지금 내 위치</div><div class="m">'+msg+'</div></div>'+
     '<div class="alert-b">'+body+'</div></div>';
@@ -420,17 +455,24 @@ function buildScen(){
   var mk=function(k,ic,t,d,v,dn){return '<button type="button" data-k="'+k+'" class="'+(scen===k?'on':'')+(dn?' dn':'')+'">'+
     '<span class="ic">'+ic+'</span><span><span class="tt">'+t+'</span><span class="td">'+d+'</span></span>'+
     '<span class="vv">'+v+'</span></button>'};
-  var u1=Math.max(1,cur-1),u5=Math.max(1,cur-.5),d5=Math.min(5,cur+.5),d1=Math.min(5,cur+1);
-  var h='<div class="sc-div">올렸을 때</div>'+
-    mk('up1','🚀','1등급 올린다면','남은 학기 '+u1.toFixed(2)+'등급',finalAvg(cur,u1).toFixed(2))+
-    mk('up05','📈','0.5등급 올린다면','남은 학기 '+u5.toFixed(2)+'등급',finalAvg(cur,u5).toFixed(2))+
-    '<div class="sc-div">그대로일 때</div>'+
-    mk('keep','📌','지금처럼 간다면','남은 학기도 '+cur.toFixed(2)+'등급',finalAvg(cur,cur).toFixed(2))+
-    '<div class="sc-div">떨어졌을 때</div>'+
-    mk('dn05','⚠️','0.5등급 떨어진다면','남은 학기 '+d5.toFixed(2)+'등급',finalAvg(cur,d5).toFixed(2),1)+
-    mk('dn1','🔻','1등급 떨어진다면','남은 학기 '+d1.toFixed(2)+'등급',finalAvg(cur,d1).toFixed(2),1)+
-    '<div class="sc-div">직접 넣기</div>'+
+  var nL=LEFT[grade].length, u1=Math.max(1,cur-1), d1=Math.min(5,cur+1);
+  var rest=function(v){return '다음 학기부터 '+nL+'개 학기 모두 <b>'+v.toFixed(2)+'등급</b>'};
+  var av=['keep','custom'], h='';
+  if(u1<cur-0.005){
+    av.push('up1');
+    h+='<div class="sc-div">한 등급 올렸을 때</div>'+
+      mk('up1','🚀','다음 학기부터 한 등급 올린다면',rest(u1),finalAvg(cur,u1).toFixed(2));
+  }
+  h+='<div class="sc-div">그대로일 때</div>'+
+    mk('keep','📌','지금처럼 간다면',rest(cur),finalAvg(cur,cur).toFixed(2));
+  if(d1>cur+0.005){
+    av.push('dn1');
+    h+='<div class="sc-div">한 등급 떨어졌을 때</div>'+
+      mk('dn1','🔻','다음 학기부터 한 등급 떨어진다면',rest(d1),finalAvg(cur,d1).toFixed(2),1);
+  }
+  h+='<div class="sc-div">직접 넣기</div>'+
     mk('custom','✏️','남은 학기 과목별 입력','학기·과목별로 정확하게','–');
+  if(av.indexOf(scen)<0){scen='keep';return buildScen()}
   $('scen').innerHTML=h;
   $('scen').querySelectorAll('button').forEach(function(b){
     b.onclick=function(){scen=b.dataset.k;buildScen();if(scen==='custom')buildCustom()}});
@@ -451,8 +493,6 @@ function targetAvg(){
   var cur=avgOf($('inputArea'));if(cur==null)return null;
   if(scen==='keep')return finalAvg(cur,cur);
   if(scen==='up1') return finalAvg(cur,Math.max(1,cur-1));
-  if(scen==='up05')return finalAvg(cur,Math.max(1,cur-.5));
-  if(scen==='dn05')return finalAvg(cur,Math.min(5,cur+.5));
   if(scen==='dn1') return finalAvg(cur,Math.min(5,cur+1));
   /* custom: 학기별 가중 */
   var w=DONE[grade].length,s=cur*w,any=false;
@@ -559,10 +599,10 @@ async function run(){
   var fit=wd.filter(function(x){return x.d>=-11&&x.d<16}).sort(bc).map(function(x){return x.r});
   var tryy=wd.filter(function(x){return x.d>=-44&&x.d<-11}).sort(bc).map(function(x){return x.r});
   var cur=avgOf($('inputArea'));
-  var L={keep:'지금처럼 갔을 때',up05:'0.5등급 올렸을 때',up1:'1등급 올렸을 때',
-         dn05:'0.5등급 떨어졌을 때',dn1:'1등급 떨어졌을 때',custom:'직접 입력한 목표'}[scen];
+  var L={keep:'지금처럼 갔을 때',up1:'한 등급 올렸을 때',
+         dn1:'한 등급 떨어졌을 때',custom:'직접 입력한 목표'}[scen];
   var h='<p class="rhead">'+grade+' · 지금까지 '+cur.toFixed(2)+'등급 · <b>'+L+'</b><br>'+
-    '졸업 시 예상 평균 <b>'+g.toFixed(2)+'등급</b> (전교 약 '+rankOf(g)+'등)</p>';
+    '졸업 시 예상 평균 <b>'+g.toFixed(2)+'등급</b> (약 '+rankOf(g)+'등 / '+N+'명 중)</p>';
   h+=section('s-fit','🎯 적정','#2563EB','컷 ±0.11~0.16등급',fit,gaps);
   h+=section('s-safe','🛡 안정','#059669','컷이 0.16등급 이상 아래',safe,gaps);
   h+=section('s-try','🔥 도전','#D97706','컷보다 0.11~0.44등급 부족',tryy,gaps);
@@ -582,6 +622,11 @@ async function run(){
     document.querySelector('#intro .lead').innerHTML='등급만으로는 안 보입니다. <b>2등급도 초반과 후반은 다릅니다.</b><br><b>재원생은 상세 정보까지 모두 무료</b>입니다.';
   }
 })();
+$('nInput').addEventListener('input',function(){
+  var v=parseInt($('nInput').value,10);
+  N=(!isNaN(v)&&v>=5&&v<=500)?v:30;
+  calcNow();
+});
 $('p1').addEventListener('click',function(){start('고1')});
 $('p2').addEventListener('click',function(){start('고2')});
 $('back').addEventListener('click',backHome);
