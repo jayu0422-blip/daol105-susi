@@ -11,7 +11,7 @@
  *   s:{tel}  →  { name, grade, school, tel, parentTel, src, note, at, sent }
  */
 
-const 학년 = ['고1', '고2', '고3·N수'];
+const 학년 = ['중3', '고1', '고2', '고3·N수'];
 const 유입 = ['유튜브', '인스타그램', '네이버 블로그·검색', '카카오톡', '지인 소개', '학원 안내물', '기타'];
 const TEL = /^01[016789]\d{7,8}$/;
 
