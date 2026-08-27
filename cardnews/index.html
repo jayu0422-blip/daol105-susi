@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>카드뉴스 — 다올105 (내부용)</title>
+<style>
+:root{--blue:#1B64DA;--blue2:#0B3D91;--ink:#12161C;--g1:#3D4754;--g2:#6B7684;
+  --ln:#E7EAEE;--bg:#F5F7FA;--card:#fff;--gold:#B69656;--r:16px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  font-size:15px;line-height:1.68;-webkit-text-size-adjust:100%}
+.w{max-width:920px;margin:0 auto;padding:0 16px}
+header{background:linear-gradient(158deg,#08326F,#1B64DA 58%,#3182F6);color:#fff;padding:28px 0 26px}
+header h1{margin:0 0 6px;font-size:22px;font-weight:800;letter-spacing:-.03em}
+header p{margin:0;font-size:13.5px;color:#C6DAF5}
+.warn{background:#FFF7ED;border-bottom:1px solid #FDBA74;color:#9A3412;
+  font-size:12.5px;padding:11px 0;line-height:1.6}
+.warn b{color:#7C2D12}
+h2{font-size:19px;font-weight:800;letter-spacing:-.03em;margin:34px 0 4px}
+h2 em{font-style:normal;font-size:13px;font-weight:700;color:var(--blue);margin-left:8px}
+.lead{color:var(--g2);font-size:13.5px;margin:0 0 16px}
+.box{background:var(--card);border:1px solid var(--ln);border-radius:var(--r);
+  padding:16px;margin-bottom:14px}
+.box h3{margin:0 0 10px;font-size:14px;font-weight:800;color:var(--blue2)}
+.lk{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--ln)}
+.lk:first-of-type{border-top:0}
+.lk .t{flex:0 0 auto;font-size:12.5px;font-weight:700;color:var(--g1);min-width:112px}
+.lk code{flex:1 1 240px;font-size:11.5px;color:var(--blue2);background:#F1F5FD;
+  border-radius:8px;padding:8px 10px;word-break:break-all;font-family:ui-monospace,monospace}
+button.cp{flex:0 0 auto;border:0;border-radius:9px;background:var(--blue);color:#fff;
+  font:inherit;font-size:12.5px;font-weight:700;padding:9px 15px;cursor:pointer}
+button.cp:active{transform:scale(.97)}
+button.cp.ok{background:#0FA36B}
+pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:12.5px;line-height:1.75;
+  color:var(--g1);background:#F8FAFC;border:1px solid var(--ln);border-radius:12px;
+  padding:14px;max-height:260px;overflow:auto;font-family:inherit}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:620px){.grid{grid-template-columns:repeat(4,1fr)}}
+.c{margin:0;background:var(--card);border:1px solid var(--ln);border-radius:14px;overflow:hidden}
+.c img{display:block;width:100%;height:auto}
+.c figcaption{display:flex;align-items:center;gap:7px;padding:9px 10px;font-size:11.5px}
+.c .n{flex:0 0 auto;background:var(--blue);color:#fff;border-radius:6px;
+  padding:1px 6px;font-size:10.5px;font-weight:800}
+.c figcaption b{flex:1;font-weight:700;color:var(--g1);font-size:11.5px;line-height:1.35}
+.c .dl{flex:0 0 auto;color:var(--blue);font-weight:700;text-decoration:none;font-size:11.5px}
+.alt{padding:0 10px 10px}
+.alt span{display:block;font-size:10px;color:var(--g2);font-weight:700;margin-bottom:3px}
+.alt code{display:block;font-size:10.5px;color:var(--g1);background:#F1F5FD;border-radius:6px;
+  padding:6px 7px;line-height:1.45;cursor:pointer;font-family:inherit}
+.alt code:active{background:#DCE9FD}
+ol{padding-left:20px;margin:0}
+ol li{margin-bottom:9px;font-size:13.5px;color:var(--g1)}
+ol li b{color:var(--ink)}
+footer{background:#12171D;color:#9AA5B1;font-size:11.5px;line-height:1.85;
+  padding:24px 0 40px;margin-top:36px}
+footer b{color:#E6EBF0}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(80px);
+  background:#0FA36B;color:#fff;font-size:13.5px;font-weight:700;padding:11px 20px;
+  border-radius:99px;opacity:0;transition:.22s;pointer-events:none;z-index:9}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<header><div class="w">
+  <h1>카드뉴스 — 인스타 게시용</h1>
+  <p>고3 10장 · 고1·고2 10장 · 1080×1350 · 캡션과 해시태그 포함</p>
+</div></header>
+
+<div class="warn"><div class="w">
+  <b>내부용 페이지입니다.</b> 검색에 잡히지 않게 막아 두었습니다. 학부모에게 이 주소를 보내지 마세요.
+</div></div>
+
+<div class="w">
+
+<h2>0. 먼저 — 프로필에 걸 링크</h2>
+<p class="lead">인스타 캡션의 주소는 <b>눌리지 않습니다.</b> 클릭되는 곳은 프로필 링크·스토리 링크 스티커·유료광고뿐입니다.<br>
+프로필 편집 → 링크에 아래 두 개를 등록하세요. <b>최대 5개</b>까지 됩니다.</p>
+<div class="box">
+  <div class="lk"><span class="t">고3 무료조회</span><code>https://jayu0422-blip.github.io/daol105-susi/?src=ig</code>
+    <button class="cp" data-copy="https://jayu0422-blip.github.io/daol105-susi/?src=ig">복사</button></div>
+  <div class="lk"><span class="t">고1·2 무료조회</span><code>https://jayu0422-blip.github.io/daol105-susi/hs12/?src=ig</code>
+    <button class="cp" data-copy="https://jayu0422-blip.github.io/daol105-susi/hs12/?src=ig">복사</button></div>
+</div>
+<p class="lead"><b>?src=ig</b> 가 붙어 있어야 신청이 들어올 때 「인스타그램」으로 자동 기록됩니다.
+붙이지 않으면 전부 「기타」로 쌓여 어디서 왔는지 알 수 없습니다.</p>
+
+<h2>1. 고3 세트 <em>10장 · 먼저 올리세요</em></h2>
+<p class="lead">2027학년도 수시 원서접수가 <b>9월 7일(월)~11일(금)</b>입니다. 시급합니다.</p>
+<div class="grid">
+    <figure class="c">
+      <a href="img/go3_01.jpg" download="go3_01.jpg"><img src="img/go3_01.jpg" alt="2027학년도 수시 원서 여섯 칸 배치 안내 카드" loading="lazy"></a>
+      <figcaption><span class="n">01</span><b>표지 — 여섯 칸</b>
+        <a class="dl" href="img/go3_01.jpg" download="go3_01.jpg">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="2027학년도 수시 원서 여섯 칸 배치 안내 카드">2027학년도 수시 원서 여섯 칸 배치 안내 카드</code></div>
+    </figure>
+    <figure class="c">
+      <a href="img/go3_02.png" download="go3_02.png"><img src="img/go3_02.png" alt="학교 추천 목록과 컨설팅 접근 방식 비교" loading="lazy"></a>
+      <figcaption><span class="n">02</span><b>학교 목록 그대로 쓰십니까</b>
+        <a class="dl" href="img/go3_02.png" download="go3_02.png">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="학교 추천 목록과 컨설팅 접근 방식 비교">학교 추천 목록과 컨설팅 접근 방식 비교</code></div>
+    </figure>
+    <figure class="c">
+      <a href="img/go3_03.png" download="go3_03.png"><img src="img/go3_03.png" alt="대학별 내신 반영 교과와 학년 가중치 차이 안내" loading="lazy"></a>
+      <figcaption><span class="n">03</span><b>대학마다 다시 계산</b>
+        <a class="dl" href="img/go3_03.png" download="go3_03.png">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="대학별 내신 반영 교과와 학년 가중치 차이 안내">대학별 내신 반영 교과와 학년 가중치 차이 안내</code></div>
+    </figure>
+    <figure class="c">
+      <a href="img/go3_04.png" download="go3_04.png"><img src="img/go3_04.png" alt="서울 주요 14개 대학 학생부교과전형 정성평가 반영 현황" loading="lazy"></a>
+      <figcaption><span class="n">04</span><b>교과전형 61.5%</b>
+        <a class="dl" href="img/go3_04.png" download="go3_04.png">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="서울 주요 14개 대학 학생부교과전형 정성평가 반영 현황">서울 주요 14개 대학 학생부교과전형 정성평가 반영 현황</code></div>
+    </figure>
+    <figure class="c">
+      <a href="img/go3_05.png" download="go3_05.png"><img src="img/go3_05.png" alt="지역균형 전형 명칭별 교과 반영비율 차이 비교" loading="lazy"></a>
+      <figcaption><span class="n">05</span><b>전형 이름은 신호가 아니다</b>
+        <a class="dl" href="img/go3_05.png" download="go3_05.png">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="지역균형 전형 명칭별 교과 반영비율 차이 비교">지역균형 전형 명칭별 교과 반영비율 차이 비교</code></div>
+    </figure>
+    <figure class="c">
+      <a href="img/go3_06.png" download="go3_06.png"><img src="img/go3_06.png" alt="2027학년도 학생부종합전형 대학별 평가요소 반영비율 비교" loading="lazy"></a>
+      <figcaption><span class="n">06</span><b>종합전형 평가요소</b>
+        <a class="dl" href="img/go3_06.png" download="go3_06.png">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="2027학년도 학생부종합전형 대학별 평가요소 반영비율 비교">2027학년도 학생부종합전형 대학별 평가요소 반영비율 비교</code></div>
+    </figure>
+    <figure class="c">
+      <a href="img/go3_07.png" download="go3_07.png"><img src="img/go3_07.png" alt="서울대 한양대 평가요소 반영비율 미공개 안내" loading="lazy"></a>
+      <figcaption><span class="n">07</span><b>정직 카드 — 미공개</b>
+        <a class="dl" href="img/go3_07.png" download="go3_07.png">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="서울대 한양대 평가요소 반영비율 미공개 안내">서울대 한양대 평가요소 반영비율 미공개 안내</code></div>
+    </figure>
+    <figure class="c">
+      <a href="img/go3_08.png" download="go3_08.png"><img src="img/go3_08.png" alt="수시 수능최저학력기준 미충족 시 지원 칸 손실 안내" loading="lazy"></a>
+      <figcaption><span class="n">08</span><b>수능최저</b>
+        <a class="dl" href="img/go3_08.png" download="go3_08.png">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="수시 수능최저학력기준 미충족 시 지원 칸 손실 안내">수시 수능최저학력기준 미충족 시 지원 칸 손실 안내</code></div>
+    </figure>
+    <figure class="c">
+      <a href="img/go3_09.png" download="go3_09.png"><img src="img/go3_09.png" alt="수시 상담에서 함께 확인하는 자료 목록" loading="lazy"></a>
+      <figcaption><span class="n">09</span><b>상담에서 함께 보는 것</b>
+        <a class="dl" href="img/go3_09.png" download="go3_09.png">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="수시 상담에서 함께 확인하는 자료 목록">수시 상담에서 함께 확인하는 자료 목록</code></div>
+    </figure>
+    <figure class="c">
+      <a href="img/go3_10.jpg" download="go3_10.jpg"><img src="img/go3_10.jpg" alt="다올105학원 고3 수시 상담 안내 및 교습비등 표시" loading="lazy"></a>
+      <figcaption><span class="n">10</span><b>CTA + 4항목</b>
+        <a class="dl" href="img/go3_10.jpg" download="go3_10.jpg">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="다올105학원 고3 수시 상담 안내 및 교습비등 표시">다올105학원 고3 수시 상담 안내 및 교습비등 표시</code></div>
+    </figure>
+</div>
+
+<h2>고3 · 캡션</h2>
+<div class="box">
+  <h3>캡션 전문 <button class="cp" data-copy-id="capA" style="float:right">캡션 복사</button></h3>
+  <pre id="capA">원서까지 열흘 남았습니다.
+여섯 칸을 어떻게 채우실 계획입니까.
+
+성적은 이미 굳었습니다. 남은 결정은 어디에 넣느냐 하나입니다.
+그런데 그 하나가 결과를 바꿉니다.
+
+━━━━━━━━━━━━━━━━
+
+▸ 같은 내신인데 대학마다 다시 계산됩니다
+
+반영 교과가 다릅니다. 전 과목을 보는 곳, 국·영·수·사·과만 보는 곳,
+상위 몇 과목만 보는 곳이 다 다릅니다.
+학년별 가중치도, 이수단위 반영 방식도 다릅니다.
+
+그래서 A대 기준 2.1이 B대 기준 1.8이 됩니다.
+내 성적표 하나로 끝나지 않습니다.
+
+▸ 교과전형은 등급만 본다 — 절반만 맞습니다
+
+서울 주요 14개 대학 중 8곳은 등급 외에
+과목 이수 내역·세부능력특기사항·출결을 사람이 직접 읽고 점수를 매깁니다.
+
+경희대 · 건국대 · 동국대 · 숙명여대 · 서울시립대 · 성균관대 · 고려대 · 한양대
+
+모집인원 5,361명 중 정성평가를 반영하는 자리가 3,301명, 61.5%입니다.
+
+다만 연세·서강·이화여·한국외·홍익은 여전히 교과 100%입니다.
+"다 바뀌었다"가 아니라 "대학마다 다르다"입니다.
+
+▸ 전형 이름만 보고는 알 수 없습니다
+
+같은 '지역균형'인데 건국대는 교과가 70%, 연세대는 100%입니다.
+같은 한양대인데 서울캠은 정성평가 10%를 보고 ERICA는 교과 100%입니다.
+
+▸ 비율을 공개하지 않는 대학도 있습니다
+
+서울대와 한양대는 모집요강에 평가요소별 비율표가 없습니다.
+그래서 저희도 요소 이름만 적었습니다.
+다른 자료에서 이 두 대학의 비율 숫자를 보셨다면 출처를 확인해 보시기 바랍니다.
+
+▸ 최저를 못 맞추면 그 칸은 비어 있는 것입니다
+
+여섯 칸 중 몇 칸에 최저를 걸지, 그 최저가 지금 모의고사로 닿는 범위인지를
+먼저 계산하고 배치합니다.
+되지 않는 것은 되지 않는다고 먼저 말씀드립니다.
+
+━━━━━━━━━━━━━━━━
+
+합격은 약속하지 않습니다. 근거는 약속합니다.
+왜 그 대학이 그 칸에 들어갔는지, 학생도 부모님도 설명할 수 있게 만들어 드립니다.
+
+내 등급으로 지금 어디까지 되는지
+이름·연락처 없이 무료로 조회하실 수 있습니다 → 프로필 링크
+
+2027학년도 수시 원서접수 2026. 9. 7(월) ~ 9. 11(금)
+고3 · N수 대상 · ☎ 031-794-8158
+
+※ 위 숫자는 2027학년도 수시모집요강 및 각 대학 입학처 공개자료 기준(2026년 8월 확인)이며,
+   지원 전 반드시 해당 대학 입학처 게시본을 확인하셔야 합니다.
+※ 본 상담은 합격을 보장하지 않습니다.
+
+━━━━━━━━━━━━━━━━
+다올105학원 · 등록번호 제 하남 298호 (광주하남교육지원청)
+교습과정 진학상담·지도
+교습비등 160,000원 ~ 520,000원 (과정·반별 상이)
+경기 하남시 미사강변대로226번안길 35 청담프라자 401~405호
+☎ 031-794-8158</pre>
+</div>
+<div class="box">
+  <h3>해시태그 30개 <button class="cp" data-copy-id="tagA" style="float:right">태그 복사</button></h3>
+  <pre id="tagA">#수시컨설팅 #수시상담 #입시컨설팅 #수시원서 #수시6장 #학생부교과전형 #학생부종합전형
+#정시수시 #대입컨설팅 #고3맘 #고삼맘 #수험생맘 #입시맘 #고3엄마 #수시지원전략
+#내신등급 #수능최저 #대학입시 #입시정보 #2027수시
+#하남학원 #미사학원 #하남입시 #미사강변학원 #하남고 #미사고 #미사강변고 #풍산고 #신장고 #다올105</pre>
+</div>
+
+<h2>2. 고1·고2 세트 <em>10장</em></h2>
+<p class="lead">2학기 내내 유효합니다. 고3 게시 며칠 뒤에 올리세요.</p>
+<div class="grid">
+    <figure class="c">
+      <a href="img/hs12_01.jpg" download="hs12_01.jpg"><img src="img/hs12_01.jpg" alt="2027학년도 대학별 학생부종합전형 평가요소 비율 비교 카드" loading="lazy"></a>
+      <figcaption><span class="n">01</span><b>표지 — 다르게 읽습니다</b>
+        <a class="dl" href="img/hs12_01.jpg" download="hs12_01.jpg">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="2027학년도 대학별 학생부종합전형 평가요소 비율 비교 카드">2027학년도 대학별 학생부종합전형 평가요소 비율 비교 카드</code></div>
+    </figure>
+    <figure class="c">
+      <a href="img/hs12_02.png" download="hs12_02.png"><img src="img/hs12_02.png" alt="한국외대 서류형 면접형 평가요소 반영비율 역전 비교" loading="lazy"></a>
+      <figcaption><span class="n">02</span><b>같은 대학인데 뒤집힘</b>
+        <a class="dl" href="img/hs12_02.png" download="hs12_02.png">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="한국외대 서류형 면접형 평가요소 반영비율 역전 비교">한국외대 서류형 면접형 평가요소 반영비율 역전 비교</code></div>
+    </figure>
+    <figure class="c">
+      <a href="img/hs12_03.png" download="hs12_03.png"><img src="img/hs12_03.png" alt="학업역량 반영비율 대학별 비교 숭실대 10 서강대 50" loading="lazy"></a>
+      <figcaption><span class="n">03</span><b>학업 10~50</b>
+        <a class="dl" href="img/hs12_03.png" download="hs12_03.png">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="학업역량 반영비율 대학별 비교 숭실대 10 서강대 50">학업역량 반영비율 대학별 비교 숭실대 10 서강대 50</code></div>
+    </figure>
+    <figure class="c">
+      <a href="img/hs12_04.png" download="hs12_04.png"><img src="img/hs12_04.png" alt="진로역량 항목이 없는 대학 전형 목록" loading="lazy"></a>
+      <figcaption><span class="n">04</span><b>진로 칸이 없는 대학</b>
+        <a class="dl" href="img/hs12_04.png" download="hs12_04.png">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="진로역량 항목이 없는 대학 전형 목록">진로역량 항목이 없는 대학 전형 목록</code></div>
+    </figure>
+    <figure class="c">
+      <a href="img/hs12_05.png" download="hs12_05.png"><img src="img/hs12_05.png" alt="공동체역량 반영비율 대학별 비교 10과 30" loading="lazy"></a>
+      <figcaption><span class="n">05</span><b>공동체 10 vs 30</b>
+        <a class="dl" href="img/hs12_05.png" download="hs12_05.png">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="공동체역량 반영비율 대학별 비교 10과 30">공동체역량 반영비율 대학별 비교 10과 30</code></div>
+    </figure>
+    <figure class="c">
+      <a href="img/hs12_06.png" download="hs12_06.png"><img src="img/hs12_06.png" alt="2027학년도 신설 전형 평가요소 반영비율 안내" loading="lazy"></a>
+      <figcaption><span class="n">06</span><b>2027 신설</b>
+        <a class="dl" href="img/hs12_06.png" download="hs12_06.png">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="2027학년도 신설 전형 평가요소 반영비율 안내">2027학년도 신설 전형 평가요소 반영비율 안내</code></div>
+    </figure>
+    <figure class="c">
+      <a href="img/hs12_07.png" download="hs12_07.png"><img src="img/hs12_07.png" alt="서울대 한양대 평가요소 반영비율 미공개 안내" loading="lazy"></a>
+      <figcaption><span class="n">07</span><b>정직 카드 — 미공개</b>
+        <a class="dl" href="img/hs12_07.png" download="hs12_07.png">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="서울대 한양대 평가요소 반영비율 미공개 안내">서울대 한양대 평가요소 반영비율 미공개 안내</code></div>
+    </figure>
+    <figure class="c">
+      <a href="img/hs12_08.png" download="hs12_08.png"><img src="img/hs12_08.png" alt="서울 주요 14개 대학 학생부교과전형 정성평가 반영 현황" loading="lazy"></a>
+      <figcaption><span class="n">08</span><b>교과전형</b>
+        <a class="dl" href="img/hs12_08.png" download="hs12_08.png">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="서울 주요 14개 대학 학생부교과전형 정성평가 반영 현황">서울 주요 14개 대학 학생부교과전형 정성평가 반영 현황</code></div>
+    </figure>
+    <figure class="c">
+      <a href="img/hs12_09.png" download="hs12_09.png"><img src="img/hs12_09.png" alt="학교생활기록부 작성 기준일과 남은 학기 안내" loading="lazy"></a>
+      <figcaption><span class="n">09</span><b>남은 학기</b>
+        <a class="dl" href="img/hs12_09.png" download="hs12_09.png">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="학교생활기록부 작성 기준일과 남은 학기 안내">학교생활기록부 작성 기준일과 남은 학기 안내</code></div>
+    </figure>
+    <figure class="c">
+      <a href="img/hs12_10.jpg" download="hs12_10.jpg"><img src="img/hs12_10.jpg" alt="다올105학원 고1 고2 학기 상담 안내 및 교습비등 표시" loading="lazy"></a>
+      <figcaption><span class="n">10</span><b>CTA + 4항목</b>
+        <a class="dl" href="img/hs12_10.jpg" download="hs12_10.jpg">저장</a></figcaption>
+      <div class="alt"><span>대체 텍스트</span><code data-copy="다올105학원 고1 고2 학기 상담 안내 및 교습비등 표시">다올105학원 고1 고2 학기 상담 안내 및 교습비등 표시</code></div>
+    </figure>
+</div>
+
+<h2>고1·2 · 캡션</h2>
+<div class="box">
+  <h3>캡션 전문 <button class="cp" data-copy-id="capB" style="float:right">캡션 복사</button></h3>
+  <pre id="capB">학생부가 좋아야 대학 간다.
+그럼 어떻게 좋아야 하는지는 들으셨습니까.
+
+수행평가 하고 동아리 열심히 하면 알아서 채워진다는 말,
+틀린 건 아닙니다. 다만 아무도 그다음을 알려주지 않았을 뿐입니다.
+
+━━━━━━━━━━━━━━━━
+
+2027학년도 수시모집요강 27개 전형의 평가요소 비율을 전부 펼쳤습니다.
+같은 학생부를 놓고 대학이 얼마나 다르게 읽는지 숫자로 보십시오.
+
+▸ 같은 대학인데 정확히 뒤집힙니다
+
+한국외대 학생부종합
+· 서류형 — 학업 50 · 진로 30 · 공동체 20
+· 면접형 — 학업 30 · 진로 50 · 공동체 20
+
+어느 쪽으로 넣느냐가 곧 어떤 기록이 필요하냐입니다.
+
+▸ '학업'은 10에서 50까지 벌어집니다
+
+숭실대 SSU미래인재 서류형 학업 10
+서강대 · 중앙대 융합형 · 한국외대 서류형 · 세종대 서류형 학업 50
+
+다섯 배 차이입니다. 같은 성적표를 내는데 읽히는 무게가 다릅니다.
+
+▸ 진로 칸이 아예 없는 대학도 있습니다
+
+건국대 KU자유전공학부 — 학업 20 · 성장 50 · 공동체 30
+경희대 네오르네상스 자율·자유전공 — 학업 40 · 자기주도 40 · 공동체 20
+서강대 학생부종합 일반Ⅰ·Ⅱ — 학업 50 · 성장 30 · 공동체 20
+
+전공을 깊게 판 기록이 강한 학생과 고르게 성장한 기록이 강한 학생은
+유리한 대학이 서로 다릅니다.
+
+▸ 공동체는 10과 30이 같이 있습니다
+
+중앙대 탐구형인재 10 / 건국대·연세대·숭실대 30. 세 배 차이입니다.
+다만 공동체 비중이 낮은 대학이라도 학교폭력 조치사항은 별도로 반영합니다.
+
+▸ 올해 새로 생긴 전형
+
+숭실대 SSU미래인재 서류형(2027 신설) — 학업 10 · 탐구 60 · 공동체 30
+탐구역량 하나가 60입니다. 학업역량과는 별개 요소입니다.
+
+▸ 비율을 공개하지 않는 대학도 있습니다
+
+서울대와 한양대는 모집요강에 비율표가 없습니다.
+그래서 저희도 요소 이름만 적었습니다.
+다른 자료에서 이 두 대학의 비율 숫자를 보셨다면 출처를 확인해 보시기 바랍니다.
+
+▸ 교과전형도 학생부를 읽습니다
+
+서울 주요 14개 대학 중 8곳이 정성평가를 반영합니다.
+모집인원 5,361명 중 3,301명, 61.5%입니다.
+다만 연세·서강·이화여·한국외·홍익은 여전히 교과 100%입니다.
+
+━━━━━━━━━━━━━━━━
+
+이 표를 처음 보는 때가 대개 고3 원서철입니다.
+그때는 기록이 이미 닫혀 있습니다.
+
+학교생활기록부 작성 기준일은 고3 8월 31일입니다.
+지나간 학기는 수정되지 않습니다.
+
+기록에 반영되는 학기가
+· 지금 고2는 2개 남았습니다 (이번 2학기 · 고3 1학기)
+· 지금 고1은 4개 남았습니다 (이번 2학기 · 고2 1·2학기 · 고3 1학기)
+
+지난 학기는 지나갔지만 이번 학기는 이제 시작입니다.
+
+내 등급으로 지금 어디까지 되는지
+이름·연락처 없이 무료로 조회하실 수 있습니다 → 프로필 링크
+
+고1 · 고2 대상 · ☎ 031-794-8158
+
+※ 본원은 학교생활기록부 사본·전자파일을 제출받거나 보관하지 않습니다.
+※ 학교생활기록부에 들어갈 문장을 만들어 드리지 않습니다.
+※ 학교에 무엇을 적어 달라고 요청하는 방법은 안내하지 않습니다.
+※ 본 상담은 합격을 보장하지 않습니다.
+※ 위 숫자는 2027학년도 수시모집요강 기준(2026년 8월 확인)이며 학년도마다 달라집니다.
+
+━━━━━━━━━━━━━━━━
+다올105학원 · 등록번호 제 하남 298호 (광주하남교육지원청)
+교습과정 진학상담·지도
+교습비등 160,000원 ~ 520,000원 (과정·반별 상이)
+경기 하남시 미사강변대로226번안길 35 청담프라자 401~405호
+☎ 031-794-8158</pre>
+</div>
+<div class="box">
+  <h3>해시태그 30개 <button class="cp" data-copy-id="tagB" style="float:right">태그 복사</button></h3>
+  <pre id="tagB">#학생부종합전형 #학생부관리 #생기부 #세특 #고1맘 #고2맘 #예비고3 #내신관리
+#고교학점제 #2022개정교육과정 #5등급제 #선택과목 #수시컨설팅 #입시컨설팅 #대입정보
+#고등맘 #중3맘 #예비고1 #학종 #교과전형
+#하남학원 #미사학원 #하남입시 #미사강변학원 #하남고 #미사고 #미사강변고 #풍산고 #남한고 #다올105</pre>
+</div>
+
+<h2>3. 올리는 순서</h2>
+<div class="box">
+  <ol>
+    <li><b>사진 10장을 순서대로 저장</b>합니다. 각 카드 아래 「저장」을 누르세요.</li>
+    <li>인스타 → 새 게시물 → <b>여러 항목 선택</b> → 10장을 <b>번호 순서대로</b> 고릅니다. 순서가 섞이면 이야기가 끊깁니다.</li>
+    <li>자르기에서 <b>4:5(세로)</b>를 고릅니다. 정사각형으로 두면 위아래가 잘립니다.</li>
+    <li>위 <b>캡션 복사</b>를 눌러 붙여넣고, 이어서 <b>태그 복사</b>를 붙입니다.</li>
+    <li>고급 설정 → <b>대체 텍스트 편집</b>. 각 카드 밑의 회색 글상자를 눌러 복사해 넣습니다. 인스타 검색에 걸리는데 거의 아무도 안 씁니다.</li>
+    <li>위치 추가 → <b>하남시</b> (다음 게시물은 미사강변도시, 그다음은 풍산동으로 돌립니다).</li>
+    <li>게시 후 <b>스토리로 공유</b>하고 <b>링크 스티커</b>를 붙이세요. 이게 있어야 카드뉴스에서 바로 랜딩으로 넘어갑니다.</li>
+    <li>첫 댓글에 지역 태그를 한 번 더 답니다.
+      <button class="cp" data-copy="#하남학원 #미사학원 #미사강변고 #하남고 #미사고">첫 댓글용 복사</button></li>
+  </ol>
+</div>
+<p class="lead"><b>올리는 시간은 밤 9~10시.</b> 하남 학부모가 아이 픽업 끝내고 폰을 보는 시간대입니다.</p>
+
+<h2>4. 올리기 전 확인</h2>
+<div class="box">
+  <ol>
+    <li>인스타 프로필에서 <b>「수시·정시 입시컨설팅(학생부종합 서류)」</b> 삭제</li>
+    <li>프로필에서 <b>「관리형독서실」</b> 삭제 (게시표에 고등부 자습 과정이 없습니다)</li>
+    <li>이름 필드를 <b>다올105 | 하남 미사 고등 입시·내신</b> 으로
+      <button class="cp" data-copy="다올105 | 하남 미사 고등 입시·내신">복사</button></li>
+    <li>프로필 링크 2개 등록 (위 0번)</li>
+  </ol>
+</div>
+
+</div>
+
+<footer><div class="w">
+  <b>다올105학원</b> · 등록번호 제 하남 298호 (광주하남교육지원청)<br>
+  교습과정 국어 · 영어 · 수학 · 진학상담·지도<br>
+  교습비등 160,000원 ~ 520,000원 (과정·반별 상이) ·
+  <a href="../fee/" style="color:#9AA5B1">교습비등 게시표</a><br>
+  경기도 하남시 미사강변대로226번안길 35 청담프라자 401~405호 · ☎ 031-794-8158<br><br>
+  카드 20장 모두 하단에 광고 표시 4항목이 들어 있습니다.<br>
+  <b>금액은 한 번도 쓰지 않았습니다</b> — 고1·2 과정 교습비 변경등록 수리 전이기 때문입니다.
+</div></footer>
+
+<div class="toast" id="toast">복사했습니다</div>
+<script>
+var T=document.getElementById('toast'),tt;
+function toast(m){T.textContent=m;T.classList.add('on');clearTimeout(tt);
+  tt=setTimeout(function(){T.classList.remove('on')},1500)}
+function copy(txt,btn){
+  function ok(){toast('복사했습니다');
+    if(btn){var o=btn.textContent;btn.textContent='복사됨 ✓';btn.classList.add('ok');
+      setTimeout(function(){btn.textContent=o;btn.classList.remove('ok')},1600)}}
+  if(navigator.clipboard&&window.isSecureContext){
+    navigator.clipboard.writeText(txt).then(ok).catch(fb)
+  }else fb();
+  function fb(){var a=document.createElement('textarea');a.value=txt;
+    a.style.position='fixed';a.style.left='-9999px';document.body.appendChild(a);
+    a.select();try{document.execCommand('copy');ok()}catch(e){toast('복사에 실패했습니다')}
+    document.body.removeChild(a)}
+}
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-copy]');
+  if(b){copy(b.dataset.copy,b.tagName==='BUTTON'?b:null);return}
+  var c=e.target.closest('[data-copy-id]');
+  if(c){var el=document.getElementById(c.dataset.copyId);if(el)copy(el.textContent,c)}
+});
+</script>
+</body>
+</html>
