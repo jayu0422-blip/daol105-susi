@@ -412,28 +412,6 @@ function showGate(){
 /* 신청 접수 서버 (Cloudflare Worker) */
 var API='https://daol105-form.daol105.workers.dev';
 /* 유입경로 — 링크 뒤에 ?src=youtube 같은 값을 붙이면 자동으로 잡힌다 */
-/* 조회 → 랜딩 유입경로 승계.
-   결과 목록·CTA가 JS로 그려지므로 DOM 완성 시점이 아니라 '클릭 순간'에 붙인다. */
-(function(){
-  var m=/[?&](?:utm_source|src)=([^&]+)/.exec(location.search);
-  var k=m?decodeURIComponent(m[1]).toLowerCase().replace(/[^a-z0-9_-]/g,'').slice(0,20):'';
-  var c=/[?&](?:utm_content|sf)=([^&]+)/.exec(location.search);
-  var sf=c?decodeURIComponent(c[1]).replace(/[^a-zA-Z0-9_-]/g,'').slice(0,20):'';
-  try{
-    if(k) sessionStorage.setItem('d105src',k); else k=sessionStorage.getItem('d105src')||'';
-    if(sf) sessionStorage.setItem('d105sf',sf); else sf=sessionStorage.getItem('d105sf')||'';
-  }catch(e){}
-  if(!k) return;
-  var q='src='+k+(sf?'&sf='+sf:'');
-  document.addEventListener('click',function(e){
-    var a=e.target.closest&&e.target.closest('a[href]'); if(!a) return;
-    var h=a.getAttribute('href');
-    if(!h||/^(#|tel:|mailto:|javascript:)/.test(h)) return;
-    if(/^https?:/i.test(h)&&h.indexOf('jayu0422-blip.github.io')<0) return;
-    if(/[?&](src|utm_source)=/.test(h)) return;
-    a.setAttribute('href', h+(h.indexOf('?')<0?'?':'&')+q);
-  },true);
-})();
 function srcOf(){
   var m=/[?&](?:utm_source|src)=([^&]+)/.exec(location.search);
   var raw=m?decodeURIComponent(m[1]).toLowerCase():'';
