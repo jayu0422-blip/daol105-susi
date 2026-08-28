@@ -250,6 +250,41 @@ table.lg2 td{padding:7px 0 7px 10px;border-bottom:1px solid var(--line);line-hei
 table.lg2 tr:last-child th,table.lg2 tr:last-child td{border-bottom:0}
 .lg2-n{font-size:12.5px;line-height:1.85;color:var(--dim);margin:11px 0 0}
 .lg2-n b{color:var(--fg)}
+
+/* 상담 신청 */
+.apbox{max-width:520px;margin:24px auto 0;background:var(--bg);border:1px solid var(--line);
+  border-radius:16px;padding:22px 20px;box-shadow:var(--sh)}
+.apg{display:grid;gap:13px}
+@media(min-width:560px){.apg{grid-template-columns:1fr 1fr}}
+.apr{display:flex;flex-direction:column;gap:6px}
+.apr label{font-size:12.5px;font-weight:700;color:var(--faint)}
+.apr label i{font-style:normal;font-weight:600;color:var(--dim);font-size:11px}
+.apr input,.apr select{width:100%;box-sizing:border-box;padding:13px;border-radius:11px;
+  border:1.5px solid var(--line);background:var(--bg);color:var(--fg);
+  font-size:15.5px;font-family:inherit;-webkit-appearance:none;appearance:none}
+.apr select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' stroke='%23606a78' stroke-width='2' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:34px}
+.apr input:focus,.apr select:focus{outline:none;border-color:var(--acc);
+  box-shadow:0 0 0 3px rgba(13,90,72,.14)}
+.aph{font-size:11.5px;color:var(--dim);line-height:1.55}
+.apc{display:flex;gap:10px;margin-top:16px;background:var(--soft);border:1.5px solid var(--line);
+  border-radius:12px;padding:14px;cursor:pointer}
+.apc.need{border-color:#c0392b;background:#fdf0ee}
+.apc input{flex:0 0 auto;width:19px;height:19px;margin-top:1px;accent-color:var(--acc);cursor:pointer}
+.apc span{font-size:12px;color:var(--faint);line-height:1.72}
+.apc b{color:var(--fg);display:block;margin-bottom:6px;font-size:13px}
+.apc u{text-decoration:none;color:var(--dim);font-weight:700}
+.apc .req{font-style:normal;color:var(--warm)}
+.ape{display:none;margin-top:12px;background:#fdf0ee;border:1px solid #e8b4ab;border-radius:10px;
+  padding:11px 13px;font-size:13px;color:#8c2d1c;line-height:1.6}
+.apb{width:100%;margin-top:16px;padding:17px;border:0;border-radius:13px;background:var(--acc);
+  color:#fff;font-size:16.5px;font-weight:800;font-family:inherit;letter-spacing:-.02em;cursor:pointer}
+.apb:disabled{opacity:.6;cursor:default}
+.apo{display:none;margin-top:6px;background:var(--acc-l);border-radius:13px;padding:20px 18px;
+  font-size:14.5px;color:var(--acc-t);line-height:1.78}
+.apo b{display:block;margin-bottom:6px;font-size:17px}
+.apn{margin-top:14px;font-size:11.5px;color:var(--dim);line-height:1.72;text-align:center}
+
 </style>
 </head>
 <body>
@@ -729,7 +764,8 @@ table.lg2 tr:last-child th,table.lg2 tr:last-child td{border-bottom:0}
   </div>
   <p class="xs" style="text-align:center;margin-top:-10px">일정은 예약 상황에 따라 조정될 수 있습니다.</p>
 
-  <a class="btn" href="tel:031-794-8158">상담 예약 · 031-794-8158</a>
+  <a class="btn" href="#apply">상담 신청하기</a>
+  <a class="btn g" href="tel:031-794-8158">전화로 문의 · 031-794-8158</a>
   <a class="btn g" href="#legal">이용 조건 · 교습비 확인</a>
 
   <div class="card" style="max-width:420px;margin:24px auto 0;text-align:left">
@@ -852,6 +888,133 @@ table.lg2 tr:last-child th,table.lg2 tr:last-child td{border-bottom:0}
   </p>
 </div>
 </div></footer>
+
+
+<div class="tint" id="apply"><div class="w"><section class="pad">
+  <p class="say" style="font-size:26px">번호를 남겨 주십시오.<br>가능한 시간을 먼저 알려드립니다.</p>
+  <p class="sm dim" style="text-align:center;margin-top:14px">
+    바로 결제하는 화면이 아닙니다. 확인 후 연락드려 일정을 맞춥니다.</p>
+
+  <div class="apbox">
+    <div class="apg">
+      <div class="apr"><label for="cName">학생 이름</label>
+        <input id="cName" type="text" maxlength="20" autocomplete="name" placeholder="홍길동"></div>
+      <div class="apr"><label for="cGrade">학년</label>
+        <select id="cGrade"><option>고3·N수</option><option>고2</option><option>고1</option></select></div>
+      <div class="apr"><label for="cSchool">학교</label>
+        <input id="cSchool" type="text" maxlength="30" placeholder="미사강변고"></div>
+      <div class="apr"><label for="cTel">연락 받으실 번호</label>
+        <input id="cTel" type="tel" inputmode="numeric" maxlength="13" autocomplete="tel" placeholder="010-1234-5678">
+        <span class="aph">이 번호로만 연락드립니다.</span></div>
+      <div class="apr"><label for="cPTel">보호자 번호 <i>선택</i></label>
+        <input id="cPTel" type="tel" inputmode="numeric" maxlength="13" placeholder="비워두셔도 됩니다"></div>
+      <div class="apr"><label for="cSrc">어떻게 알고 오셨나요</label>
+        <select id="cSrc"><option>유튜브</option><option>인스타그램</option><option>네이버 블로그·검색</option>
+          <option>카카오톡</option><option>지인 소개</option><option>학원 안내물</option><option>기타</option></select></div>
+    </div>
+
+    <label class="apc" id="cAgreeBox"><input type="checkbox" id="cAgree"><span>
+      <b><i class="req">[필수]</i> 개인정보 수집·이용 동의</b>
+      <u>수집항목</u> 이름 · 학년 · 학교 · 휴대폰 (보호자 번호는 선택)<br>
+      <u>이용목적</u> 상담 일정 안내 및 상담 진행<br>
+      <u>보유기간</u> 수집일로부터 <b>1년</b>, 이후 지체 없이 파기<br>
+      <u>거부 권리</u> 동의를 거부하실 수 있으며, 이 경우 상담 일정 안내가 어렵습니다.
+    </span></label>
+
+    <input id="cHp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true"
+      style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+
+    <div class="ape" id="cErr"></div>
+    <button type="button" class="apb" id="cGo">상담 가능한 시간 안내받기</button>
+    <div class="apo" id="cOk"><b>접수됐습니다.</b>
+      확인 후 남겨주신 번호로 상담 가능한 시간을 안내드리겠습니다.<br>
+      급하시면 <b>031-794-8158</b>로 바로 전화 주셔도 됩니다.</div>
+
+    <div class="apn">개인정보 삭제를 원하시면 031-794-8158로 말씀만 주세요. 바로 지웁니다.<br>
+      본 상담은 합격을 보장하지 않습니다.</div>
+  </div>
+</section></div></div>
+
+<script>
+(function(){
+  var API='https://daol105-form.daol105.workers.dev';
+  function $(i){return document.getElementById(i)}
+
+/* 유입경로 — ?src= 또는 ?utm_source= 를 읽어 신청에 기록하고, 나가는 링크에 물려준다 */
+var DSRC=(function(){
+  var m=/[?&](?:utm_source|src)=([^&]+)/.exec(location.search);
+  var raw=m?decodeURIComponent(m[1]).toLowerCase().replace(/[^a-z0-9_-]/g,'').slice(0,20):'';
+  var T={youtube:'유튜브',yt:'유튜브',instagram:'인스타그램',ig:'인스타그램',insta:'인스타그램',
+         naver:'네이버 블로그·검색',blog:'네이버 블로그·검색',kakao:'카카오톡',talk:'카카오톡',
+         litt:'인스타그램',print:'학원 안내물',sms:'기타'};
+  var c=/[?&](?:utm_content|sf)=([^&]+)/.exec(location.search);
+  var sf=c?decodeURIComponent(c[1]).replace(/[^a-zA-Z0-9_-]/g,'').slice(0,20):'';
+  try{
+    if(raw) sessionStorage.setItem('d105src',raw);
+    if(sf)  sessionStorage.setItem('d105sf',sf);
+    if(!raw) raw=sessionStorage.getItem('d105src')||'';
+    if(!sf)  sf=sessionStorage.getItem('d105sf')||'';
+  }catch(e){}
+  return {key:raw, label:T[raw]||'', sf:sf};
+})();
+/* 같은 사이트 안으로 나가는 링크에 유입경로를 물려준다 */
+(function(){
+  if(!DSRC.key) return;
+  var q='src='+DSRC.key+(DSRC.sf?'&sf='+DSRC.sf:'');
+  [].forEach.call(document.querySelectorAll('a[href]'),function(a){
+    var h=a.getAttribute('href');
+    if(!h||/^(#|tel:|mailto:|javascript:)/.test(h)) return;
+    if(/^https?:/i.test(h)&&h.indexOf('jayu0422-blip.github.io')<0) return;
+    if(/[?&](src|utm_source)=/.test(h)) return;
+    a.setAttribute('href', h+(h.indexOf('?')<0?'?':'&')+q);
+  });
+})();
+
+  (function(){
+    if(!DSRC.label) return;
+    var el=$('cSrc');
+    for(var i=0;i<el.options.length;i++)
+      if(el.options[i].text===DSRC.label){ el.selectedIndex=i; break; }
+  })();
+
+  function tel(el){el.addEventListener('input',function(){
+    var v=el.value.replace(/[^0-9]/g,'').slice(0,11),o=v;
+    if(v.length>7)o=v.slice(0,3)+'-'+v.slice(3,v.length-4)+'-'+v.slice(v.length-4);
+    else if(v.length>3)o=v.slice(0,3)+'-'+v.slice(3);
+    el.value=o})}
+  tel($('cTel')); tel($('cPTel'));
+
+  $('cGo').addEventListener('click',function(){
+    var b=this,e=$('cErr');
+    function fail(m){e.textContent=m;e.style.display='block';
+      b.disabled=false;b.textContent='상담 가능한 시간 안내받기'}
+    var n=$('cName').value.trim(), s=$('cSchool').value.trim(),
+        p=$('cTel').value.replace(/[^0-9]/g,''), pp=$('cPTel').value.replace(/[^0-9]/g,'');
+    if(!n)return fail('이름을 입력해 주세요.');
+    if(!s)return fail('학교를 입력해 주세요.');
+    if(!/^01[016789][0-9]{7,8}$/.test(p))return fail('휴대폰 번호를 정확히 입력해 주세요.');
+    if(!$('cAgree').checked){
+      $('cAgreeBox').classList.add('need');
+      $('cAgreeBox').scrollIntoView({behavior:'smooth',block:'center'});
+      return fail('[필수] 개인정보 수집·이용에 동의해 주세요.');
+    }
+    e.style.display='none'; b.disabled=true; b.textContent='처리 중...';
+    fetch(API+'/api/submit',{method:'POST',headers:{'content-type':'application/json'},
+      body:JSON.stringify({name:n,school:s,grade:$('cGrade').value,tel:p,parentTel:pp,
+        src:$('cSrc').value,note:'고3 수시 컨설팅 랜딩'+(DSRC.sf?' · '+DSRC.sf:''),
+        agree:true,website:$('cHp').value})})
+      .then(function(r){return r.json()})
+      .then(function(j){
+        if(!j.ok)throw new Error(j.err||'잠시 후 다시 시도해 주세요.');
+        document.querySelector('.apg').style.display='none';
+        $('cAgreeBox').style.display='none'; $('cGo').style.display='none';
+        $('cOk').style.display='block';
+        $('cOk').scrollIntoView({behavior:'smooth',block:'center'});
+      })
+      .catch(function(err){fail(err.message||'연결에 실패했습니다. 잠시 후 다시 시도해 주세요.')});
+  });
+})();
+</script>
 
 </body>
 </html>

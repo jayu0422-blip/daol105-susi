@@ -1259,6 +1259,36 @@ footer .note{font-size:11.5px;color:#77828F;line-height:1.85}
 <script>
 (function(){
   var API='https://daol105-form.daol105.workers.dev';
+  /* 유입경로 — ?src= 또는 ?utm_source= 를 읽어 신청에 기록하고, 나가는 링크에 물려준다 */
+  var DSRC=(function(){
+    var m=/[?&](?:utm_source|src)=([^&]+)/.exec(location.search);
+    var raw=m?decodeURIComponent(m[1]).toLowerCase().replace(/[^a-z0-9_-]/g,'').slice(0,20):'';
+    var T={youtube:'유튜브',yt:'유튜브',instagram:'인스타그램',ig:'인스타그램',insta:'인스타그램',
+           naver:'네이버 블로그·검색',blog:'네이버 블로그·검색',kakao:'카카오톡',talk:'카카오톡',
+           litt:'인스타그램',print:'학원 안내물',sms:'기타'};
+    var c=/[?&](?:utm_content|sf)=([^&]+)/.exec(location.search);
+    var sf=c?decodeURIComponent(c[1]).replace(/[^a-zA-Z0-9_-]/g,'').slice(0,20):'';
+    try{
+      if(raw) sessionStorage.setItem('d105src',raw);
+      if(sf)  sessionStorage.setItem('d105sf',sf);
+      if(!raw) raw=sessionStorage.getItem('d105src')||'';
+      if(!sf)  sf=sessionStorage.getItem('d105sf')||'';
+    }catch(e){}
+    return {key:raw, label:T[raw]||'', sf:sf};
+  })();
+  /* 같은 사이트 안으로 나가는 링크에 유입경로를 물려준다 */
+  (function(){
+    if(!DSRC.key) return;
+    var q='src='+DSRC.key+(DSRC.sf?'&sf='+DSRC.sf:'');
+    [].forEach.call(document.querySelectorAll('a[href]'),function(a){
+      var h=a.getAttribute('href');
+      if(!h||/^(#|tel:|mailto:|javascript:)/.test(h)) return;
+      if(/^https?:/i.test(h)&&h.indexOf('jayu0422-blip.github.io')<0) return;
+      if(/[?&](src|utm_source)=/.test(h)) return;
+      a.setAttribute('href', h+(h.indexOf('?')<0?'?':'&')+q);
+    });
+  })();
+  
   function $(i){return document.getElementById(i)}
   function tel(el){el.addEventListener('input',function(){
     var v=el.value.replace(/[^0-9]/g,'').slice(0,11),o=v;
@@ -1266,6 +1296,14 @@ footer .note{font-size:11.5px;color:#77828F;line-height:1.85}
     else if(v.length>3)o=v.slice(0,3)+'-'+v.slice(3);
     el.value=o})}
   tel($('fTel')); tel($('fPTel'));
+
+  /* 유입경로를 드롭다운에 미리 골라 둔다 */
+  (function(){
+    if(!DSRC.label) return;
+    var el=$('fSrc');
+    for(var i=0;i<el.options.length;i++)
+      if(el.options[i].text===DSRC.label){ el.selectedIndex=i; break; }
+  })();
 
   $('fGo').addEventListener('click',function(){
     var b=this,e=$('fErr');
@@ -1285,7 +1323,9 @@ footer .note{font-size:11.5px;color:#77828F;line-height:1.85}
     e.style.display='none'; b.disabled=true; b.textContent='처리 중...';
     fetch(API+'/api/submit',{method:'POST',headers:{'content-type':'application/json'},
       body:JSON.stringify({name:n,school:s,grade:$('fGrade').value,tel:p,parentTel:pp,
-        src:$('fSrc').value,note:'학기별 진학 설계 랜딩',agree:true,website:$('fHp').value})})
+        src:$('fSrc').value,
+        note:'학기별 진학 설계 랜딩'+(DSRC.sf?' · '+DSRC.sf:''),
+        agree:true,website:$('fHp').value})})
       .then(function(r){return r.json()})
       .then(function(j){
         if(!j.ok)throw new Error(j.err||'잠시 후 다시 시도해 주세요.');
